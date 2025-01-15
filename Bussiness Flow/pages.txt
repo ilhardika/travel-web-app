@@ -1,0 +1,39 @@
+Terdapat 2 role (User dan Admin)
+
+Halaman untuk User
+1. Landing Page  
+   - Banner Promo, Kategori Aktivitas, dan Aktivitas Populer.
+2. Halaman Login & Register  
+   - Form login dan registrasi.
+3. Halaman Detail Aktivitas  
+   - Detail aktivitas (gambar, deskripsi, harga, lokasi).  
+   - Tombol Tambah ke Keranjang.
+4. Halaman Keranjang (Cart)  
+   - Daftar aktivitas yang ditambahkan ke keranjang.  
+   - Edit/Hapus item dan tombol Checkout.
+5. Halaman Pembayaran  
+   - Pilih metode pembayaran dan upload bukti pembayaran.
+6. Halaman Riwayat Transaksi  
+   - Daftar dan detail transaksi user.  
+   - Tombol *Batalkan Pesanan*.
+
+Halaman untuk Admin
+1. Dashboard Admin  
+   - Overview data transaksi, jumlah user, dan statistik pemesanan.
+2. Manajemen Banner  
+   - CRUD Banner
+3. Manajemen Promo  
+   - CRUD Promo.
+4. Manajemen Kategori  
+   - CRUD Kategori aktivitas.
+5. Manajemen Aktivitas  
+   - CRUD Aktivitas wisata.
+6. Manajemen User  
+   - Lihat daftar user dan ubah role mereka.
+7. Manajemen Transaksi  
+   - Lihat semua transaksi, update status, dan batalkan transaksi.
+
+Total Halaman
+Untuk User: 6 Halaman  
+Untuk Admin: 7 Halaman  
+Total Keseluruhan: 13 Halaman
