@@ -1,0 +1,21 @@
+1. User
+Role ini untuk user yang ingin mencari dan memesan aktivitas wisata.
+Akses & Fitur:
+- Registrasi & Login: Daftar dan login menggunakan API Register dan Login.  
+- Lihat Banner dan Promo: Mengakses promo dan banner menarik.  
+- Lihat & Cari Aktivitas: Menjelajahi aktivitas wisata berdasarkan kategori.  
+- Tambah ke Keranjang: Menambahkan aktivitas ke keranjang.  
+- Checkout & Pembayaran: Memilih metode pembayaran dan upload bukti pembayaran.  
+- Lihat Riwayat Transaksi: Melihat status pemesanan dan detail transaksi.  
+- Batalkan Pesanan: Membatalkan transaksi yang belum diproses.
+
+2. Admin
+Role ini untuk mengelola konten dan transaksi dalam web app.
+Akses & Fitur:
+- Manajemen Banner: Tambah, ubah, dan hapus banner menggunakan API Create/Update/Delete Banner.  
+- Manajemen Promo: Tambah, ubah, dan hapus promo dengan API Create/Update/Delete Promo.  
+- Manajemen Kategori: Kelola kategori aktivitas wisata.  
+- Manajemen Aktivitas: Tambah, edit, dan hapus aktivitas wisata.  
+- Kelola user: Lihat semua user dan ubah role mereka dengan API Update User Role.  
+- Kelola Transaksi: Lihat semua transaksi user, update status transaksi (success/failed), atau membatalkan transaksi.  
+- Kelola Metode Pembayaran: Tambah atau update metode pembayaran.
