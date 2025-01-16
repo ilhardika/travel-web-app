@@ -1,0 +1,42 @@
+@startuml
+|User|
+start
+:Landing Page;
+:Browse Aktivitas;
+:Klik "Add to Cart";
+if (Sudah Login?) then (Ya)
+  :Tambah ke Keranjang;
+else (Belum)
+  :Login / Register;
+  :Tambah ke Keranjang;
+endif
+:Checkout & Pembayaran;
+:Upload Bukti Pembayaran;
+|Admin|
+:Verifikasi Pembayaran;
+if (Pembayaran Valid?) then (Ya)
+  :Update Status ke "Sukses";
+else (Tidak)
+  :Update Status ke "Gagal";
+endif
+|User|
+:Melihat Riwayat Transaksi;
+if (Status = Sukses?) then (Ya)
+  :Pesanan Berhasil;
+else (Tidak)
+  :Pesanan Dibatalkan;
+endif
+stop
+
+|Admin|
+start
+:Login ke Dashboard;
+:Kelola Banner/Promo/Kategori/Aktivitas;
+:Kelola Transaksi;
+if (Validasi Pembayaran?) then (Valid)
+  :Update Status Transaksi;
+else (Tidak Valid)
+  :Batalkan Transaksi;
+endif
+stop
+@enduml
