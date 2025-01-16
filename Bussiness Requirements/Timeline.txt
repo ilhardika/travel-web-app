@@ -1,0 +1,43 @@
+Project Estimated Timeline (4 Weeks)
+
+Week 1: Planning and Preparation
+- Day 1-2: 
+  - Determine Key Features: Create a list of features you want to include in the application, such as:
+    - Landing Page
+    - Activity Detail Page
+    - Cart Page
+    - Payment Page
+    - Transaction History Page
+- Day 3-5: 
+  - Create Simple Wireframes: Draw basic wireframes for the landing page and other main pages. You can use paper or simple design tools.
+  - Set Up Development Environment: Install all necessary tools, such as Node.js, React, and other development tools.
+
+Week 2: Landing Page Development
+- Day 6-7: 
+  - Develop Landing Page: Start developing the landing page using React. Focus on the HTML structure and CSS.
+  - Implement UI Elements: Add elements such as header, hero section, promo banner, activity categories, and popular activities.
+- Day 8-10: 
+  - Add Interactivity: Implement buttons and hover effects to enhance user experience.
+  - Test Responsiveness: Ensure the landing page is responsive across various screen sizes (desktop and mobile).
+
+Week 3: Main Page Development
+- Day 11-13: 
+  - Develop Activity Detail Page: Create a page that displays activity details, including images, descriptions, prices, and an "Add to Cart" button.
+- Day 14-16: 
+  - Develop Cart Page: Create a page that displays a list of activities added to the cart, with options to edit or remove items.
+- Day 17: 
+  - Develop Payment Page: Create a page for selecting payment methods and uploading payment proof.
+
+Week 4: Testing and Finalization
+- Day 18-20: 
+  - Develop Transaction History Page: Create a page that displays a list and details of user transactions, as well as a button to cancel orders.
+- Day 21-22: 
+  - Application Testing: Conduct testing to ensure all pages and features function correctly. Fix any bugs found.
+- Day 23-25: 
+  - Finalization and Launch Preparation: Complete all final details, such as styling and documentation. Prepare the application for launch.
+
+Summary
+-Week 1: Planning and Preparation
+-Week 2: Landing Page Development
+-Week 3: Main Page Development
+-Week 4: Testing and Finalization

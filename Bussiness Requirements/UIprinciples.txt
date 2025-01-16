@@ -6,4 +6,4 @@ a minimalist and modern UI for the Travel Booking Web App. The design should fea
 - Consistent typography and icons that align with the travel and adventure theme.
 - Include interactive elements like hover effects, smooth transitions, and micro-interactions for user engagement.
 - Optional: Incorporate search/filter options, ratings, or user reviews if relevant to the page.
-- Show the layout as a wireframe or high-fidelity mockup."
+- Show the layout as a wireframe or high-fidelity mockup.
