@@ -1,0 +1,61 @@
+Authentication:
+Register User: Mulai dengan mendaftarkan pengguna baru.
+Login User: Setelah pendaftaran, login dengan kredensial pengguna yang baru terdaftar untuk mendapatkan token JWT.
+Logout User: Setelah selesai dengan operasi yang memerlukan autentikasi, logout pengguna.
+
+User Management:
+Get Logged User: Dapatkan informasi pengguna yang sedang login.
+Gell All User: Dapatkan daftar semua pengguna.
+Update Profile: Perbarui profil pengguna.
+Update User Role: Ubah peran pengguna.
+
+Banner Management:
+Create Banner: Buat banner baru.
+Update Banner: Perbarui banner yang ada.
+Delete Banner: Hapus banner.
+Banners: Dapatkan daftar semua banner.
+Banner By Id: Dapatkan detail banner berdasarkan ID.
+
+Promo Management:
+Create Promo: Buat promo baru.
+Update Promo: Perbarui promo yang ada.
+Delete Promo: Hapus promo.
+Promos: Dapatkan daftar semua promo.
+Promo By Id: Dapatkan detail promo berdasarkan ID.
+
+Category Management:
+Create Category: Buat kategori baru.
+Update Category: Perbarui kategori yang ada.
+Delete Category: Hapus kategori.
+Categories: Dapatkan daftar semua kategori.
+Category By Id: Dapatkan detail kategori berdasarkan ID.
+
+Activity Management:
+Create Activity: Buat aktivitas baru.
+Update Activity: Perbarui aktivitas yang ada.
+Delete Activity: Hapus aktivitas.
+Activities: Dapatkan daftar semua aktivitas.
+Activity By Id: Dapatkan detail aktivitas berdasarkan ID.
+Activities By Category Id: Dapatkan aktivitas berdasarkan ID kategori.
+
+Payment Method:
+Payment Methods: Dapatkan daftar metode pembayaran.
+Generate Payment Methods: Buat metode pembayaran baru.
+
+Cart Management:
+Add to Cart: Tambahkan item ke keranjang.
+Update Cart: Perbarui item di keranjang.
+Delete Cart: Hapus item dari keranjang.
+Carts: Dapatkan daftar semua item di keranjang.
+
+Transaction Management:
+Create Transaction: Buat transaksi baru.
+Update Transaction Proof Payment: Perbarui bukti pembayaran transaksi.
+Update Transaction Status: Perbarui status transaksi.
+Cancel Transaction: Batalkan transaksi.
+Transaction By Id: Dapatkan detail transaksi berdasarkan ID.
+My Transactions: Dapatkan daftar transaksi pengguna.
+All Transactions: Dapatkan daftar semua transaksi.
+
+Upload Image:
+Upload Image: Unggah gambar.
