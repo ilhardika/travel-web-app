@@ -1,9 +1,9 @@
-import Zcomp from "./components/Zcomp";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   return (
     <div>
-      <Zcomp />
+      <LandingPage />
     </div>
   );
 }
