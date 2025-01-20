@@ -1,122 +1,160 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { Mail, Lock } from "lucide-react";
+
+// Import komponen common
+import Button from "../../components/common/Button";
+import Input from "../../components/common/Input";
+
 import { useAuth } from "../../context/AuthContext";
 
+// Utility validator
+export const validateEmail = (email) => {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(String(email).toLowerCase());
+};
+
 const Login = () => {
-  // State untuk form
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  // State Management
+  const [formState, setFormState] = useState({
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  // Hook navigasi dan autentikasi
+  // Hooks
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // Handler submit form
+  // Handler Input dengan useCallback untuk optimasi
+  const handleInputChange = useCallback(
+    (e) => {
+      const { name, value } = e.target;
+      setFormState((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+
+      // Hapus error saat mengetik
+      if (errors[name]) {
+        setErrors((prev) => {
+          const newErrors = { ...prev };
+          delete newErrors[name];
+          return newErrors;
+        });
+      }
+    },
+    [errors]
+  );
+
+  // Validasi Form dengan useMemo
+  const isFormValid = useMemo(() => {
+    return formState.email.length > 0 && formState.password.length >= 6;
+  }, [formState]);
+
+  // Handler Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setIsLoading(true);
 
-    // Validasi sederhana
-    if (!email || !password) {
-      setError("Email dan password harus diisi");
-      setIsLoading(false);
+    // Validasi
+    const newErrors = {};
+
+    if (!formState.email) {
+      newErrors.email = "Email harus diisi";
+    } else if (!validateEmail(formState.email)) {
+      newErrors.email = "Format email tidak valid";
+    }
+
+    if (!formState.password) {
+      newErrors.password = "Password harus diisi";
+    } else if (formState.password.length < 6) {
+      newErrors.password = "Password minimal 6 karakter";
+    }
+
+    // Set errors jika ada
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
-    try {
-      // Panggil fungsi login dari context
-      await login(email, password);
+    setIsLoading(true);
 
-      // Redirect ke halaman utama setelah login berhasil
+    try {
+      await login(formState.email, formState.password);
       navigate("/");
     } catch (err) {
-      // Set pesan error dari response API
-      setError(err.response?.data?.message || "Login gagal");
+      setErrors({
+        submit: err.response?.data?.message || "Login gagal",
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Render Method
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Login ke Akun Anda
-          </h2>
+    <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
+        {/* Header dengan Ilustrasi */}
+        <div className="bg-blue-600 p-6 text-center">
+          <h2 className="text-3xl font-bold text-white">TravApp</h2>
+          <p className="text-blue-100 mt-2">Mulai Petualangan Anda</p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            {/* Input Email */}
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email"
-              />
-            </div>
 
-            {/* Input Password */}
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-              />
-            </div>
+        {/* Form Login */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          {/* Input Email */}
+          <div className="relative">
+            <Input
+              type="email"
+              name="email"
+              value={formState.email}
+              onChange={handleInputChange}
+              placeholder="Email"
+              icon={<Mail className="text-gray-400" />}
+              error={errors.email}
+            />
           </div>
 
-          {/* Pesan Error */}
-          {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
+          {/* Input Password */}
+          <div className="relative">
+            <Input
+              type="password"
+              name="password"
+              value={formState.password}
+              onChange={handleInputChange}
+              placeholder="Password"
+              icon={<Lock className="text-gray-400" />}
+              error={errors.password}
+            />
+          </div>
+
+          {/* Error Submit */}
+          {errors.submit && (
+            <div className="text-red-500 text-center">{errors.submit}</div>
           )}
 
           {/* Tombol Login */}
-          <div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
-                isLoading
-                  ? "bg-gray-500 cursor-not-allowed"
-                  : "bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              }`}
-            >
-              {isLoading ? "Logging in..." : "Login"}
-            </button>
-          </div>
+          <Button
+            type="submit"
+            disabled={isLoading || !isFormValid}
+            className={`w-full ${
+              isLoading || !isFormValid
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
+          >
+            {isLoading ? "Memproses..." : "Login"}
+          </Button>
 
-          {/* Link Register */}
-          <div className="text-center">
-            <span className="text-sm text-gray-600">
-              Belum punya akun?{" "}
-              <a
-                href="/register"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Daftar di sini
-              </a>
-            </span>
-          </div>
+          {/* Link Registrasi */}
+          <p className="text-center text-sm text-gray-600 mt-4">
+            Belum punya akun?{" "}
+            <a href="/register" className="text-blue-600 hover:underline">
+              Daftar Sekarang
+            </a>
+          </p>
         </form>
       </div>
     </div>
