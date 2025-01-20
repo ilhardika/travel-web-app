@@ -1,173 +1,132 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { User, Mail, Lock } from "lucide-react";
+import Button from "../../components/common/Button";
+import Input from "../../components/common/Input";
 import { useAuth } from "../../context/AuthContext";
+import { useForm } from "../../hooks/useForm";
+import { registerValidator } from "../../utils/formValidators";
 
 const Register = () => {
-  // State untuk form registrasi
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordRepeat, setPasswordRepeat] = useState("");
-  const [role, setRole] = useState("user"); // Default role
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Default profile picture dan phone number
-  const DEFAULT_PROFILE_PICTURE =
-    "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80";
-  const DEFAULT_PHONE_NUMBER = "08976041232";
-
-  // Hook navigasi dan autentikasi
+  // Hooks
   const navigate = useNavigate();
   const { register } = useAuth();
 
-  // Handler submit form
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setIsLoading(true);
-
-    // Validasi form
-    if (!name || !email || !password || !passwordRepeat) {
-      setError("Semua field wajib diisi");
-      setIsLoading(false);
-      return;
-    }
-
-    if (password !== passwordRepeat) {
-      setError("Password tidak cocok");
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      // Data registrasi
-      const userData = {
-        name,
-        email,
-        password,
-        passwordRepeat,
-        role,
-        profilePictureUrl: DEFAULT_PROFILE_PICTURE,
-        phoneNumber: DEFAULT_PHONE_NUMBER,
-      };
-
-      // Panggil fungsi register dari context
-      await register(userData);
-
-      // Redirect ke halaman login setelah registrasi berhasil
-      navigate("/login");
-    } catch (err) {
-      // Set pesan error dari response API
-      setError(err.response?.data?.message || "Registrasi gagal");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // Form Hook
+  const {
+    formState,
+    errors,
+    isLoading,
+    isFormValid,
+    handleInputChange,
+    handleSubmit,
+  } = useForm(
+    // Initial State
+    {
+      name: "",
+      email: "",
+      password: "",
+      passwordRepeat: "",
+      role: "user",
+    },
+    // Validator
+    registerValidator,
+    // Submit Handler
+    async (formData) => {
+      await register(formData);
+    },
+    // Navigate path setelah berhasil
+    "/login"
+  );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Buat Akun Baru
-          </h2>
+    <div className="min-h-screen bg-blue-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
+        {/* Header */}
+        <div className="bg-blue-600 p-6 text-center">
+          <h2 className="text-3xl font-bold text-white">TravApp</h2>
+          <p className="text-blue-100 mt-2">Buat Akun Baru</p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm space-y-4">
-            {/* Input Nama */}
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Nama Lengkap"
-            />
 
-            {/* Input Email */}
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Email"
-            />
+        {/* Form Registrasi */}
+        <form
+          onSubmit={(e) => handleSubmit(e, navigate)}
+          className="p-6 space-y-6"
+        >
+          <Input
+            type="text"
+            name="name"
+            value={formState.name}
+            onChange={handleInputChange}
+            placeholder="Nama Lengkap"
+            icon={<User className="text-gray-400" />}
+            error={errors.name}
+          />
 
-            {/* Input Password */}
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Password"
-            />
+          <Input
+            type="email"
+            name="email"
+            value={formState.email}
+            onChange={handleInputChange}
+            placeholder="Email"
+            icon={<Mail className="text-gray-400" />}
+            error={errors.email}
+          />
 
-            {/* Input Konfirmasi Password */}
-            <input
-              id="passwordRepeat"
-              name="passwordRepeat"
-              type="password"
-              required
-              value={passwordRepeat}
-              onChange={(e) => setPasswordRepeat(e.target.value)}
-              className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Konfirmasi Password"
-            />
+          <Input
+            type="password"
+            name="password"
+            value={formState.password}
+            onChange={handleInputChange}
+            placeholder="Password"
+            icon={<Lock className="text-gray-400" />}
+            error={errors.password}
+          />
+
+          <Input
+            type="password"
+            name="passwordRepeat"
+            value={formState.passwordRepeat}
+            onChange={handleInputChange}
+            placeholder="Konfirmasi Password"
+            icon={<Lock className="text-gray-400" />}
+            error={errors.passwordRepeat}
+          />
+
+          <div>
+            <select
+              name="role"
+              value={formState.role}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 border-gray-300 focus:ring-blue-500"
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
           </div>
 
-          {/* Dropdown Role */}
-          <select
-            id="role"
-            name="role"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-          >
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-          </select>
-
-          {/* Pesan Error */}
-          {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
+          {errors.submit && (
+            <div className="text-red-500 text-center">{errors.submit}</div>
           )}
 
-          {/* Tombol Register */}
-          <div>
-            <button
-              type="submit"
-              disabled={isLoading}
-              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
-                isLoading
-                  ? "bg-gray-500 cursor-not-allowed"
-                  : "bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              }`}
-            >
-              {isLoading ? "Mendaftar..." : "Daftar"}
-            </button>
-          </div>
+          <Button
+            type="submit"
+            disabled={isLoading || !isFormValid}
+            className={`w-full ${
+              isLoading || !isFormValid
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
+          >
+            {isLoading ? "Mendaftar..." : "Daftar"}
+          </Button>
 
-          {/* Link Login */}
-          <div className="text-center">
-            <span className="text-sm text-gray-600">
-              Sudah punya akun?{" "}
-              <a
-                href="/login"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Login di sini
-              </a>
-            </span>
-          </div>
+          <p className="text-center text-sm text-gray-600 mt-4">
+            Sudah punya akun?{" "}
+            <a href="/login" className="text-blue-600 hover:underline">
+              Login di sini
+            </a>
+          </p>
         </form>
       </div>
     </div>
