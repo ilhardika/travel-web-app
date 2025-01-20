@@ -1,34 +1,89 @@
-flowchart TD  
-    A[Start] --> B[User Visits Landing Page]  
-    B --> C[User Browses Activities]  
-    C --> D[User Views Activity Details]  
-    D --> E{Is User Logged In?}  
-    E -->|Yes| F[User Adds Activity to Cart]  
-    E -->|No| G[User Logs In or Registers]  
-    G -->|Login Successful| F  
-    F --> H[User Views Cart]  
-    H --> I[User Proceeds to Payment]  
-    I --> J[User Uploads Payment Proof]  
-    J --> K[System Confirms Payment]  
-    K --> L[User Views Transaction History]  
-    L --> M{Select Action}  
-    M -->|View Details| N[User Views Transaction Details]  
-    M -->|Cancel Order| O[User Cancels Order]  
-    O --> P[System Updates Order Status]  
-    P --> Q[End]  
-    N --> Q  
-  
-    %% Admin Process  
-    R[Admin Logs In] --> S[Admin Accesses Dashboard]  
-    S --> T{Select Management Option}  
-    T -->|Manage Banners| U[Admin Manages Banners]  
-    T -->|Manage Promotions| V[Admin Manages Promotions]  
-    T -->|Manage Categories| W[Admin Manages Categories]  
-    T -->|Manage Activities| X[Admin Manages Activities]  
-    T -->|Manage Users| Y[Admin Manages Users]  
-    T -->|Manage Transactions| Z[Admin Manages Transactions]  
-    Z --> AA{Select Transaction Action}  
-    AA -->|Update Status| AB[Admin Updates Transaction Status]  
-    AA -->|Cancel Transaction| AC[Admin Cancels Transaction]  
-    AC --> AD[System Updates Transaction Status]  
-    AD --> AE[End]  
+graph TD
+    A[Mulai] --> B[Halaman Utama/Landing Page]
+    B --> C[Lihat Kategori Aktivitas]
+    C --> D[Pilih Kategori]
+    D --> E[Lihat Aktivitas dalam Kategori]
+    E --> F[Pilih Aktivitas]
+    F --> G[Lihat Detail Aktivitas]
+    
+    B --> H[Lihat Banner]
+    B --> I[Lihat Promo]
+    
+    G --> J{User Login?}
+    J -->|Tidak| K[Redirect Login]
+    K --> L[Login]
+    L --> M{Login Berhasil?}
+    M -->|Ya| N[Kembali ke Detail Aktivitas]
+    M -->|Tidak| L
+    
+    J -->|Ya| O[Add to Cart]
+    O --> P[Keranjang]
+    P --> Q[Pilih Metode Pembayaran]
+    Q --> R[Buat Transaksi]
+    R --> S[Upload Bukti Pembayaran]
+    S --> T[Menunggu Konfirmasi]
+    T --> U[Transaksi Selesai]
+    
+    N --> O
+    
+    B --> V[Profil Pengguna]
+    V --> W[Update Profil]
+    V --> X[Riwayat Transaksi]
+
+graph TD
+    A[Mulai] --> B[Pilih Aksi]
+    B --> C[Register]
+    B --> D[Login]
+    B --> E[Lupa Password]
+    
+    C --> F[Isi Data Registrasi]
+    F --> G{Validasi Data}
+    G -->|Valid| H[Buat Akun]
+    G -->|Tidak Valid| F
+    
+    D --> I[Masukkan Email & Password]
+    I --> J{Validasi Kredensial}
+    J -->|Berhasil| K[Masuk Sistem]
+    J -->|Gagal| I
+    
+    E --> L[Masukkan Email]
+    L --> M{Cek Email}
+    M -->|Ada| N[Kirim Link Reset]
+    M -->|Tidak Ada| L
+
+graph TD
+    A[Login Admin] --> B{Autentikasi Berhasil?}
+    B -->|Ya| C[Dashboard Admin]
+    B -->|Tidak| A
+    
+    C --> D[Manajemen Pengguna]
+    D --> E[Lihat Semua Pengguna]
+    E --> F[Update Role Pengguna]
+    E --> G[Hapus Pengguna]
+    
+    C --> H[Manajemen Kategori]
+    H --> I[Tambah Kategori]
+    H --> J[Update Kategori]
+    H --> K[Hapus Kategori]
+    
+    C --> L[Manajemen Aktivitas]
+    L --> M[Tambah Aktivitas]
+    L --> N[Update Aktivitas]
+    L --> O[Hapus Aktivitas]
+    
+    C --> P[Manajemen Promo]
+    P --> Q[Tambah Promo]
+    P --> R[Update Promo]
+    P --> S[Hapus Promo]
+    
+    C --> T[Manajemen Transaksi]
+    T --> U[Lihat Semua Transaksi]
+    U --> V[Konfirmasi Pembayaran]
+    U --> W[Update Status Transaksi]
+    
+    C --> X[Manajemen Banner]
+    X --> Y[Tambah Banner]
+    X --> Z[Update Banner]
+    X --> AA[Hapus Banner]
+    
+    C --> AB[Logout]
