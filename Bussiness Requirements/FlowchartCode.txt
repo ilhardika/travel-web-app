@@ -1,4 +1,25 @@
 graph TD
+    A[Mulai] --> B[Pilih Aksi]
+    B --> C[Register]
+    B --> D[Login]
+    B --> E[Lupa Password]
+    
+    C --> F[Isi Data Registrasi]
+    F --> G{Validasi Data}
+    G -->|Valid| H[Buat Akun]
+    G -->|Tidak Valid| F
+    
+    D --> I[Masukkan Email & Password]
+    I --> J{Validasi Kredensial}
+    J -->|Berhasil| K[Masuk Sistem]
+    J -->|Gagal| I
+    
+    E --> L[Masukkan Email]
+    L --> M{Cek Email}
+    M -->|Ada| N[Kirim Link Reset]
+    M -->|Tidak Ada| L
+
+graph TD
     A[Mulai] --> B[Halaman Utama/Landing Page]
     B --> C[Lihat Kategori Aktivitas]
     C --> D[Pilih Kategori]
@@ -29,27 +50,6 @@ graph TD
     B --> V[Profil Pengguna]
     V --> W[Update Profil]
     V --> X[Riwayat Transaksi]
-
-graph TD
-    A[Mulai] --> B[Pilih Aksi]
-    B --> C[Register]
-    B --> D[Login]
-    B --> E[Lupa Password]
-    
-    C --> F[Isi Data Registrasi]
-    F --> G{Validasi Data}
-    G -->|Valid| H[Buat Akun]
-    G -->|Tidak Valid| F
-    
-    D --> I[Masukkan Email & Password]
-    I --> J{Validasi Kredensial}
-    J -->|Berhasil| K[Masuk Sistem]
-    J -->|Gagal| I
-    
-    E --> L[Masukkan Email]
-    L --> M{Cek Email}
-    M -->|Ada| N[Kirim Link Reset]
-    M -->|Tidak Ada| L
 
 graph TD
     A[Login Admin] --> B{Autentikasi Berhasil?}
