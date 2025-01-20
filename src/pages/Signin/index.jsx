@@ -1,15 +1,14 @@
-import React from "react";
 import Navbar from "../../components/Navbar";
 import { FcGoogle } from "react-icons/fc";
 
-export default function Login() {
+export default function Signin() {
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col">
       <Navbar />
       <div className="flex flex-col justify-center items-center flex-grow p-6">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
           <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">
-            Login
+            Signin
           </h1>
           <form className="flex flex-col space-y-4">
             <div>

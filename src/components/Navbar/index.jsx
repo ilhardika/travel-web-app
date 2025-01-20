@@ -3,10 +3,8 @@ import { FaShoppingCart } from "react-icons/fa";
 import { RiMenuFold2Line, RiMenuUnfold2Line } from "react-icons/ri";
 
 const Navbar = () => {
-  // State to manage mobile menu visibility
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Function to toggle mobile menu
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -16,16 +14,13 @@ const Navbar = () => {
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center">
-          <h1 className="text-2xl font-bold text-gray-800">TravelBook</h1>
+          <h1 className="text-2xl font-bold text-gray-800">TravelApp</h1>
         </div>
 
         {/* Navigation Links */}
         <div className="hidden md:flex space-x-6">
           <a href="#" className="text-gray-600 hover:text-gray-800">
-            About Us
-          </a>
-          <a href="#" className="text-gray-600 hover:text-gray-800">
-            Contact
+            Promo
           </a>
           <a href="#" className="text-gray-600 hover:text-gray-800">
             Destination
@@ -60,7 +55,7 @@ const Navbar = () => {
       {isMobileMenuOpen && (
         <div
           className="fixed inset-0 bg-black opacity-50 z-40"
-          onClick={toggleMobileMenu} // Close menu when clicking on overlay
+          onClick={toggleMobileMenu}
         />
       )}
 
@@ -80,10 +75,7 @@ const Navbar = () => {
         </div>
         <div className="flex flex-col space-y-6 px-6 py-6">
           <a href="#" className="text-gray-600 hover:text-gray-800">
-            About Us
-          </a>
-          <a href="#" className="text-gray-600 hover:text-gray-800">
-            Contact
+            Promo
           </a>
           <a href="#" className="text-gray-600 hover:text-gray-800">
             Destination

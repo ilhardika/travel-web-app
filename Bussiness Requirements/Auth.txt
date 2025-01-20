@@ -17,5 +17,4 @@ Akses & Fitur:
 - Manajemen Kategori: Kelola kategori aktivitas wisata.  
 - Manajemen Aktivitas: Tambah, edit, dan hapus aktivitas wisata.  
 - Kelola user: Lihat semua user dan ubah role mereka dengan API Update User Role.  
-- Kelola Transaksi: Lihat semua transaksi user, update status transaksi (success/failed), atau membatalkan transaksi.  
-- Kelola Metode Pembayaran: Tambah atau update metode pembayaran.
+- Kelola Transaksi: Lihat semua transaksi user, update status transaksi (success/failed), atau membatalkan transaksi.
