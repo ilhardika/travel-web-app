@@ -12,6 +12,7 @@ Akses & Fitur:
 2. Admin
 Role ini untuk mengelola konten dan transaksi dalam web app.
 Akses & Fitur:
+- Dashboard
 - Manajemen Banner: Tambah, ubah, dan hapus banner menggunakan API Create/Update/Delete Banner.  
 - Manajemen Promo: Tambah, ubah, dan hapus promo dengan API Create/Update/Delete Promo.  
 - Manajemen Kategori: Kelola kategori aktivitas wisata.  

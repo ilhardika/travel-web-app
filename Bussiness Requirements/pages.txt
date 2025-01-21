@@ -3,7 +3,6 @@
 Form email/username
 Form password
 Tombol login
-Link lupa password
 Validasi input
 
 2. Register

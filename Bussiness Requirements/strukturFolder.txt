@@ -16,6 +16,7 @@ travel-app/
 │   │   └── ui/
 │   │       ├── ActivityCard.jsx
 │   │       ├── CategoryCard.jsx
+│   │       ├── DestinationCard.jsx
 │   │       └── PromoCard.jsx
 │   │
 │   ├── pages/
@@ -46,47 +47,23 @@ travel-app/
 │   │       ├── TransactionManagement.jsx
 │   │       └── BannerManagement.jsx
 │   │
-│   ├── services/
-│   │   ├── api/
-│   │   │   ├── authService.js
-│   │   │   ├── userService.js
-│   │   │   ├── categoryService.js
-│   │   │   ├── activityService.js
-│   │   │   ├── promoService.js
-│   │   │   ├── cartService.js
-│   │   │   └── transactionService.js
-│   │   │
-│   │   └── utils/
-│   │       ├── constants.js
-│   │       ├── validations.js
-│   │       └── helpers.js
-│   │
-│   ├── store/
-│   │   ├── slices/
-│   │   │   ├── authSlice.js
-│   │   │   ├── userSlice.js
-│   │   │   ├── categorySlice.js
-│   │   │   ├── activitySlice.js
-│   │   │   ├── transactionSlice.js
-│   │   │   ├── promoSlice.js
-│   │   │   └── cartSlice.js
-│   │   │
-│   │   └── index.js
-│   │
-│   ├── hooks/
-│   │   ├── useAuth.js
-│   │   └── useFetch.js
-│   │
-│   ├── routes/
-│   │   ├── PrivateRoute.jsx
-│   │   ├── AdminRoute.jsx
-│   │   └── AppRoutes.jsx
-│   │
-│   ├── assets/
-│   │   ├── website-icon.png
+│   ├── lib/
+│   │   ├── api.js
+│   │   ├── auth.js
+│   │   ├── user.js
+│   │   ├── category.js
+│   │   ├── activity.js
+│   │   ├── promo.js
+│   │   ├── cart.js
+│   │   ├── transaction.js
+│   │   ├── banner.js
+│   │   ├── constants.js
+│   │   ├── validations.js
+│   │   ├── helpers.js
+│   │   ├── hooks.js
+│   │   └── context.js
 │   │
 │   ├── App.jsx
-│   ├── index.css
 │   └── main.jsx
 │
 ├── package.json

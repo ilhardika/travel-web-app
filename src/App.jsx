@@ -1,21 +1,17 @@
-// src/App.jsx
-import React from "react";
-import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import AppRoutes from "./routes/AppRoutes";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import ProtectedRoute from "./lib/ProtectedRoutes";
+import Login from "./pages/auth/Login";
 
 function App() {
   return (
-    <AuthProvider>
+    <div>
       <BrowserRouter>
-        <AppRoutes />
+        <Routes>
+          <Route path="/login/" element={<Login />}></Route>
+        </Routes>
       </BrowserRouter>
-    </AuthProvider>
+    </div>
   );
 }
 
 export default App;
-
-// Semua service API
-// Axios configuration
-// Interceptor
