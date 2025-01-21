@@ -1,0 +1,93 @@
+travel-app/
+│
+├── src/
+│   ├── components/
+│   │   ├── common/
+│   │   │   ├── Button.jsx
+│   │   │   ├── Input.jsx
+│   │   │   ├── Modal.jsx
+│   │   │   └── Card.jsx
+│   │   │
+│   │   ├── layout/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   └── Footer.jsx
+│   │   │
+│   │   └── ui/
+│   │       ├── ActivityCard.jsx
+│   │       ├── CategoryCard.jsx
+│   │       └── PromoCard.jsx
+│   │
+│   ├── pages/
+│   │   ├── auth/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   └── ForgotPassword.jsx
+│   │   │
+│   │   ├── public/
+│   │   │   ├── LandingPage.jsx
+│   │   │   ├── CategoryPage.jsx
+│   │   │   ├── ActivityListPage.jsx
+│   │   │   └── ActivityDetailPage.jsx
+│   │   │
+│   │   ├── user/
+│   │   │   ├── ProfilePage.jsx
+│   │   │   ├── EditProfilePage.jsx
+│   │   │   ├── CartPage.jsx
+│   │   │   ├── PaymentMethodPage.jsx
+│   │   │   └── TransactionHistoryPage.jsx
+│   │   │
+│   │   └── admin/
+│   │       ├── AdminDashboard.jsx
+│   │       ├── UserManagement.jsx
+│   │       ├── CategoryManagement.jsx
+│   │       ├── ActivityManagement.jsx
+│   │       ├── PromoManagement.jsx
+│   │       ├── TransactionManagement.jsx
+│   │       └── BannerManagement.jsx
+│   │
+│   ├── services/
+│   │   ├── api/
+│   │   │   ├── authService.js
+│   │   │   ├── userService.js
+│   │   │   ├── categoryService.js
+│   │   │   ├── activityService.js
+│   │   │   ├── promoService.js
+│   │   │   ├── cartService.js
+│   │   │   └── transactionService.js
+│   │   │
+│   │   └── utils/
+│   │       ├── constants.js
+│   │       ├── validations.js
+│   │       └── helpers.js
+│   │
+│   ├── store/
+│   │   ├── slices/
+│   │   │   ├── authSlice.js
+│   │   │   ├── userSlice.js
+│   │   │   ├── categorySlice.js
+│   │   │   ├── activitySlice.js
+│   │   │   ├── transactionSlice.js
+│   │   │   ├── promoSlice.js
+│   │   │   └── cartSlice.js
+│   │   │
+│   │   └── index.js
+│   │
+│   ├── hooks/
+│   │   ├── useAuth.js
+│   │   └── useFetch.js
+│   │
+│   ├── routes/
+│   │   ├── PrivateRoute.jsx
+│   │   ├── AdminRoute.jsx
+│   │   └── AppRoutes.jsx
+│   │
+│   ├── assets/
+│   │   ├── website-icon.png
+│   │
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
+│
+├── package.json
+└── README.md
