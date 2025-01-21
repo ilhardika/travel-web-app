@@ -114,7 +114,8 @@ const Navbar = () => {
                   }
                   className="focus:outline-none"
                 >
-                  <UserCircle
+                  <User
+                    Circle
                     className="text-blue-600 hover:text-blue-700 transition-colors"
                     size={28}
                   />
@@ -127,10 +128,14 @@ const Navbar = () => {
             ) : (
               <div className="flex items-center space-x-4">
                 <Link to="/login">
-                  <Button variant="outline">Login</Button>
+                  <Button className="border-2 border-blue-600 text-black bg-white hover:bg-blue-600 hover:text-white px-4 rounded-lg">
+                    Login
+                  </Button>
                 </Link>
                 <Link to="/register">
-                  <Button>Register</Button>
+                  <Button className="bg-blue-600 text-white hover:bg-blue-700 transition-colors px-4 rounded-lg shadow-md hover:shadow-lg">
+                    Register
+                  </Button>
                 </Link>
               </div>
             )}
