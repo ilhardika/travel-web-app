@@ -70,7 +70,7 @@ const ActivityCard = ({ activity }) => {
             </p>
           </div>
           <Link
-            to={`/activity/${activity.id}`}
+            to={`/activity/detail/${activity.id}`}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             View Details
