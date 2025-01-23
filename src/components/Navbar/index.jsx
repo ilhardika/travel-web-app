@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ShoppingCart, X, ChevronDown, CircleUser } from "lucide-react";
 import { useCategories } from "../../hooks/useCategories";
 import { MobileNavigation } from "./MobileNavigation";
+import useCart from '../../hooks/useCart';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -12,6 +13,7 @@ const Navbar = () => {
     useState(false);
 
   const { categories, loading: categoriesLoading } = useCategories();
+  const { totalItems } = useCart();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -102,9 +104,14 @@ const Navbar = () => {
             <div className="flex items-center space-x-4">
               <Link
                 to="/cart"
-                className="p-2 rounded-full text-gray-600 hover:bg-gray-100 transition-colors duration-300"
+                className="p-2 rounded-full text-gray-600 hover:bg-gray-100 transition-colors duration-300 relative"
               >
                 <ShoppingCart className="w-6 h-6" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                    {totalItems}
+                  </span>
+                )}
               </Link>
 
               {/* Auth Buttons */}

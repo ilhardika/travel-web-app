@@ -9,7 +9,8 @@ import UpdateProfilePage from "./pages/UpdateProfilePage";
 import DestinationsPage from "./pages/ActivityPage";
 import PromoPage from "./pages/PromoPage";
 import ActivityDetailPage from "./pages/ActivityDetailPage";
-import { AuthProvider } from './context/AuthContext';
+import CartPage from "./pages/CartPage";
+import { AuthProvider } from "./context/AuthContext";
 
 const App = () => {
   return (
@@ -18,18 +19,11 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />}></Route>
-            <Route 
-              path="/activity/detail/:activityId" 
-              element={<ActivityDetailPage />} 
-            />
             <Route
-              path="/activity"
-              element={
-                <ProtectedRoute>
-                  <DestinationsPage />
-                </ProtectedRoute>
-              }
-            ></Route>
+              path="/activity/detail/:activityId"
+              element={<ActivityDetailPage />}
+            />
+            <Route path="/activity" element={<DestinationsPage />}></Route>
             <Route
               path="/activity/:categoryName"
               element={<DestinationsPage />}
@@ -51,6 +45,14 @@ const App = () => {
                 </ProtectedRoute>
               }
             ></Route>
+            <Route
+              path="/cart"
+              element={
+                <ProtectedRoute>
+                  <CartPage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/signin" element={<SinginPage />}></Route>
             <Route path="/signup" element={<SignupPage />}></Route>
           </Routes>
