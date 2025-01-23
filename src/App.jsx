@@ -6,7 +6,7 @@ import SinginPage from "./pages/SigninPage";
 import SignupPage from "./pages/SignupPage";
 import ProfilePage from "./pages/ProfilePage";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
-import DestinationsPage from "./pages/DestinationsPage";
+import DestinationsPage from "./pages/ActivityPage";
 import PromoPage from "./pages/PromoPage";
 import ActivityDetailPage from "./pages/ActivityDetailPage";
 
@@ -17,7 +17,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LandingPage />}></Route>
           <Route
-            path="/destinations"
+            path="/activity"
             element={
               <ProtectedRoute>
                 <DestinationsPage />
@@ -25,17 +25,10 @@ const App = () => {
             }
           ></Route>
           <Route
-            path="/destinations/:categoryName"
+            path="/activity/:categoryName"
             element={<DestinationsPage />}
           ></Route>
-          <Route
-            path="/promo"
-            element={
-              <ProtectedRoute>
-                <PromoPage />
-              </ProtectedRoute>
-            }
-          ></Route>
+          <Route path="/promo" element={<PromoPage />}></Route>
           <Route
             path="/profile"
             element={

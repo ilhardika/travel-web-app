@@ -65,7 +65,7 @@ const ActivityList = () => {
                     IDR {activity.price.toLocaleString()}
                   </span>
 
-                  <Link to={`/destinations`}>
+                  <Link to={`/activity`}>
                     <button className="group flex items-center text-teal-600 hover:text-teal-800 transition-colors">
                       Explore Now
                       <ArrowRight className="w-5 h-5 ml-2 transform transition-transform group-hover:translate-x-1" />

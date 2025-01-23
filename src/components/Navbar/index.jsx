@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, Links, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ShoppingCart, X, ChevronDown, CircleUser } from "lucide-react";
 import { useCategories } from "../../hooks/useCategories";
 import { MobileNavigation } from "./MobileNavigation";
@@ -68,7 +68,7 @@ const Navbar = () => {
                 onMouseLeave={() => setDestinationsDropdownOpen(false)}
               >
                 <Link
-                  to={"/destinations"}
+                  to="/activity"
                   className="flex items-center space-x-1 py-2 text-gray-600 hover:text-gray-900 transition-colors duration-300"
                 >
                   Destinations
@@ -86,7 +86,7 @@ const Navbar = () => {
                         categories.map((category) => (
                           <Link
                             key={category.id}
-                            to={`/destinations/${category.name.toLowerCase()}`}
+                            to={`/activity/${category.name.toLowerCase()}`}
                             className="block px-4 py-2 hover:bg-gray-100 text-gray-700 hover:text-gray-900"
                           >
                             {category.name}
@@ -222,7 +222,7 @@ const Navbar = () => {
                         categories.map((category) => (
                           <Link
                             key={category.id}
-                            to={`/destinations/${category.name.toLowerCase()}`}
+                            to={`/activity/${category.name.toLowerCase()}`}
                             className="block px-8 py-2 text-gray-700 hover:bg-gray-100"
                           >
                             {category.name}
