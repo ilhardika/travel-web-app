@@ -114,7 +114,7 @@ const DestinationsPage = () => {
                       Rp {destination.price.toLocaleString("id-ID")}
                     </span>
                     <Link
-                      to={`/destination/${destination.id}`}
+                      to={`/activity/${destination.id}`}
                       className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                     >
                       Detail

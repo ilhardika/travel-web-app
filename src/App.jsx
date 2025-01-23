@@ -7,7 +7,8 @@ import SignupPage from "./pages/SignupPage";
 import ProfilePage from "./pages/ProfilePage";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
 import DestinationsPage from "./pages/DestinationsPage";
-import PromoPage from "./pages";
+import PromoPage from "./pages/PromoPage";
+import ActivityDetailPage from "./pages/ActivityDetailPage";
 
 const App = () => {
   return (
@@ -53,6 +54,10 @@ const App = () => {
           ></Route>
           <Route path="/signin" element={<SinginPage />}></Route>
           <Route path="/signup" element={<SignupPage />}></Route>
+          <Route
+            path="/activity/:activityId"
+            element={<ActivityDetailPage />}
+          ></Route>
         </Routes>
       </BrowserRouter>
     </div>
