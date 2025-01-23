@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ArrowRight, Map, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useBanners } from "../hooks/useBanners";
 
 const AnimatedNumber = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
@@ -37,6 +38,8 @@ const AnimatedNumber = ({ end, duration = 2000 }) => {
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const { banners, loading } = useBanners();
+  const [currentBanner, setCurrentBanner] = useState(0);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -46,16 +49,41 @@ const Hero = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (banners.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentBanner((prev) => (prev + 1) % banners.length);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [banners.length]);
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-blue-950 to-blue-900">
-      {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute w-[800px] h-[800px] -top-1/2 -right-1/4 rounded-full bg-blue-400 opacity-10 blur-3xl" />
-        <div className="absolute w-[600px] h-[600px] top-3/4 -left-1/4 rounded-full bg-purple-400 opacity-10 blur-3xl" />
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Background Banner Slider */}
+      <div className="absolute inset-0 z-0">
+        {loading || banners.length === 0 ? (
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-950 to-blue-900" />
+        ) : (
+          banners.map((banner, index) => (
+            <div
+              key={banner.id}
+              className={`absolute inset-0 transition-opacity duration-700 
+                ${index === currentBanner ? 'opacity-100' : 'opacity-0'}`}
+            >
+              <img
+                src={banner.imageUrl}
+                alt={banner.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-blue-950/80 to-blue-900/80" />
+            </div>
+          ))
+        )}
       </div>
 
-      {/* Main Content */}
-      <div className="relative container mx-auto px-4 pt-32">
+      {/* Content */}
+      <div className="relative z-10 container mx-auto px-4 pt-32">
         <div className="max-w-4xl mx-auto text-center">
           {/* Small Highlight Text */}
           <div className="inline-block animate-fade-in">

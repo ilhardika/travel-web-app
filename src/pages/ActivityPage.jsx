@@ -3,14 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useDestinations } from "../hooks/useDestinations";
 import { useCategories } from "../hooks/useCategories";
 import Navbar from "../components/Navbar";
-import {
-  MapPin,
-  Star,
-  Users,
-  Clock,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { MapPin, Star, Users, Clock } from "lucide-react";
 
 const ActivityCard = ({ activity }) => {
   const [imageError, setImageError] = useState(false);
@@ -90,16 +83,6 @@ const ActivityCard = ({ activity }) => {
 
 const CategoryFilter = ({ categories, categoryName }) => {
   const scrollContainerRef = React.useRef(null);
-
-  const scroll = (direction) => {
-    if (scrollContainerRef.current) {
-      const scrollAmount = 200;
-      scrollContainerRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
 
   return (
     <div className="relative">
