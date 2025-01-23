@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import useCart from '../hooks/useCart';
 import { Minus, Plus, Trash2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Toast from '../components/Toast';
 
 const CartPage = () => {
-  const { cartItems, loading, updateQuantity } = useCart();
+  const navigate = useNavigate();
+  const [toast, setToast] = useState({ show: false, message: '', type: '' });
+  const { 
+    cartItems, 
+    loading, 
+    updateQuantity, 
+    deleteCartItem,
+    selectedItems,
+    toggleItemSelection,
+    toggleAllItems,
+    getSelectedItemsTotal
+  } = useCart();
 
   if (loading) {
     return (
@@ -23,68 +37,191 @@ const CartPage = () => {
   const handleQuantityChange = async (cartId, currentQuantity, change) => {
     const newQuantity = currentQuantity + change;
     if (newQuantity > 0) {
-      await updateQuantity(cartId, newQuantity);
+      const success = await updateQuantity(cartId, newQuantity);
+      
+      if (!success) {
+        setToast({
+          show: true,
+          message: 'Failed to update quantity',
+          type: 'error'
+        });
+      }
+    }
+  };
+
+  const handleDelete = async (cartId) => {
+    if (window.confirm('Are you sure you want to remove this item?')) {
+      const success = await deleteCartItem(cartId);
+      if (success) {
+        setToast({
+          show: true,
+          message: 'Item removed from cart',
+          type: 'success'
+        });
+      } else {
+        setToast({
+          show: true,
+          message: 'Failed to remove item',
+          type: 'error'
+        });
+      }
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Toast 
+        show={toast.show}
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast(prev => ({ ...prev, show: false }))}
+      />
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-8">Shopping Cart</h1>
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8">
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 lg:mb-0">
+            Shopping Cart
+          </h1>
+          {cartItems.length > 0 && (
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={selectedItems.length === cartItems.length}
+                onChange={(e) => toggleAllItems(e.target.checked)}
+                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm text-gray-600">Select All</span>
+            </div>
+          )}
+        </div>
         
         {cartItems.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500">Your cart is empty</p>
-          </div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-12"
+          >
+            <div className="max-w-md mx-auto">
+              <img 
+                src="/empty-cart.svg" 
+                alt="Empty Cart" 
+                className="w-64 h-64 mx-auto mb-6 opacity-50"
+              />
+              <p className="text-gray-500 mb-4">Your cart is empty</p>
+              <button 
+                onClick={() => navigate('/')}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Start Shopping
+              </button>
+            </div>
+          </motion.div>
         ) : (
           <div className="space-y-4">
-            {cartItems.map((item) => (
-              <div key={item.id} className="bg-white rounded-xl shadow-sm p-6">
-                <div className="flex gap-6">
-                  <img
-                    src={item.activity.imageUrls[0]}
-                    alt={item.activity.title}
-                    className="w-32 h-32 object-cover rounded-lg"
-                  />
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {item.activity.title}
-                    </h3>
-                    <p className="text-gray-600 mt-1">
-                      {item.activity.city}, {item.activity.province}
-                    </p>
-                    <div className="mt-4 flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <button
-                          onClick={() => handleQuantityChange(item.id, item.quantity, -1)}
-                          className="p-1 rounded-full hover:bg-gray-100"
-                        >
-                          <Minus className="w-4 h-4" />
-                        </button>
-                        <span className="font-medium">{item.quantity}</span>
-                        <button
-                          onClick={() => handleQuantityChange(item.id, item.quantity, 1)}
-                          className="p-1 rounded-full hover:bg-gray-100"
-                        >
-                          <Plus className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-lg font-semibold text-gray-900">
-                          IDR {(item.activity.price * item.quantity).toLocaleString('id-ID')}
+            <AnimatePresence>
+              {cartItems.map((item) => (
+                <motion.div
+                  key={item.id}
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, x: -100 }}
+                  className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
+                >
+                  <div className="flex gap-6">
+                    <div className="flex items-start">
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.includes(item.id)}
+                        onChange={() => toggleItemSelection(item.id)}
+                        className="mt-2 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                    </div>
+                    <img
+                      src={item.activity.imageUrls[0]}
+                      alt={item.activity.title}
+                      className="w-32 h-32 object-cover rounded-lg"
+                    />
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        {item.activity.title}
+                      </h3>
+                      <p className="text-gray-600 mt-1">
+                        {item.activity.city}, {item.activity.province}
+                      </p>
+                      <div className="mt-4 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => handleQuantityChange(item.id, item.quantity, -1)}
+                            className="p-2 rounded-full hover:bg-gray-100"
+                          >
+                            <Minus className="w-4 h-4" />
+                          </motion.button>
+                          <motion.span 
+                            key={item.quantity}
+                            initial={{ scale: 1.2 }}
+                            animate={{ scale: 1 }}
+                            className="font-medium w-8 text-center"
+                          >
+                            {item.quantity}
+                          </motion.span>
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => handleQuantityChange(item.id, item.quantity, 1)}
+                            className="p-2 rounded-full hover:bg-gray-100"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </motion.button>
+                          <motion.button
+                            whileHover={{ scale: 1.1, color: '#ef4444' }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => handleDelete(item.id)}
+                            className="p-2 rounded-full hover:bg-red-50 text-red-500"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </motion.button>
                         </div>
-                        {item.activity.price_discount && (
-                          <div className="text-sm text-gray-500 line-through">
-                            IDR {(item.activity.price_discount * item.quantity).toLocaleString('id-ID')}
+                        <div className="text-right">
+                          <div className="text-lg font-semibold text-gray-900">
+                            IDR {(item.activity.price * item.quantity).toLocaleString('id-ID')}
                           </div>
-                        )}
+                          {item.activity.price_discount && (
+                            <div className="text-sm text-gray-500 line-through">
+                              IDR {(item.activity.price_discount * item.quantity).toLocaleString('id-ID')}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+
+            {selectedItems.length > 0 && (
+              <motion.div
+                initial={{ y: 100 }}
+                animate={{ y: 0 }}
+                className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t p-4 backdrop-blur-lg bg-white/90 z-50"
+              >
+                <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center gap-4">
+                  <div>
+                    <p className="text-gray-600 text-center lg:text-left">
+                      Total Selected ({selectedItems.length} items)
+                    </p>
+                    <p className="text-xl lg:text-2xl font-bold text-gray-900">
+                      IDR {getSelectedItemsTotal().toLocaleString('id-ID')}
+                    </p>
+                  </div>
+                  <button className="w-full lg:w-auto px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold">
+                    Checkout
+                  </button>
                 </div>
-              </div>
-            ))}
+              </motion.div>
+            )}
           </div>
         )}
       </div>
