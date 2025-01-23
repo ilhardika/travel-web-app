@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import useCart from '../hooks/useCart';
-import { Minus, Plus, Trash2 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Toast from '../components/Toast';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import useCart from "../hooks/useCart";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import Toast from "../components/Toast";
 
 const CartPage = () => {
   const navigate = useNavigate();
-  const [toast, setToast] = useState({ show: false, message: '', type: '' });
-  const { 
-    cartItems, 
-    loading, 
-    updateQuantity, 
+  const [toast, setToast] = useState({ show: false, message: "", type: "" });
+  const {
+    cartItems,
+    loading,
+    updateQuantity,
     deleteCartItem,
     selectedItems,
     toggleItemSelection,
     toggleAllItems,
-    getSelectedItemsTotal
+    getSelectedItemsTotal,
   } = useCart();
 
   if (loading) {
@@ -38,31 +38,31 @@ const CartPage = () => {
     const newQuantity = currentQuantity + change;
     if (newQuantity > 0) {
       const success = await updateQuantity(cartId, newQuantity);
-      
+
       if (!success) {
         setToast({
           show: true,
-          message: 'Failed to update quantity',
-          type: 'error'
+          message: "Failed to update quantity",
+          type: "error",
         });
       }
     }
   };
 
   const handleDelete = async (cartId) => {
-    if (window.confirm('Are you sure you want to remove this item?')) {
+    if (window.confirm("Are you sure you want to remove this item?")) {
       const success = await deleteCartItem(cartId);
       if (success) {
         setToast({
           show: true,
-          message: 'Item removed from cart',
-          type: 'success'
+          message: "Item removed from cart",
+          type: "success",
         });
       } else {
         setToast({
           show: true,
-          message: 'Failed to remove item',
-          type: 'error'
+          message: "Failed to remove item",
+          type: "error",
         });
       }
     }
@@ -70,11 +70,11 @@ const CartPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Toast 
+      <Toast
         show={toast.show}
         message={toast.message}
         type={toast.type}
-        onClose={() => setToast(prev => ({ ...prev, show: false }))}
+        onClose={() => setToast((prev) => ({ ...prev, show: false }))}
       />
       <Navbar />
       <div className="container mx-auto px-4 py-8">
@@ -94,22 +94,22 @@ const CartPage = () => {
             </div>
           )}
         </div>
-        
+
         {cartItems.length === 0 ? (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center py-12"
           >
             <div className="max-w-md mx-auto">
-              <img 
-                src="/empty-cart.svg" 
-                alt="Empty Cart" 
+              <img
+                src="/empty-cart.svg"
+                alt="Empty Cart"
                 className="w-64 h-64 mx-auto mb-6 opacity-50"
               />
               <p className="text-gray-500 mb-4">Your cart is empty</p>
-              <button 
-                onClick={() => navigate('/')}
+              <button
+                onClick={() => navigate("/")}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Start Shopping
@@ -154,12 +154,14 @@ const CartPage = () => {
                           <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => handleQuantityChange(item.id, item.quantity, -1)}
+                            onClick={() =>
+                              handleQuantityChange(item.id, item.quantity, -1)
+                            }
                             className="p-2 rounded-full hover:bg-gray-100"
                           >
                             <Minus className="w-4 h-4" />
                           </motion.button>
-                          <motion.span 
+                          <motion.span
                             key={item.quantity}
                             initial={{ scale: 1.2 }}
                             animate={{ scale: 1 }}
@@ -170,13 +172,15 @@ const CartPage = () => {
                           <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => handleQuantityChange(item.id, item.quantity, 1)}
+                            onClick={() =>
+                              handleQuantityChange(item.id, item.quantity, 1)
+                            }
                             className="p-2 rounded-full hover:bg-gray-100"
                           >
                             <Plus className="w-4 h-4" />
                           </motion.button>
                           <motion.button
-                            whileHover={{ scale: 1.1, color: '#ef4444' }}
+                            whileHover={{ scale: 1.1, color: "#ef4444" }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => handleDelete(item.id)}
                             className="p-2 rounded-full hover:bg-red-50 text-red-500"
@@ -186,11 +190,17 @@ const CartPage = () => {
                         </div>
                         <div className="text-right">
                           <div className="text-lg font-semibold text-gray-900">
-                            IDR {(item.activity.price * item.quantity).toLocaleString('id-ID')}
+                            IDR{" "}
+                            {(
+                              item.activity.price * item.quantity
+                            ).toLocaleString("id-ID")}
                           </div>
                           {item.activity.price_discount && (
                             <div className="text-sm text-gray-500 line-through">
-                              IDR {(item.activity.price_discount * item.quantity).toLocaleString('id-ID')}
+                              IDR{" "}
+                              {(
+                                item.activity.price_discount * item.quantity
+                              ).toLocaleString("id-ID")}
                             </div>
                           )}
                         </div>
@@ -213,7 +223,7 @@ const CartPage = () => {
                       Total Selected ({selectedItems.length} items)
                     </p>
                     <p className="text-xl lg:text-2xl font-bold text-gray-900">
-                      IDR {getSelectedItemsTotal().toLocaleString('id-ID')}
+                      IDR {getSelectedItemsTotal().toLocaleString("id-ID")}
                     </p>
                   </div>
                   <button className="w-full lg:w-auto px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold">
