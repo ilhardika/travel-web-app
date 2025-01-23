@@ -198,18 +198,13 @@ const Navbar = () => {
                 {/* Destinations Dropdown for Mobile */}
                 <div>
                   <Link
-                    to={"/destinations"}
+                    to={"/activity"}
                     className="flex justify-between items-center px-4 py-3 text-gray-800 hover:bg-gray-100"
                     onClick={() =>
                       setDestinationsDropdownOpen(!destinationsDropdownOpen)
                     }
                   >
                     Destinations
-                    <ChevronDown
-                      className={`w-5 h-5 transition-transform duration-300 ${
-                        destinationsDropdownOpen ? "rotate-180" : ""
-                      }`}
-                    />
                   </Link>
 
                   {destinationsDropdownOpen && (
