@@ -1,5 +1,5 @@
 import React from "react";
-import useActivities from "../../hooks/useActivity";
+import useActivities from "../hooks/useActivity";
 import { Star, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 

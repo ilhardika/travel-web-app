@@ -1,7 +1,7 @@
 // pages/PromoPage.jsx
 import React from "react";
-import { usePromos } from "../../hooks/usePromos";
-import Navbar from "../../components/Navbar";
+import { usePromos } from "../hooks/usePromos";
+import Navbar from "../components/Navbar";
 
 const PromoPage = () => {
   const { promos, loading, error } = usePromos();
@@ -82,11 +82,6 @@ const PromoPage = () => {
                   <h2 className="text-xl font-semibold my-2">
                     Promo Code : {promo.promo_code}
                   </h2>
-
-                  {/* Tombol Gunakan Promo */}
-                  <button className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-                    Gunakan Promo
-                  </button>
                 </div>
               </div>
             ))}

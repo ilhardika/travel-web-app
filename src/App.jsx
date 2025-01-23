@@ -7,7 +7,7 @@ import SignupPage from "./pages/SignupPage";
 import ProfilePage from "./pages/ProfilePage";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
 import DestinationsPage from "./pages/DestinationsPage";
-import PromoPage from "./pages/PromoPage";
+import PromoPage from "./pages";
 
 const App = () => {
   return (

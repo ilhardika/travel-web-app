@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import useActivityDetail from "../../hooks/useActivityDetails";
+import useActivityDetail from "../hooks/useActivityDetails";
 import { ChevronLeft, MapPin, Star, Calendar } from "lucide-react";
 
 const DestinationDetailPage = () => {

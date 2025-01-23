@@ -1,6 +1,6 @@
 import React from "react";
 import Slider from "react-slick";
-import { useTestimonials } from "../../hooks/useTestimonials";
+import { useTestimonials } from "../hooks/useTestimonials";
 import { Quote, Star, ChevronLeft, ChevronRight } from "lucide-react";
 
 // Import slick CSS

@@ -1,9 +1,9 @@
 // pages/DestinationsPage.jsx
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useDestinations } from "../../hooks/useDestinations";
-import { useCategories } from "../../hooks/useCategories";
-import Navbar from "../../components/Navbar";
+import { useDestinations } from "../hooks/useDestinations";
+import { useCategories } from "../hooks/useCategories";
+import Navbar from "../components/Navbar";
 
 const DestinationsPage = () => {
   const { categoryName } = useParams();

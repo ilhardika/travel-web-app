@@ -1,5 +1,5 @@
 import React from "react";
-import DestinationCard from "../DestinationCard";
+import DestinationCard from "./DestinationCard";
 
 const DestinationsGrid = ({ destinations }) => {
   return (

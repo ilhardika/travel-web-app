@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../../components/Navbar";
+import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Phone, Edit, LogOut } from "lucide-react";
 
