@@ -1,8 +1,8 @@
 import React from "react";
 import Slider from "react-slick";
-import { useTestimonials } from "../hooks/useTestimonials";
-import CustomPrevArrow from "./CustomPrevArrow";
-import CustomNextArrow from "./CustomNextArrow";
+import { useTestimonials } from "../../hooks/useTestimonials";
+import CustomPrevArrow from "../Arrows/CustomPrevArrow";
+import CustomNextArrow from "../Arrows/CustomNextArrow";
 import TestimonialCard from "./TestimonialCard";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
