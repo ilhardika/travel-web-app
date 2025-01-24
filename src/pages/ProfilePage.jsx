@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import { User, Mail, Phone, Edit, LogOut } from "lucide-react";
+import { User, Mail, Phone, Edit, LogOut, ShieldEllipsis } from "lucide-react";
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
@@ -96,7 +96,7 @@ const ProfilePage = () => {
           <div className="bg-gradient-to-r from-blue-500 to-sky-400 p-6 text-center">
             <div className="mx-auto w-32 h-32 rounded-full border-4 border-white mb-4 overflow-hidden">
               <img
-                src={userData.profilePictureUrl || "/default-avatar.png"}
+                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80"
                 alt="Foto Profil"
                 className="w-full h-full object-cover"
               />
@@ -128,6 +128,14 @@ const ProfilePage = () => {
               <div>
                 <p className="text-gray-600">Nomor Telepon</p>
                 <p className="font-semibold">{userData.phoneNumber}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <ShieldEllipsis className="text-blue-500" />
+              <div>
+                <p className="text-gray-600">Role</p>
+                <p className="font-semibold">{userData.role}</p>
               </div>
             </div>
           </div>

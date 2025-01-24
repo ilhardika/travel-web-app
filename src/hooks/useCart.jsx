@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useCartContext } from '../context/CartContext';
+import { useCartContext } from "../context/CartContext";
 
 const useCart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -36,11 +36,11 @@ const useCart = () => {
   const updateQuantity = async (cartId, quantity) => {
     try {
       console.log("Updating cart:", { cartId, quantity });
-      
+
       // Update local state optimistically
-      setCartItems(currentItems => 
-        currentItems.map(item => 
-          item.id === cartId 
+      setCartItems((currentItems) =>
+        currentItems.map((item) =>
+          item.id === cartId
             ? { ...item, quantity: parseInt(quantity, 10) }
             : item
         )
@@ -87,10 +87,10 @@ const useCart = () => {
   const deleteCartItem = async (cartId) => {
     try {
       // Optimistic updates
-      const newItems = cartItems.filter(item => item.id !== cartId);
+      const newItems = cartItems.filter((item) => item.id !== cartId);
       setCartItems(newItems);
       setCartCount(newItems.length); // Update global cart count
-      setSelectedItems(prev => prev.filter(id => id !== cartId));
+      setSelectedItems((prev) => prev.filter((id) => id !== cartId));
 
       const response = await fetch(
         `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/delete-cart/${cartId}`,
@@ -117,6 +117,40 @@ const useCart = () => {
       await fetchCart();
       setError(err.message);
       return false;
+    }
+  };
+
+  const addToCart = async (activityId) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(
+        "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/add-cart",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+          },
+          body: JSON.stringify({ activityId }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.code === "200") {
+        await fetchCart(); // Refresh cart after adding
+        return { success: true, message: data.message };
+      } else {
+        throw new Error(data.message || "Failed to add to cart");
+      }
+    } catch (error) {
+      setError(error.message);
+      return { success: false, message: error.message };
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -150,14 +184,15 @@ const useCart = () => {
     cartItems,
     loading,
     error,
+    addToCart,
     updateQuantity,
     deleteCartItem,
     refreshCart: fetchCart,
-    totalItems: cartItems.length, // This will always reflect the true count
+    totalItems: cartItems.length,
     selectedItems,
     toggleItemSelection,
     toggleAllItems,
-    getSelectedItemsTotal
+    getSelectedItemsTotal,
   };
 };
 

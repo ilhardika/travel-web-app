@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import useActivityDetails from "../hooks/useActivityDetails";
+import { useActivityDetails } from "../hooks/useActivity"; // Changed from useActivityDetails
 import { useAuth } from "../context/AuthContext";
 import {
   MapPin,
@@ -12,7 +12,7 @@ import {
   Info,
   Share2,
 } from "lucide-react";
-import useAddToCart from "../hooks/useAddToCart";
+import useCart from "../hooks/useCart"; // This will now include addToCart functionality
 import Toast from "../components/Toast";
 import { useCartContext } from "../context/CartContext";
 
@@ -25,7 +25,7 @@ const ActivityDetailPage = () => {
     error: activityError,
   } = useActivityDetails(activityId);
   const [selectedImage, setSelectedImage] = useState(0);
-  const { addToCart, loading: isBooking, error: bookingError } = useAddToCart();
+  const { addToCart, loading: isBooking, error: bookingError } = useCart();
   const { isAuthenticated } = useAuth();
   const [toast, setToast] = useState({
     show: false,

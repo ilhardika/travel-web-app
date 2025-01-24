@@ -68,6 +68,11 @@ const PromoPage = () => {
                     {promo.terms_condition.replace(/<\/?p>/g, "")}
                   </p>
 
+                  {/* Promo Code */}
+                  <h2 className="text-xl font-semibold my-2">
+                    Promo Code : {promo.promo_code}
+                  </h2>
+
                   {/* Diskon */}
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-green-600 font-bold text-lg">
@@ -77,11 +82,6 @@ const PromoPage = () => {
                       Minimum Claim Rp.{promo.minimum_claim_price}
                     </span>
                   </div>
-
-                  {/* Promo Code */}
-                  <h2 className="text-xl font-semibold my-2">
-                    Promo Code : {promo.promo_code}
-                  </h2>
                 </div>
               </div>
             ))}

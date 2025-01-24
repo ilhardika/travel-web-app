@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useDestinations } from "../hooks/useDestinations";
+import useActivities from "../hooks/useActivity"; // Changed from useDestinations
 import { useCategories } from "../hooks/useCategories";
 import Navbar from "../components/Navbar";
 import { MapPin, Star, Users, Clock } from "lucide-react";
@@ -122,46 +122,53 @@ const CategoryFilter = ({ categories, categoryName }) => {
 
 const DestinationsPage = () => {
   const { categoryName } = useParams();
-  const { destinations, loading, error } = useDestinations(categoryName);
+  const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
   const { categories, loading: categoriesLoading } = useCategories();
-
-  // Tampilan loading untuk categories
-  if (categoriesLoading) {
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  // Show loading state
+  if (activitiesLoading || categoriesLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
-  // Tampilan error
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-500 text-xl mb-4">{error}</div>
-          <Link
-            to="/"
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            Kembali ke Beranda
-          </Link>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <div className="animate-pulse space-y-4">
+            <div className="h-12 bg-gray-200 rounded w-1/4"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="h-64 bg-gray-200 rounded"></div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
-  // Tampilan loading
-  if (loading) {
+  // Show error state
+  if (activitiesError) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center text-red-600">
+            Error: {activitiesError}
+          </div>
+        </div>
       </div>
     );
   }
 
+  // Filter activities
+  const filteredActivities = activities?.filter((activity) => {
+    const matchesSearch = activity.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = !categoryName || 
+      (categories?.find(cat => cat.name.toLowerCase() === categoryName.toLowerCase())?.id === activity.categoryId);
+    return matchesSearch && matchesCategory;
+  }) || [];
+
   // Filter out activities without images
-  const validDestinations = destinations.filter(
+  const validDestinations = filteredActivities.filter(
     (dest) => dest.imageUrls && dest.imageUrls.length > 0 && dest.imageUrls[0]
   );
 
