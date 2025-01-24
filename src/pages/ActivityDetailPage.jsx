@@ -12,24 +12,34 @@ import {
   Info,
   Share2,
 } from "lucide-react";
-import useAddToCart from '../hooks/useAddToCart';
-import Toast from '../components/Toast';
+import useAddToCart from "../hooks/useAddToCart";
+import Toast from "../components/Toast";
+import { useCartContext } from "../context/CartContext";
 
 const ActivityDetailPage = () => {
   const { activityId } = useParams();
   const navigate = useNavigate();
-  const { activity, loading: activityLoading, error: activityError } = useActivityDetails(activityId);
+  const {
+    activity,
+    loading: activityLoading,
+    error: activityError,
+  } = useActivityDetails(activityId);
   const [selectedImage, setSelectedImage] = useState(0);
   const { addToCart, loading: isBooking, error: bookingError } = useAddToCart();
   const { isAuthenticated } = useAuth();
   const [toast, setToast] = useState({
     show: false,
-    message: '',
-    type: 'success'
+    message: "",
+    type: "success",
   });
+  const { cartCount, setCartCount } = useCartContext(); // Remove refreshCart
 
   // Add console logs for debugging
-  console.log('ActivityDetailPage render:', { activityId, activity, isAuthenticated });
+  console.log("ActivityDetailPage render:", {
+    activityId,
+    activity,
+    isAuthenticated,
+  });
 
   if (activityLoading) {
     return (
@@ -61,46 +71,50 @@ const ActivityDetailPage = () => {
 
   const handleBooking = async () => {
     if (!isAuthenticated) {
-      navigate('/signin'); // Changed from '/login' to '/signin'
+      navigate("/signin"); // Changed from '/login' to '/signin'
       return;
     }
 
     try {
       const result = await addToCart(activityId);
-      console.log('Cart result:', result); // Debug log
-      
+      console.log("Cart result:", result); // Debug log
+
       if (result.success) {
+        // Just update the cart count
+        setCartCount((prev) => prev + 1);
         setToast({
           show: true,
-          message: 'Successfully added to cart!',
-          type: 'success'
+          message: "Successfully added to cart!",
+          type: "success",
         });
-        console.log('Toast should show:', { show: true, type: 'success' }); // Debug log
+        console.log("Toast should show:", { show: true, type: "success" }); // Debug log
       } else {
         setToast({
           show: true,
-          message: result.message || 'Failed to add to cart',
-          type: 'error'
+          message: result.message || "Failed to add to cart",
+          type: "error",
         });
-        console.log('Toast should show:', { show: true, type: 'error' }); // Debug log
+        console.log("Toast should show:", { show: true, type: "error" }); // Debug log
       }
     } catch (error) {
-      console.error('Booking error:', error); // Debug log
+      console.error("Booking error:", error); // Debug log
       setToast({
         show: true,
-        message: error.message || 'Failed to add to cart',
-        type: 'error'
+        message: error.message || "Failed to add to cart",
+        type: "error",
       });
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 relative"> {/* Added relative */}
-      <Toast 
+    <div className="min-h-screen bg-gray-50 relative">
+      {" "}
+      {/* Added relative */}
+      <Toast
         show={toast.show}
         message={toast.message}
         type={toast.type}
-        onClose={() => setToast(prev => ({ ...prev, show: false }))}
+        onClose={() => setToast((prev) => ({ ...prev, show: false }))}
       />
       <Navbar />
       <div className="container mx-auto px-4 py-8">
@@ -180,9 +194,13 @@ const ActivityDetailPage = () => {
                   disabled={isBooking}
                   className={`bg-blue-600 text-white px-8 py-3 rounded-xl 
                   transition-colors font-semibold shadow-lg hover:shadow-blue-200
-                  ${isBooking ? 'opacity-75 cursor-not-allowed' : 'hover:bg-blue-700'}`}
+                  ${
+                    isBooking
+                      ? "opacity-75 cursor-not-allowed"
+                      : "hover:bg-blue-700"
+                  }`}
                 >
-                  {isBooking ? 'Processing...' : 'Book Now'}
+                  {isBooking ? "Processing..." : "Book Now"}
                 </button>
               </div>
             </div>

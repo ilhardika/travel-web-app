@@ -10,53 +10,65 @@ import DestinationsPage from "./pages/ActivityPage";
 import PromoPage from "./pages/PromoPage";
 import ActivityDetailPage from "./pages/ActivityDetailPage";
 import CartPage from "./pages/CartPage";
+import CheckoutPage from "./pages/CheckoutPage";
 import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from './context/CartContext';
 
 const App = () => {
   return (
     <div>
       <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<LandingPage />}></Route>
-            <Route
-              path="/activity/detail/:activityId"
-              element={<ActivityDetailPage />}
-            />
-            <Route path="/activity" element={<DestinationsPage />}></Route>
-            <Route
-              path="/activity/:categoryName"
-              element={<DestinationsPage />}
-            ></Route>
-            <Route path="/promo" element={<PromoPage />}></Route>
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfilePage />
-                </ProtectedRoute>
-              }
-            ></Route>
-            <Route
-              path="/edit-profile"
-              element={
-                <ProtectedRoute>
-                  <UpdateProfilePage />
-                </ProtectedRoute>
-              }
-            ></Route>
-            <Route
-              path="/cart"
-              element={
-                <ProtectedRoute>
-                  <CartPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/signin" element={<SinginPage />}></Route>
-            <Route path="/signup" element={<SignupPage />}></Route>
-          </Routes>
-        </BrowserRouter>
+        <CartProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<LandingPage />}></Route>
+              <Route
+                path="/activity/detail/:activityId"
+                element={<ActivityDetailPage />}
+              />
+              <Route path="/activity" element={<DestinationsPage />}></Route>
+              <Route
+                path="/activity/:categoryName"
+                element={<DestinationsPage />}
+              ></Route>
+              <Route path="/promo" element={<PromoPage />}></Route>
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route
+                path="/edit-profile"
+                element={
+                  <ProtectedRoute>
+                    <UpdateProfilePage />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route
+                path="/cart"
+                element={
+                  <ProtectedRoute>
+                    <CartPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/checkout"
+                element={
+                  <ProtectedRoute>
+                    <CheckoutPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/signin" element={<SinginPage />}></Route>
+              <Route path="/signup" element={<SignupPage />}></Route>
+            </Routes>
+          </BrowserRouter>
+        </CartProvider>
       </AuthProvider>
     </div>
   );

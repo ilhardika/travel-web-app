@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useCartContext } from '../context/CartContext';
 
 const useCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { setCartCount } = useCartContext(); // Remove duplicate declaration and updateCartCount
 
   const fetchCart = async () => {
     try {
@@ -19,27 +21,13 @@ const useCart = () => {
         }
       );
       const data = await response.json();
-      
-      // Preserve order by updating quantities instead of replacing the entire array
-      if (cartItems.length > 0) {
-        const updatedItems = cartItems.map(existingItem => {
-          const newItemData = data.data.find(newItem => newItem.id === existingItem.id);
-          return newItemData || existingItem;
-        });
-        
-        // Add any new items that weren't in the original array
-        const newItems = data.data.filter(
-          newItem => !cartItems.some(existingItem => existingItem.id === newItem.id)
-        );
-        
-        setCartItems([...updatedItems, ...newItems]);
-      } else {
-        // First load - just set the items as they come
-        setCartItems(data.data || []);
-      }
-      setSelectedItems([]); // Reset selections when cart updates
+      const items = data.data || [];
+      setCartItems(items);
+      setCartCount(items.length); // Update global cart count
+      return items.length; // Return the count for initializing
     } catch (err) {
       setError(err.message);
+      return 0;
     } finally {
       setLoading(false);
     }
@@ -98,6 +86,12 @@ const useCart = () => {
 
   const deleteCartItem = async (cartId) => {
     try {
+      // Optimistic updates
+      const newItems = cartItems.filter(item => item.id !== cartId);
+      setCartItems(newItems);
+      setCartCount(newItems.length); // Update global cart count
+      setSelectedItems(prev => prev.filter(id => id !== cartId));
+
       const response = await fetch(
         `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/delete-cart/${cartId}`,
         {
@@ -111,11 +105,16 @@ const useCart = () => {
 
       const data = await response.json();
       if (data.code === "200") {
-        await fetchCart();
         return true;
       }
+
+      // Rollback if failed
+      await fetchCart();
       throw new Error(data.message || "Failed to delete item");
     } catch (err) {
+      console.error("Delete error:", err);
+      // Rollback optimistic updates if failed
+      await fetchCart();
       setError(err.message);
       return false;
     }
@@ -139,9 +138,13 @@ const useCart = () => {
       .reduce((total, item) => total + item.activity.price * item.quantity, 0);
   };
 
+  // Load cart data on mount and token change
   useEffect(() => {
-    fetchCart();
-  }, []);
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetchCart();
+    }
+  }, [localStorage.getItem("token")]); // Re-fetch when token changes
 
   return {
     cartItems,
@@ -150,11 +153,11 @@ const useCart = () => {
     updateQuantity,
     deleteCartItem,
     refreshCart: fetchCart,
-    totalItems: cartItems.length,
+    totalItems: cartItems.length, // This will always reflect the true count
     selectedItems,
     toggleItemSelection,
     toggleAllItems,
-    getSelectedItemsTotal,
+    getSelectedItemsTotal
   };
 };
 

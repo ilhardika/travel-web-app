@@ -5,6 +5,7 @@ import useCart from "../hooks/useCart";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Toast from "../components/Toast";
+import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const CartPage = () => {
     toggleAllItems,
     getSelectedItemsTotal,
   } = useCart();
+  const [deleteItem, setDeleteItem] = useState(null);
 
   if (loading) {
     return (
@@ -49,23 +51,41 @@ const CartPage = () => {
     }
   };
 
-  const handleDelete = async (cartId) => {
-    if (window.confirm("Are you sure you want to remove this item?")) {
-      const success = await deleteCartItem(cartId);
-      if (success) {
-        setToast({
-          show: true,
-          message: "Item removed from cart",
-          type: "success",
-        });
-      } else {
-        setToast({
-          show: true,
-          message: "Failed to remove item",
-          type: "error",
-        });
-      }
+  const handleDelete = async (cartId, itemName) => {
+    setDeleteItem({ id: cartId, name: itemName });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteItem) return;
+
+    const success = await deleteCartItem(deleteItem.id);
+    setToast({
+      show: true,
+      message: success
+        ? `Successfully removed ${deleteItem.name}`
+        : "Failed to remove item",
+      type: success ? "success" : "error",
+    });
+    setDeleteItem(null);
+  };
+
+  const handleCheckout = () => {
+    if (selectedItems.length === 0) {
+      setToast({
+        show: true,
+        message: "Please select items to checkout",
+        type: "error",
+      });
+      return;
     }
+
+    const totalAmount = getSelectedItemsTotal();
+    navigate("/checkout", {
+      state: {
+        selectedItems,
+        totalAmount,
+      },
+    });
   };
 
   return (
@@ -78,12 +98,12 @@ const CartPage = () => {
       />
       <Navbar />
       <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8">
+        <div className="flex flex-col justify-between items-star gap-4 mb-4">
           <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 lg:mb-0">
-            Shopping Cart
+            Activity Cart
           </h1>
           {cartItems.length > 0 && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 ml-6">
               <input
                 type="checkbox"
                 checked={selectedItems.length === cartItems.length}
@@ -102,17 +122,12 @@ const CartPage = () => {
             className="text-center py-12"
           >
             <div className="max-w-md mx-auto">
-              <img
-                src="/empty-cart.svg"
-                alt="Empty Cart"
-                className="w-64 h-64 mx-auto mb-6 opacity-50"
-              />
               <p className="text-gray-500 mb-4">Your cart is empty</p>
               <button
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/activity")}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Start Shopping
+                Explore Activities
               </button>
             </div>
           </motion.div>
@@ -129,7 +144,7 @@ const CartPage = () => {
                   className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
                 >
                   <div className="flex gap-6">
-                    <div className="flex items-start">
+                    <div className="flex items-center">
                       <input
                         type="checkbox"
                         checked={selectedItems.includes(item.id)}
@@ -182,7 +197,7 @@ const CartPage = () => {
                           <motion.button
                             whileHover={{ scale: 1.1, color: "#ef4444" }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => handleDelete(item.id)}
+                            onClick={() => handleDelete(item.id, item.activity.title)}
                             className="p-2 rounded-full hover:bg-red-50 text-red-500"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -226,7 +241,10 @@ const CartPage = () => {
                       IDR {getSelectedItemsTotal().toLocaleString("id-ID")}
                     </p>
                   </div>
-                  <button className="w-full lg:w-auto px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold">
+                  <button
+                    onClick={handleCheckout}
+                    className="w-full lg:w-auto px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold"
+                  >
                     Checkout
                   </button>
                 </div>
@@ -235,6 +253,12 @@ const CartPage = () => {
           </div>
         )}
       </div>
+      <DeleteConfirmationModal
+        isOpen={!!deleteItem}
+        onClose={() => setDeleteItem(null)}
+        onConfirm={confirmDelete}
+        itemName={deleteItem?.name}
+      />
     </div>
   );
 };
