@@ -10,14 +10,20 @@ import {
   ShieldEllipsis,
   MapPin,
   Calendar,
+  CreditCard,
+  ChevronRight,
+  Clock,
   Heart,
 } from "lucide-react";
+import useTransactions from "../hooks/useTransactions";
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const { transactions, loading: transactionsLoading } = useTransactions();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -227,11 +233,78 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          {/* Right Column - Activities & Saved */}
+          {/* Right Column - Transactions */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Recent Activities */}
             <div className="bg-white rounded-2xl p-6 shadow-sm">
-              <h2 className="text-xl font-semibold mb-6">Recent Transaction</h2>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold">Recent Transactions</h2>
+                <button
+                  onClick={() => navigate('/transactions')}
+                  className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                >
+                  View All
+                </button>
+              </div>
+
+              {transactionsLoading ? (
+                <div className="space-y-4">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="animate-pulse">
+                      <div className="h-24 bg-gray-200 rounded-xl"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : transactions.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">No transactions yet</p>
+                  <button
+                    onClick={() => navigate('/activity')}
+                    className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                  >
+                    Explore Activities
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {transactions.slice(0, 5).map((transaction) => (
+                    <div
+                      key={transaction.id}
+                      onClick={() => navigate(`/transactions/${transaction.id}`)}
+                      className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer"
+                    >
+                      <div className="p-3 bg-blue-100 rounded-xl">
+                        <CreditCard className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-medium text-gray-900">
+                          Transaction #{transaction.id}
+                        </h3>
+                        <div className="flex items-center gap-4 mt-1">
+                          <span className="flex items-center text-sm text-gray-500">
+                            <Calendar className="w-4 h-4 mr-1" />
+                            {new Date(transaction.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-lg font-semibold text-gray-900">
+                          IDR {(transaction.totalPrice || 0).toLocaleString('id-ID')}
+                        </p>
+                        <span className={`inline-block px-3 py-1 rounded-full text-xs ${
+                          transaction.status === 'COMPLETED'
+                            ? 'bg-green-100 text-green-700'
+                            : transaction.status === 'PENDING'
+                            ? 'bg-yellow-100 text-yellow-700'
+                            : 'bg-red-100 text-red-700'
+                        }`}>
+                          {transaction.status || 'PENDING'}
+                        </span>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-gray-400" />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
