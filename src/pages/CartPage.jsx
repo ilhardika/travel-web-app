@@ -6,6 +6,7 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Toast from "../components/Toast";
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
+import { useCartContext } from '../context/CartContext'; // Add this line
 
 const CartPage = () => {
   const navigate = useNavigate();
