@@ -51,7 +51,7 @@ const UpdateProfilePage = () => {
   if (!userData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-600"></div>
       </div>
     );
   }
@@ -59,7 +59,7 @@ const UpdateProfilePage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100 to-blue-300 py-12 px-4 flex items-center justify-center">
       <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-500 to-sky-400 p-6 text-center">
+        <div className="bg-blue-600 p-6 text-center">
           <h1 className="text-2xl font-bold text-white">Perbarui Profil</h1>
         </div>
 
