@@ -38,13 +38,6 @@ const useTransaction = () => {
   const createTransaction = async (cartIds, paymentMethodId) => {
     try {
       setLoading(true);
-      
-      // Debug the input
-      console.log('Creating transaction with:', {
-        cartIds: Array.isArray(cartIds) ? cartIds : [cartIds],
-        paymentMethodId
-      });
-
       const response = await fetch(
         'https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/create-transaction',
         {
@@ -62,18 +55,11 @@ const useTransaction = () => {
       );
 
       const data = await response.json();
-      console.log('Raw request body:', JSON.stringify({
-        cartIds: Array.isArray(cartIds) ? cartIds : [cartIds],
-        paymentMethodId: paymentMethodId
-      }));
-      console.log('Transaction response:', data);
-      
       if (data.code === "200") {
         return { success: true, transaction: data.data };
       }
       throw new Error(data.message || data.errors || 'Failed to create transaction');
     } catch (err) {
-      console.error('Transaction error:', err);
       setError(err.message);
       return { success: false, error: err.message };
     } finally {

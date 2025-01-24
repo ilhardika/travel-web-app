@@ -1,36 +1,48 @@
 import { useState, useEffect } from "react";
 import { useCartContext } from "../context/CartContext";
 
+const API_BASE_URL = "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1";
+const API_KEY = "24405e01-fbc1-45a5-9f5a-be13afcd757c";
+
 const useCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { setCartCount } = useCartContext(); // Remove duplicate declaration and updateCartCount
+  const { setCartCount } = useCartContext();
+
+  const getHeaders = () => ({
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    apiKey: API_KEY,
+    "Content-Type": "application/json",
+  });
+
+  const handleApiRequest = async (url, method = "GET", body = null) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${url}`, {
+        method,
+        headers: getHeaders(),
+        ...(body && { body: JSON.stringify(body) }),
+      });
+      const data = await response.json();
+      if (data.code === "200") return { success: true, data: data.data };
+      throw new Error(data.message);
+    } catch (err) {
+      console.error(`Cart operation failed:`, err);
+      setError(err.message);
+      return { success: false, error: err.message };
+    }
+  };
 
   const fetchCart = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(
-        "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/carts",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
-          },
-        }
-      );
-      const data = await response.json();
-      const items = data.data || [];
-      setCartItems(items);
-      setCartCount(items.length); // Update global cart count
-      return items.length; // Return the count for initializing
-    } catch (err) {
-      setError(err.message);
-      return 0;
-    } finally {
-      setLoading(false);
+    setLoading(true);
+    const result = await handleApiRequest("/carts");
+    if (result.success) {
+      setCartItems(result.data);
+      setCartCount(result.data.length);
     }
+    setLoading(false);
+    return result.success ? result.data.length : 0;
   };
 
   const updateQuantity = async (cartId, quantity) => {
@@ -46,37 +58,20 @@ const useCart = () => {
         )
       );
 
-      const response = await fetch(
-        `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/update-cart/${cartId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
-          },
-          body: JSON.stringify({
-            quantity: parseInt(quantity, 10),
-          }),
-        }
+      const result = await handleApiRequest(
+        `/update-cart/${cartId}`,
+        "POST",
+        { quantity: parseInt(quantity, 10) }
       );
 
-      if (!response.ok) {
+      if (!result.success) {
         // Rollback on error
         await fetchCart();
-        throw new Error(`Failed to update cart: ${response.status}`);
+        throw new Error(result.error);
       }
 
-      const data = await response.json();
-      console.log("Update response:", data);
-
-      if (data.code === "200") {
-        return true;
-      }
-
-      // Rollback on API error
-      await fetchCart();
-      throw new Error(data.message || "Failed to update quantity");
+      console.log("Update response:", result.data);
+      return true;
     } catch (err) {
       console.error("Update error:", err);
       setError(err.message);
@@ -92,25 +87,18 @@ const useCart = () => {
       setCartCount(newItems.length); // Update global cart count
       setSelectedItems((prev) => prev.filter((id) => id !== cartId));
 
-      const response = await fetch(
-        `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/delete-cart/${cartId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
-          },
-        }
+      const result = await handleApiRequest(
+        `/delete-cart/${cartId}`,
+        "DELETE"
       );
 
-      const data = await response.json();
-      if (data.code === "200") {
-        return true;
+      if (!result.success) {
+        // Rollback if failed
+        await fetchCart();
+        throw new Error(result.error);
       }
 
-      // Rollback if failed
-      await fetchCart();
-      throw new Error(data.message || "Failed to delete item");
+      return true;
     } catch (err) {
       console.error("Delete error:", err);
       // Rollback optimistic updates if failed
@@ -125,27 +113,18 @@ const useCart = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(
-        "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/add-cart",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
-          },
-          body: JSON.stringify({ activityId }),
-        }
+      const result = await handleApiRequest(
+        "/add-cart",
+        "POST",
+        { activityId }
       );
 
-      const data = await response.json();
-
-      if (data.code === "200") {
-        await fetchCart(); // Refresh cart after adding
-        return { success: true, message: data.message };
-      } else {
-        throw new Error(data.message || "Failed to add to cart");
+      if (!result.success) {
+        throw new Error(result.error);
       }
+
+      await fetchCart(); // Refresh cart after adding
+      return { success: true, message: result.data.message };
     } catch (error) {
       setError(error.message);
       return { success: false, message: error.message };

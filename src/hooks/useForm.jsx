@@ -1,4 +1,3 @@
-// hooks/useForm.js
 import { useState } from "react";
 
 export const useForm = (initialState = {}) => {

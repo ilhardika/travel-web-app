@@ -12,7 +12,7 @@ const SigninPage = () => {
 
   const { login, error, loading } = useAuth();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     await login(values.email, values.password);
   };
@@ -20,6 +20,7 @@ const SigninPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center to-blue-300 p-6">
       <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
+        {/* Header */}
         <div className="bg-gradient-to-r from-blue-500 to-sky-400 p-6 text-center">
           <div className="flex justify-center items-center mb-4">
             <h1 className="text-3xl font-bold text-white">TravelApp</h1>
@@ -28,13 +29,15 @@ const SigninPage = () => {
         </div>
 
         <div className="p-8">
+          {/* Error Display */}
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-center">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleLogin} className="space-y-6">
+          {/* Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Mail className="h-5 w-5 text-gray-400" />
@@ -78,6 +81,7 @@ const SigninPage = () => {
             </button>
           </form>
 
+          {/* Sign Up Link */}
           <div className="mt-6 text-center">
             <p className="text-gray-600">
               Don't have an account?{" "}
