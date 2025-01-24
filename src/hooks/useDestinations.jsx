@@ -1,4 +1,3 @@
-// hooks/useDestinations.js
 import { useState, useEffect } from "react";
 
 export const useDestinations = (categoryName = null) => {

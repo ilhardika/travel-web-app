@@ -32,7 +32,7 @@ const ActivityDetailPage = () => {
     message: "",
     type: "success",
   });
-  const { cartCount, setCartCount } = useCartContext(); // Remove refreshCart
+  const { cartCount, setCartCount, updateCartCount } = useCartContext(); // Remove refreshCart
 
   // Add console logs for debugging
   console.log("ActivityDetailPage render:", {
@@ -81,7 +81,7 @@ const ActivityDetailPage = () => {
 
       if (result.success) {
         // Just update the cart count
-        setCartCount((prev) => prev + 1);
+        await updateCartCount(); // Update cart count immediately
         setToast({
           show: true,
           message: "Successfully added to cart!",

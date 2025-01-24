@@ -21,6 +21,7 @@ const CartPage = () => {
     getSelectedItemsTotal,
   } = useCart();
   const [deleteItem, setDeleteItem] = useState(null);
+  const { updateCartCount } = useCartContext();
 
   if (loading) {
     return (
@@ -59,6 +60,9 @@ const CartPage = () => {
     if (!deleteItem) return;
 
     const success = await deleteCartItem(deleteItem.id);
+    if (success) {
+      await updateCartCount(); // Update cart count after successful delete
+    }
     setToast({
       show: true,
       message: success
@@ -79,11 +83,13 @@ const CartPage = () => {
       return;
     }
 
-    const totalAmount = getSelectedItemsTotal();
+    // Send selected cart items
+    const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.id));
     navigate("/checkout", {
       state: {
-        selectedItems,
-        totalAmount,
+        selectedCartIds: selectedItems,  // Send the actual cart IDs
+        cartItems: selectedCartItems,
+        totalAmount: getSelectedItemsTotal()
       },
     });
   };
