@@ -21,11 +21,11 @@ const CheckoutPage = () => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     // Add console.log to debug
     console.log("Checkout Page Data:", {
-      selectedCartIds,
       cartItems,
       totalAmount,
     });
@@ -78,13 +78,11 @@ const CheckoutPage = () => {
         paymentMethodId: selectedPayment,
       });
 
-      const result = await createTransaction(
-        selectedCartIds, // Pass the actual cart IDs
-        selectedPayment
-      );
+      const result = await createTransaction(selectedCartIds, selectedPayment);
       console.log("Transaction result:", result);
 
       if (result.success) {
+        console.log("Transaction details:", result.transaction);
         await updateCartCount(); // Update cart count after successful checkout
         setShowSuccessMessage(true);
         setToast({
@@ -92,11 +90,6 @@ const CheckoutPage = () => {
           message: "Transaction created successfully!",
           type: "success",
         });
-
-        // Wait for 2 seconds before redirecting
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
       } else {
         setToast({
           show: true,
@@ -137,12 +130,14 @@ const CheckoutPage = () => {
               Order Complete!
             </h2>
             <p className="text-gray-600 mb-6">
-              Your transaction has been successfully created. Redirecting to
-              home page...
+              Your transaction has been successfully created.
             </p>
-            <div className="animate-pulse">
-              <div className="h-1 w-24 bg-blue-200 rounded mx-auto"></div>
-            </div>
+            <button
+              onClick={() => navigate("/")}
+              className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700"
+            >
+              Back to Homepage
+            </button>
           </motion.div>
         </div>
       )}

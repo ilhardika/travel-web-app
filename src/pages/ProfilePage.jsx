@@ -26,10 +26,6 @@ const ProfilePage = () => {
     navigate("/signin");
   };
 
-  const handleEditProfile = () => {
-    navigate("/edit-profile");
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -65,6 +61,11 @@ const ProfilePage = () => {
       </div>
     );
   }
+
+  // Sort transactions by latest created
+  const sortedTransactions = transactions.sort(
+    (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -176,7 +177,7 @@ const ProfilePage = () => {
                     </div>
                   ))}
                 </div>
-              ) : transactions.length === 0 ? (
+              ) : sortedTransactions.length === 0 ? (
                 <div className="text-center py-8">
                   <p className="text-gray-500">No transactions yet</p>
                   <button
@@ -188,7 +189,7 @@ const ProfilePage = () => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {transactions.slice(0, 3).map((transaction) => (
+                  {sortedTransactions.slice(0, 3).map((transaction) => (
                     <div
                       key={transaction.id}
                       onClick={() =>
@@ -206,9 +207,14 @@ const ProfilePage = () => {
                         <div className="flex flex-col md:flex-row items-start gap-1 mt-1">
                           <span className="flex items-center text-sm text-gray-500">
                             <Calendar className="w-4 h-4 mr-1" />
-                            {new Date(
-                              transaction.orderDate
-                            ).toLocaleDateString()}
+                            {new Date(transaction.orderDate).toLocaleString(
+                              "en-US",
+                              {
+                                hour: "numeric",
+                                minute: "numeric",
+                                hour12: true,
+                              }
+                            )}
                           </span>
                           <span className="flex items-center text-sm text-gray-500">
                             {transaction.transaction_items.length} items
