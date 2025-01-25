@@ -112,7 +112,7 @@ const ActivityDetailPage = () => {
       {/* Added relative */}
       <Toast
         show={toast.show}
-        message={toast.message}
+        message={toast.message || "An error occurred"}
         type={toast.type}
         onClose={() => setToast((prev) => ({ ...prev, show: false }))}
       />

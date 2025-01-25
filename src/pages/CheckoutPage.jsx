@@ -73,17 +73,17 @@ const CheckoutPage = () => {
 
     try {
       // Debug log
-      console.log('Checkout data:', {
+      console.log("Checkout data:", {
         cartIds: selectedCartIds, // Use the actual cart IDs
-        paymentMethodId: selectedPayment
+        paymentMethodId: selectedPayment,
       });
 
       const result = await createTransaction(
         selectedCartIds, // Pass the actual cart IDs
         selectedPayment
       );
-      console.log('Transaction result:', result);
-      
+      console.log("Transaction result:", result);
+
       if (result.success) {
         await updateCartCount(); // Update cart count after successful checkout
         setShowSuccessMessage(true);
@@ -92,7 +92,7 @@ const CheckoutPage = () => {
           message: "Transaction created successfully!",
           type: "success",
         });
-        
+
         // Wait for 2 seconds before redirecting
         setTimeout(() => {
           navigate("/");
@@ -105,7 +105,7 @@ const CheckoutPage = () => {
         });
       }
     } catch (error) {
-      console.error('Checkout error:', error);
+      console.error("Checkout error:", error);
       setToast({
         show: true,
         message: error.message || "Failed to process checkout",
@@ -133,9 +133,12 @@ const CheckoutPage = () => {
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Order Complete!</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              Order Complete!
+            </h2>
             <p className="text-gray-600 mb-6">
-              Your transaction has been successfully created. Redirecting to home page...
+              Your transaction has been successfully created. Redirecting to
+              home page...
             </p>
             <div className="animate-pulse">
               <div className="h-1 w-24 bg-blue-200 rounded mx-auto"></div>
@@ -175,7 +178,7 @@ const CheckoutPage = () => {
               {/* Summary Card*/}
               <div className="border-t pt-3 text-lg flex justify-between font-semibold">
                 <span>Total</span>
-                <span>IDR {(totalAmount * 1.02).toLocaleString("id-ID")}</span>
+                <span>IDR {totalAmount.toLocaleString("id-ID")}</span>
               </div>
             </div>
 

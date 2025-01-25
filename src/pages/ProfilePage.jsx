@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
+import useTransactions from "../hooks/useMyTransactions";
+import useUserProfile from "../hooks/useUserProfile";
 import {
   User,
   Mail,
@@ -12,67 +14,19 @@ import {
   Calendar,
   CreditCard,
   ChevronRight,
-  Clock,
-  Heart,
 } from "lucide-react";
-import useTransactions from "../hooks/useMyTransactions";
 
 const ProfilePage = () => {
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
-
+  const { userData, loading, error } = useUserProfile();
   const { transactions, loading: transactionsLoading } = useTransactions();
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        // Redirect ke halaman login jika tidak ada token
-        navigate("/signin");
-        return;
-      }
-
-      try {
-        const response = await fetch(
-          "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/user",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Gagal mengambil data profil");
-        }
-
-        const data = await response.json();
-        setUserData(data.data);
-        setLoading(false);
-      } catch (err) {
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-
-    fetchUserProfile();
-  }, [navigate]);
-
   const handleLogout = () => {
-    // Hapus token dari localStorage
     localStorage.removeItem("token");
-    // Redirect ke halaman login
     navigate("/signin");
   };
 
   const handleEditProfile = () => {
-    // Navigasi ke halaman edit profil (bisa Anda buat nanti)
     navigate("/edit-profile");
   };
 
@@ -111,38 +65,6 @@ const ProfilePage = () => {
       </div>
     );
   }
-
-  const recentActivities = [
-    {
-      id: 1,
-      title: "Booked Bali Adventure Tour",
-      date: "2024-02-15",
-      status: "Completed",
-    },
-    {
-      id: 2,
-      title: "Reserved Beach Resort",
-      date: "2024-02-10",
-      status: "Pending",
-    },
-    // Add more activities as needed
-  ];
-
-  const savedDestinations = [
-    {
-      id: 1,
-      name: "Bali Beach Resort",
-      location: "Bali, Indonesia",
-      image: "https://source.unsplash.com/800x600/?bali,beach",
-    },
-    {
-      id: 2,
-      name: "Mount Bromo",
-      location: "East Java, Indonesia",
-      image: "https://source.unsplash.com/800x600/?bromo",
-    },
-    // Add more destinations as needed
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -226,7 +148,7 @@ const ProfilePage = () => {
                   <ShieldEllipsis className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Account Type</p>
+                  <p className="text-sm text-gray-500">Role</p>
                   <p className="font-medium capitalize">{userData.role}</p>
                 </div>
               </div>
@@ -266,7 +188,7 @@ const ProfilePage = () => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {transactions.slice(0, 5).map((transaction) => (
+                  {transactions.slice(0, 3).map((transaction) => (
                     <div
                       key={transaction.id}
                       onClick={() =>
@@ -279,13 +201,13 @@ const ProfilePage = () => {
                       </div>
                       <div className="flex-1">
                         <h3 className="font-medium text-gray-900">
-                          Transaction #{transaction.id}
+                          Transaction #{transaction.id.substring(0, 6)}
                         </h3>
                         <div className="flex items-center gap-4 mt-1">
                           <span className="flex items-center text-sm text-gray-500">
                             <Calendar className="w-4 h-4 mr-1" />
                             {new Date(
-                              transaction.createdAt
+                              transaction.orderDate
                             ).toLocaleDateString()}
                           </span>
                         </div>
@@ -293,7 +215,7 @@ const ProfilePage = () => {
                       <div className="text-right">
                         <p className="text-lg font-semibold text-gray-900">
                           IDR{" "}
-                          {(transaction.totalPrice || 0).toLocaleString(
+                          {(transaction.totalAmount || 0).toLocaleString(
                             "id-ID"
                           )}
                         </p>

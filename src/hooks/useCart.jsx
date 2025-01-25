@@ -124,7 +124,7 @@ const useCart = () => {
       }
 
       await fetchCart(); // Refresh cart after adding
-      return { success: true, message: result.data.message };
+      return { success: true, message: result.data?.message || "Added to cart" };
     } catch (error) {
       setError(error.message);
       return { success: false, message: error.message };
