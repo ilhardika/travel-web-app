@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import usePaymentMethods from "../hooks/usePaymentMethods";
 import useTransaction from "../hooks/useTransaction.jsx";
 import { motion } from "framer-motion";
-import { CreditCard, Wallet, Upload, CheckCircle } from "lucide-react";
+import { CreditCard, Wallet, CheckCircle } from "lucide-react";
 import Toast from "../components/Toast";
 import { useCartContext } from "../context/CartContext";
 
@@ -13,15 +13,12 @@ const CheckoutPage = () => {
   const location = useLocation();
   const { selectedCartIds, cartItems, totalAmount } = location.state || {};
   const { paymentMethods, loading: loadingPayments } = usePaymentMethods();
-  const { uploadProofOfPayment, createTransaction, loading } = useTransaction();
+  const { createTransaction, loading } = useTransaction();
   const { updateCartCount } = useCartContext();
 
   const [selectedPayment, setSelectedPayment] = useState(null);
-  const [proofImage, setProofImage] = useState(null);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     // Add console.log to debug
@@ -39,28 +36,6 @@ const CheckoutPage = () => {
   const selectedCartItems =
     cartItems?.filter((item) => selectedCartIds?.includes(item.id)) || [];
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setProofImage(file);
-      const result = await uploadProofOfPayment(file);
-      if (result.success) {
-        setUploadedImageUrl(result.imageUrl);
-        setToast({
-          show: true,
-          message: "Proof of payment uploaded successfully",
-          type: "success",
-        });
-      } else {
-        setToast({
-          show: true,
-          message: result.error,
-          type: "error",
-        });
-      }
-    }
-  };
-
   const handleCheckout = async () => {
     if (!selectedPayment) {
       setToast({
@@ -70,38 +45,42 @@ const CheckoutPage = () => {
       });
       return;
     }
-
-    try {
-      // Debug log
-      console.log("Checkout data:", {
-        cartIds: selectedCartIds, // Use the actual cart IDs
-        paymentMethodId: selectedPayment,
-      });
-
-      const result = await createTransaction(selectedCartIds, selectedPayment);
-      console.log("Transaction result:", result);
-
-      if (result.success) {
-        console.log("Transaction details:", result.transaction);
-        await updateCartCount(); // Update cart count after successful checkout
-        setShowSuccessMessage(true);
-        setToast({
-          show: true,
-          message: "Transaction created successfully!",
-          type: "success",
-        });
-      } else {
-        setToast({
-          show: true,
-          message: result.error || "Failed to create transaction",
-          type: "error",
-        });
-      }
-    } catch (error) {
-      console.error("Checkout error:", error);
+  
+    if (!selectedCartIds || selectedCartIds.length === 0) {
       setToast({
         show: true,
-        message: error.message || "Failed to process checkout",
+        message: "No items in the cart",
+        type: "error",
+      });
+      return;
+    }
+  
+    try {
+      console.log("Creating transaction with:", {
+        selectedCartIds,
+        selectedPayment,
+      });
+  
+      // Step 2: Create transaction
+      const createResult = await createTransaction(selectedCartIds, selectedPayment);
+      console.log("Create transaction result:", createResult);
+  
+      if (!createResult.success) {
+        setToast({
+          show: true,
+          message: createResult.error || "Transaction creation failed",
+          type: "error",
+        });
+        return;
+      }
+  
+      setShowSuccessMessage(true); // Show success message overlay
+      await updateCartCount(); // Update cart count after successful checkout
+    } catch (error) {
+      console.error("Error during checkout:", error);
+      setToast({
+        show: true,
+        message: error.message,
         type: "error",
       });
     }
@@ -211,43 +190,6 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            {/* Upload Proof Section */}
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-              <h2 className="text-lg font-semibold mb-4">
-                Upload Payment Proof
-              </h2>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                {uploadedImageUrl ? (
-                  <div className="space-y-4">
-                    <img
-                      src={uploadedImageUrl}
-                      alt="Proof of payment"
-                      className="max-h-48 mx-auto"
-                    />
-                    <button
-                      onClick={() => setUploadedImageUrl("")}
-                      className="text-red-500 hover:text-red-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ) : (
-                  <div>
-                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <label className="cursor-pointer text-blue-600 hover:text-blue-700">
-                      <span>Click to upload proof of payment</span>
-                      <input
-                        type="file"
-                        className="hidden"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                      />
-                    </label>
-                  </div>
-                )}
-              </div>
-            </div>
-
             {/* Action Buttons */}
             <div className="flex gap-4">
               <button
@@ -258,10 +200,10 @@ const CheckoutPage = () => {
               </button>
               <button
                 onClick={handleCheckout}
-                disabled={loading || !selectedPayment || !uploadedImageUrl}
+                disabled={loading || !selectedPayment}
                 className={`flex-1 px-6 py-3 rounded-xl font-medium text-white
                   ${
-                    !loading && selectedPayment && uploadedImageUrl
+                    !loading && selectedPayment
                       ? "bg-blue-600 hover:bg-blue-700"
                       : "bg-gray-400 cursor-not-allowed"
                   }`}

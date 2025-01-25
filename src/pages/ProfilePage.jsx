@@ -220,6 +220,18 @@ const ProfilePage = () => {
                             {transaction.transaction_items.length} items
                           </span>
                         </div>
+                        {transaction.proofPaymentUrl && (
+                          <div className="mt-2">
+                            <a
+                              href={transaction.proofPaymentUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline text-sm"
+                            >
+                              View Proof of Payment
+                            </a>
+                          </div>
+                        )}
                       </div>
                       <div className="text-right">
                         <p className="text-lg font-semibold text-gray-900">

@@ -24,6 +24,7 @@ const TransactionDetailPage = () => {
       const result = await fetchTransaction(transactionId);
       if (result.success) {
         setTransaction(result.transaction);
+        setUploadedImageUrl(result.transaction.proofPaymentUrl); // Set the proofPaymentUrl
       } else {
         setError(result.error);
       }
@@ -185,12 +186,12 @@ const TransactionDetailPage = () => {
             </div>
 
             {/* Proof of Payment */}
-            {transaction?.proofPaymentUrl && (
+            {uploadedImageUrl && (
               <div className="mb-8">
                 <p className="text-sm text-gray-500 mb-4">Proof of Payment</p>
                 <div className="rounded-xl overflow-hidden shadow-lg">
                   <img
-                    src={transaction.proofPaymentUrl}
+                    src={uploadedImageUrl}
                     alt="Proof of Payment"
                     className="w-full h-auto"
                   />
