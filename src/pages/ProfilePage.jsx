@@ -203,12 +203,15 @@ const ProfilePage = () => {
                         <h3 className="font-medium text-gray-900">
                           Transaction #{transaction.id.substring(0, 6)}
                         </h3>
-                        <div className="flex items-center gap-4 mt-1">
+                        <div className="flex flex-col md:flex-row items-start gap-1 mt-1">
                           <span className="flex items-center text-sm text-gray-500">
                             <Calendar className="w-4 h-4 mr-1" />
                             {new Date(
                               transaction.orderDate
                             ).toLocaleDateString()}
+                          </span>
+                          <span className="flex items-center text-sm text-gray-500">
+                            {transaction.transaction_items.length} items
                           </span>
                         </div>
                       </div>
