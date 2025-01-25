@@ -201,7 +201,7 @@ const ProfilePage = () => {
                       </div>
                       <div className="flex-1">
                         <h3 className="font-medium text-gray-900">
-                          Transaction #{transaction.id.substring(0, 6)}
+                          {transaction.invoiceId}
                         </h3>
                         <div className="flex flex-col md:flex-row items-start gap-1 mt-1">
                           <span className="flex items-center text-sm text-gray-500">

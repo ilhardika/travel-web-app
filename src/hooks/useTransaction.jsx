@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 const useTransaction = () => {
   const [loading, setLoading] = useState(false);
@@ -8,15 +8,15 @@ const useTransaction = () => {
     try {
       setLoading(true);
       const formData = new FormData();
-      formData.append('image', file);
+      formData.append("image", file);
 
       const response = await fetch(
-        'https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/upload-image',
+        "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/upload-image",
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            apiKey: '24405e01-fbc1-45a5-9f5a-be13afcd757c',
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
           },
           body: formData,
         }
@@ -39,17 +39,17 @@ const useTransaction = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        'https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/create-transaction',
+        "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/create-transaction",
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            apiKey: '24405e01-fbc1-45a5-9f5a-be13afcd757c',
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
           },
           body: JSON.stringify({
             cartIds: Array.isArray(cartIds) ? cartIds : [cartIds],
-            paymentMethodId: paymentMethodId
+            paymentMethodId: paymentMethodId,
           }),
         }
       );
@@ -58,7 +58,9 @@ const useTransaction = () => {
       if (data.code === "200") {
         return { success: true, transaction: data.data };
       }
-      throw new Error(data.message || data.errors || 'Failed to create transaction');
+      throw new Error(
+        data.message || data.errors || "Failed to create transaction"
+      );
     } catch (err) {
       setError(err.message);
       return { success: false, error: err.message };
@@ -73,11 +75,11 @@ const useTransaction = () => {
       const response = await fetch(
         `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/update-transaction-proof-payment/${transactionId}`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            apiKey: '24405e01-fbc1-45a5-9f5a-be13afcd757c',
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
           },
           body: JSON.stringify({ proofPaymentUrl }),
         }
@@ -96,12 +98,42 @@ const useTransaction = () => {
     }
   };
 
+  const fetchTransaction = async (transactionId) => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/transaction/${transactionId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+          },
+        }
+      );
+      if (response.status === 404) {
+        setLoading(false);
+        throw new Error("Transaction not found");
+      }
+      const data = await response.json();
+      if (data.code === "200") {
+        setLoading(false);
+        return { success: true, transaction: data.data };
+      }
+      throw new Error(data.message);
+    } catch (err) {
+      setLoading(false);
+      setError(err.message);
+      return { success: false, error: err.message };
+    }
+  };
+
   return {
     uploadProofOfPayment,
     createTransaction,
     updateProofPayment,
+    fetchTransaction,
     loading,
-    error
+    error,
   };
 };
 

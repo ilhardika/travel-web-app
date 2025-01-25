@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import usePaymentMethods from "../hooks/usePaymentMethods";
-import useTransaction from "../hooks/useTransaction";
+import useTransaction from "../hooks/useTransaction.jsx";
 import { motion } from "framer-motion";
 import { CreditCard, Wallet, Upload, CheckCircle } from "lucide-react";
 import Toast from "../components/Toast";
