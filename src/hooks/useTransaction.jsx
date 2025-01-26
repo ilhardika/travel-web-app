@@ -107,12 +107,44 @@ const useTransaction = () => {
     }
   };
 
+  const updateProofPayment = async (transactionId, proofPaymentUrl) => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/update-transaction-proof-payment/${transactionId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+          },
+          body: JSON.stringify({ proofPaymentUrl }),
+        }
+      );
+
+      const data = await response.json();
+      console.log("Update proof of payment response data:", data);
+      if (data.code === "200") {
+        return { success: true };
+      }
+      throw new Error(data.message);
+    } catch (err) {
+      console.error("Error updating proof of payment:", err);
+      setError(err.message);
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     loading,
     error,
     createTransaction,
     uploadProofOfPayment,
     fetchTransaction,
+    updateProofPayment,
   };
 };
 
