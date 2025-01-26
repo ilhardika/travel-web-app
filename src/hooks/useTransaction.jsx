@@ -22,10 +22,26 @@ const useTransaction = () => {
         }
       );
       console.log("Create transaction response data:", response.data);
+
+      // Fetch the latest transaction based on createdAt
+      const transactionsResponse = await axios.get(
+        "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/my-transactions",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+          },
+        }
+      );
+      const sortedTransactions = transactionsResponse.data.data.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      const latestTransaction = sortedTransactions[0];
+
       setLoading(false);
       return {
         success: response.data.status === "OK",
-        transactionId: response.data.data?.transaction?.id, // Handle transaction ID
+        transactionId: latestTransaction.id, // Use the latest transaction ID
       };
     } catch (error) {
       console.error("Error creating transaction:", error);

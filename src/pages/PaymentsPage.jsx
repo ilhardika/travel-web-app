@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import useTransaction from "../hooks/useTransaction.jsx";
 import Toast from "../components/Toast";
-import { Upload, ArrowLeft, X } from "lucide-react";
+import { Upload, X } from "lucide-react";
 
 const PaymentsPage = () => {
   const { transactionId } = useParams();
@@ -117,18 +117,6 @@ const PaymentsPage = () => {
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-3xl mx-auto">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
-          >
-            <ArrowLeft size={20} />
-            <span>Back</span>
-          </button>
-
-          <h1 className="text-3xl font-bold mb-8 text-gray-900">
-            Update Payment Proof
-          </h1>
-
           <div className="bg-white rounded-2xl shadow-lg p-8 transition-all hover:shadow-xl">
             <h2 className="text-xl font-bold mb-6 text-gray-900">
               Upload Proof of Payment
@@ -181,7 +169,7 @@ const PaymentsPage = () => {
                 onClick={handleUploadProof}
                 className="mt-6 w-full px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
               >
-                Change Image
+                Upload Image
               </button>
             )}
           </div>

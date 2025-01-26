@@ -113,7 +113,7 @@ const CartPage = () => {
       console.log("Create transaction result:", createResult);
       if (createResult.success) {
         console.log("Transaction created successfully, redirecting to payment page");
-        navigate(`/payments/${createResult.transactionId || ''}`);
+        navigate(`/payments/${createResult.transactionId}`);
       } else {
         setToast({
           show: true,

@@ -251,7 +251,7 @@ const TransactionDetailPage = () => {
           {/* Upload Proof of Payment */}
           <div className="bg-white rounded-2xl shadow-lg p-8 transition-all hover:shadow-xl">
             <h2 className="text-xl font-bold mb-6 text-gray-900">
-              Upload Proof of Payment
+              Update Proof of Payment
             </h2>
             <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-500 transition-colors">
               <input
