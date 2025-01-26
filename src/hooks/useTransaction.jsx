@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const useTransaction = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [transaction, setTransaction] = useState(null);
+  const [paymentMethods, setPaymentMethods] = useState([]);
 
   const createTransaction = async (cartIds, paymentMethodId) => {
     setLoading(true);
@@ -105,6 +107,7 @@ const useTransaction = () => {
       const data = await response.json();
       console.log("Fetch transaction response data:", data);
       if (data.code === "200") {
+        setTransaction(data.data);
         setLoading(false);
         return { success: true, transaction: data.data };
       }
@@ -113,6 +116,27 @@ const useTransaction = () => {
       console.error("Error fetching transaction:", err);
       setError(err.message);
       return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchPaymentMethods = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(
+        "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/payment-methods",
+        {
+          headers: {
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const data = await response.json();
+      setPaymentMethods(data.data || []);
+    } catch (err) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -149,9 +173,15 @@ const useTransaction = () => {
     }
   };
 
+  useEffect(() => {
+    fetchPaymentMethods();
+  }, []);
+
   return {
     loading,
     error,
+    transaction,
+    paymentMethods,
     createTransaction,
     uploadProofOfPayment,
     fetchTransaction,

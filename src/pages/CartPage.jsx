@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import useCart from "../hooks/useCart";
-import usePaymentMethods from "../hooks/usePaymentMethods";
 import useTransaction from "../hooks/useTransaction";
 import { Minus, Plus, Trash2, CreditCard, Wallet } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -23,17 +22,10 @@ const CartPage = () => {
     toggleAllItems,
     getSelectedItemsTotal,
   } = useCart();
-  const { paymentMethods, loading: loadingPayments } = usePaymentMethods();
-  const { createTransaction, loading: creatingTransaction } = useTransaction();
+  const { paymentMethods, createTransaction, loading: creatingTransaction } = useTransaction();
   const [deleteItem, setDeleteItem] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const { updateCartCount } = useCartContext();
-
-  useEffect(() => {
-    if (paymentMethods.length > 0) {
-      setSelectedPayment(paymentMethods[0].id);
-    }
-  }, [paymentMethods]);
 
   if (loading) {
     return (

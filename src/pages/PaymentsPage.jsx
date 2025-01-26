@@ -8,30 +8,14 @@ import { Upload, X } from "lucide-react";
 const PaymentsPage = () => {
   const { transactionId } = useParams();
   const navigate = useNavigate();
-  const { uploadProofOfPayment, updateProofPayment, fetchTransaction } =
-    useTransaction();
+  const { uploadProofOfPayment, updateProofPayment, fetchTransaction, transaction, loading, error } = useTransaction();
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
-  const [transaction, setTransaction] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [proofImage, setProofImage] = useState(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [previewUrl, setPreviewUrl] = useState(null);
 
   useEffect(() => {
-    const getTransaction = async () => {
-      setLoading(true);
-      const result = await fetchTransaction(transactionId);
-      if (result.success) {
-        setTransaction(result.transaction);
-        setUploadedImageUrl(result.transaction.proofPaymentUrl);
-      } else {
-        setError(result.error);
-      }
-      setLoading(false);
-    };
-
-    getTransaction();
+    fetchTransaction(transactionId);
   }, [transactionId]);
 
   const handleFileChange = (e) => {
