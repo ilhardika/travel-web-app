@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Lock, Mail } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { useForm } from "../hooks/useForm";
@@ -14,6 +14,8 @@ const SigninPage = () => {
   const { login, error, loading } = useAuth();
   const { banners } = useBanners();
   const [successMessage, setSuccessMessage] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,10 +27,14 @@ const SigninPage = () => {
 
   useEffect(() => {
     if (successMessage) {
-      const timer = setTimeout(() => setSuccessMessage(""), 3000);
+      const timer = setTimeout(() => {
+        const prevPath = new URLSearchParams(location.search).get("prev") || "/";
+        setSuccessMessage("");
+        navigate(prevPath);
+      }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [successMessage]);
+  }, [successMessage, location, navigate]);
 
   return (
     <div
@@ -108,7 +114,7 @@ const SigninPage = () => {
             <p className="text-gray-600">
               Don't have an account?{" "}
               <Link
-                to="/signup"
+                to={`/signup?prev=${location.pathname}${location.search}`}
                 className="text-blue-600 hover:text-blue-800 font-semibold"
               >
                 Sign Up

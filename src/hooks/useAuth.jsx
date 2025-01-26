@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export const useAuth = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleAuthRequest = async (url, userData) => {
     try {
@@ -47,7 +48,8 @@ export const useAuth = () => {
       { email, password }
     );
     if (success) {
-      setTimeout(() => navigate("/"), 2000); // Delay of 2 seconds before redirecting
+      const redirectTo = new URLSearchParams(location.search).get('prev') || "/";
+      navigate(redirectTo);
     }
     return success;
   };
@@ -64,7 +66,10 @@ export const useAuth = () => {
       "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/register",
       { ...userData, passwordConfirmation: userData.password }
     );
-    if (success) navigate("/");
+    if (success) {
+      const redirectTo = new URLSearchParams(location.search).get('prev') || "/";
+      navigate(redirectTo);
+    }
     return success;
   };
 

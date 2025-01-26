@@ -34,13 +34,6 @@ const ActivityDetailPage = () => {
   });
   const { cartCount, setCartCount, updateCartCount } = useCartContext(); // Remove refreshCart
 
-  // Add console logs for debugging
-  console.log("ActivityDetailPage render:", {
-    activityId,
-    activity,
-    isAuthenticated,
-  });
-
   if (activityLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -71,33 +64,27 @@ const ActivityDetailPage = () => {
 
   const handleBooking = async () => {
     if (!isAuthenticated) {
-      navigate("/signin"); // Changed from '/login' to '/signin'
+      navigate(`/signin?prev=/activity/detail/${activityId}`); // Changed from '/login' to '/signin'
       return;
     }
 
     try {
       const result = await addToCart(activityId);
-      console.log("Cart result:", result); // Debug log
-
       if (result.success) {
-        // Just update the cart count
-        await updateCartCount(); // Update cart count immediately
+        await updateCartCount();
         setToast({
           show: true,
           message: "Successfully added to cart!",
           type: "success",
         });
-        console.log("Toast should show:", { show: true, type: "success" }); // Debug log
       } else {
         setToast({
           show: true,
           message: result.message || "Failed to add to cart",
           type: "error",
         });
-        console.log("Toast should show:", { show: true, type: "error" }); // Debug log
       }
     } catch (error) {
-      console.error("Booking error:", error); // Debug log
       setToast({
         show: true,
         message: error.message || "Failed to add to cart",
