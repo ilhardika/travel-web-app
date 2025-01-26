@@ -87,7 +87,7 @@ const ProfilePage = () => {
               </h1>
               <p className="text-blue-100 flex items-center justify-center md:justify-start gap-2">
                 <MapPin className="w-4 h-4" />
-                {userData.city || "Jakarta, Indonesia"}
+                "Jakarta, Indonesia"
               </p>
             </div>
             <div className="md:ml-auto flex gap-4">

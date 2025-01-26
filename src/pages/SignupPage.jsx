@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Lock, Mail, User, Phone } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { useForm } from "../hooks/useForm";
+import { useBanners } from "../hooks/useBanners";
 
 const SignUpPage = () => {
   const { values, handleChange } = useForm({
@@ -13,15 +14,31 @@ const SignUpPage = () => {
   });
 
   const { register, error, loading } = useAuth();
+  const { banners } = useBanners();
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    await register(values);
+    const success = await register(values);
+    if (success) {
+      setSuccessMessage("Registration successful! Redirecting...");
+    }
   };
 
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => setSuccessMessage(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-100 to-blue-300 p-6">
-      <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center p-6 relative"
+      style={{ backgroundImage: `url(${banners[0]?.imageUrl})` }}
+    >
+      <div className="absolute inset-0 bg-black opacity-60"></div>
+      <div className="relative w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
         <div className="bg-gradient-to-r from-blue-500 to-sky-400 p-6 text-center">
           <div className="flex justify-center items-center mb-4">
             <h1 className="text-3xl font-bold text-white">TravApp</h1>
@@ -33,6 +50,11 @@ const SignUpPage = () => {
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-center">
               {error}
+            </div>
+          )}
+          {successMessage && (
+            <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg mb-4 text-center">
+              {successMessage}
             </div>
           )}
 

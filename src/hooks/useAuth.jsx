@@ -46,7 +46,9 @@ export const useAuth = () => {
       "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/login",
       { email, password }
     );
-    if (success) navigate("/");
+    if (success) {
+      setTimeout(() => navigate("/"), 2000); // Delay of 2 seconds before redirecting
+    }
     return success;
   };
 

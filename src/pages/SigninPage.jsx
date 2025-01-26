@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Lock, Mail } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { useForm } from "../hooks/useForm";
+import { useBanners } from "../hooks/useBanners";
 
 const SigninPage = () => {
   const { values, handleChange } = useForm({
@@ -11,15 +12,31 @@ const SigninPage = () => {
   });
 
   const { login, error, loading } = useAuth();
+  const { banners } = useBanners();
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await login(values.email, values.password);
+    const success = await login(values.email, values.password);
+    if (success) {
+      setSuccessMessage("Login successful! Redirecting...");
+    }
   };
 
+  useEffect(() => {
+    if (successMessage) {
+      const timer = setTimeout(() => setSuccessMessage(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [successMessage]);
+
   return (
-    <div className="min-h-screen flex items-center justify-center to-blue-300 p-6">
-      <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
+    <div
+      className="min-h-screen flex items-center justify-center bg-cover bg-center p-6 relative"
+      style={{ backgroundImage: `url(${banners[0]?.imageUrl})` }}
+    >
+      <div className="absolute inset-0 bg-black opacity-60"></div>
+      <div className="relative w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-500 to-sky-400 p-6 text-center">
           <div className="flex justify-center items-center mb-4">
@@ -33,6 +50,11 @@ const SigninPage = () => {
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-center">
               {error}
+            </div>
+          )}
+          {successMessage && (
+            <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg mb-4 text-center">
+              {successMessage}
             </div>
           )}
 
