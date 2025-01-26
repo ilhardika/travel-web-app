@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import useCart from "../hooks/useCart";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import usePaymentMethods from "../hooks/usePaymentMethods";
+import useTransaction from "../hooks/useTransaction";
+import { Minus, Plus, Trash2, CreditCard, Wallet } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Toast from "../components/Toast";
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
-import { useCartContext } from '../context/CartContext'; // Add this line
+import { useCartContext } from '../context/CartContext';
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -21,8 +23,17 @@ const CartPage = () => {
     toggleAllItems,
     getSelectedItemsTotal,
   } = useCart();
+  const { paymentMethods, loading: loadingPayments } = usePaymentMethods();
+  const { createTransaction, loading: creatingTransaction } = useTransaction();
   const [deleteItem, setDeleteItem] = useState(null);
+  const [selectedPayment, setSelectedPayment] = useState(null);
   const { updateCartCount } = useCartContext();
+
+  useEffect(() => {
+    if (paymentMethods.length > 0) {
+      setSelectedPayment(paymentMethods[0].id);
+    }
+  }, [paymentMethods]);
 
   if (loading) {
     return (
@@ -74,8 +85,8 @@ const CartPage = () => {
     setDeleteItem(null);
   };
 
-  const handleCheckout = () => {
-    if (selectedItems.length === 0) {
+  const handleCreateTransaction = async () => {
+    if (!selectedItems.length) {
       setToast({
         show: true,
         message: "Please select items to checkout",
@@ -84,15 +95,40 @@ const CartPage = () => {
       return;
     }
 
-    // Send selected cart items
-    const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.id));
-    navigate("/checkout", {
-      state: {
-        selectedCartIds: selectedItems,  // Send the actual cart IDs
-        cartItems: selectedCartItems,
-        totalAmount: getSelectedItemsTotal()
-      },
-    });
+    if (!selectedPayment) {
+      setToast({
+        show: true,
+        message: "Please select a payment method",
+        type: "error",
+      });
+      return;
+    }
+
+    try {
+      console.log("Creating transaction with:", {
+        selectedItems,
+        selectedPayment,
+      });
+      const createResult = await createTransaction(selectedItems, selectedPayment);
+      console.log("Create transaction result:", createResult);
+      if (createResult.success) {
+        console.log("Transaction created successfully, redirecting to payment page");
+        navigate(`/payments/${createResult.transactionId || ''}`);
+      } else {
+        setToast({
+          show: true,
+          message: createResult.error || "Transaction creation failed",
+          type: "error",
+        });
+      }
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+      setToast({
+        show: true,
+        message: error.message,
+        type: "error",
+      });
+    }
   };
 
   return (
@@ -139,124 +175,158 @@ const CartPage = () => {
             </div>
           </motion.div>
         ) : (
-          <div className="space-y-4">
-            <AnimatePresence>
-              {cartItems.map((item) => (
-                <motion.div
-                  key={item.id}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, x: -100 }}
-                  className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
-                >
-                  <div className="flex gap-6">
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={selectedItems.includes(item.id)}
-                        onChange={() => toggleItemSelection(item.id)}
-                        className="mt-2 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+          <div className="flex flex-col lg:flex-row gap-8">
+            <div className="flex-1 space-y-4">
+              <AnimatePresence>
+                {cartItems.map((item) => (
+                  <motion.div
+                    key={item.id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, x: -100 }}
+                    className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex gap-6">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedItems.includes(item.id)}
+                          onChange={() => toggleItemSelection(item.id)}
+                          className="mt-2 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                      </div>
+                      <img
+                        src={item.activity.imageUrls[0]}
+                        alt={item.activity.title}
+                        className="w-32 h-32 object-cover rounded-lg"
                       />
-                    </div>
-                    <img
-                      src={item.activity.imageUrls[0]}
-                      alt={item.activity.title}
-                      className="w-32 h-32 object-cover rounded-lg"
-                    />
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        {item.activity.title}
-                      </h3>
-                      <p className="text-gray-600 mt-1">
-                        {item.activity.city}, {item.activity.province}
-                      </p>
-                      <div className="mt-4 flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() =>
-                              handleQuantityChange(item.id, item.quantity, -1)
-                            }
-                            className="p-2 rounded-full hover:bg-gray-100"
-                          >
-                            <Minus className="w-4 h-4" />
-                          </motion.button>
-                          <motion.span
-                            key={item.quantity}
-                            initial={{ scale: 1.2 }}
-                            animate={{ scale: 1 }}
-                            className="font-medium w-8 text-center"
-                          >
-                            {item.quantity}
-                          </motion.span>
-                          <motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() =>
-                              handleQuantityChange(item.id, item.quantity, 1)
-                            }
-                            className="p-2 rounded-full hover:bg-gray-100"
-                          >
-                            <Plus className="w-4 h-4" />
-                          </motion.button>
-                          <motion.button
-                            whileHover={{ scale: 1.1, color: "#ef4444" }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => handleDelete(item.id, item.activity.title)}
-                            className="p-2 rounded-full hover:bg-red-50 text-red-500"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </motion.button>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-lg font-semibold text-gray-900">
-                            IDR{" "}
-                            {(
-                              item.activity.price * item.quantity
-                            ).toLocaleString("id-ID")}
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          {item.activity.title}
+                        </h3>
+                        <p className="text-gray-600 mt-1">
+                          {item.activity.city}, {item.activity.province}
+                        </p>
+                        <div className="mt-4 flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() =>
+                                handleQuantityChange(item.id, item.quantity, -1)
+                              }
+                              className="p-2 rounded-full hover:bg-gray-100"
+                            >
+                              <Minus className="w-4 h-4" />
+                            </motion.button>
+                            <motion.span
+                              key={item.quantity}
+                              initial={{ scale: 1.2 }}
+                              animate={{ scale: 1 }}
+                              className="font-medium w-8 text-center"
+                            >
+                              {item.quantity}
+                            </motion.span>
+                            <motion.button
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() =>
+                                handleQuantityChange(item.id, item.quantity, 1)
+                              }
+                              className="p-2 rounded-full hover:bg-gray-100"
+                            >
+                              <Plus className="w-4 h-4" />
+                            </motion.button>
+                            <motion.button
+                              whileHover={{ scale: 1.1, color: "#ef4444" }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => handleDelete(item.id, item.activity.title)}
+                              className="p-2 rounded-full hover:bg-red-50 text-red-500"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </motion.button>
                           </div>
-                          {item.activity.price_discount && (
-                            <div className="text-sm text-gray-500 line-through">
+                          <div className="text-right">
+                            <div className="text-lg font-semibold text-gray-900">
                               IDR{" "}
                               {(
-                                item.activity.price_discount * item.quantity
+                                item.activity.price * item.quantity
                               ).toLocaleString("id-ID")}
                             </div>
-                          )}
+                            {item.activity.price_discount && (
+                              <div className="text-sm text-gray-500 line-through">
+                                IDR{" "}
+                                {(
+                                  item.activity.price_discount * item.quantity
+                                ).toLocaleString("id-ID")}
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
 
-            {selectedItems.length > 0 && (
-              <motion.div
-                initial={{ y: 100 }}
-                animate={{ y: 0 }}
-                className="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t p-4 backdrop-blur-lg bg-white/90 z-50"
-              >
-                <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center gap-4">
-                  <div>
-                    <p className="text-gray-600 text-center lg:text-left">
-                      Total Selected ({selectedItems.length} items)
-                    </p>
-                    <p className="text-xl lg:text-2xl font-bold text-gray-900">
-                      IDR {getSelectedItemsTotal().toLocaleString("id-ID")}
-                    </p>
+            <div className="w-full lg:w-1/3 space-y-4">
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <h2 className="text-lg font-semibold mb-4">Summary</h2>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span>Total Selected</span>
+                    <span>{selectedItems.length} items</span>
                   </div>
-                  <button
-                    onClick={handleCheckout}
-                    className="w-full lg:w-auto px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold"
-                  >
-                    Checkout
-                  </button>
+                  <div className="flex justify-between">
+                    <span>Total Price</span>
+                    <span>IDR {getSelectedItemsTotal().toLocaleString("id-ID")}</span>
+                  </div>
                 </div>
-              </motion.div>
-            )}
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <h2 className="text-lg font-semibold mb-4">Payment Method</h2>
+                <div className="space-y-4">
+                  {paymentMethods.map((method) => (
+                    <motion.div
+                      key={method.id}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
+                      onClick={() => setSelectedPayment(method.id)}
+                      className={`flex items-center p-4 border rounded-lg cursor-pointer ${
+                        selectedPayment === method.id
+                          ? "border-blue-500 bg-blue-50"
+                          : "border-gray-200"
+                      }`}
+                    >
+                      <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                        {method.type === "CREDIT_CARD" ? (
+                          <CreditCard className="w-6 h-6 text-gray-600" />
+                        ) : (
+                          <Wallet className="w-6 h-6 text-gray-600" />
+                        )}
+                      </div>
+                      <div className="ml-4">
+                        <h3 className="font-medium">{method.name}</h3>
+                        <p className="text-sm text-gray-500">
+                          {method.description}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={handleCreateTransaction}
+                className="w-full px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold"
+                disabled={creatingTransaction}
+              >
+                {creatingTransaction ? "Processing..." : "Create Transaction"}
+              </button>
+            </div>
           </div>
         )}
       </div>

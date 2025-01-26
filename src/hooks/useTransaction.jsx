@@ -5,11 +5,7 @@ const useTransaction = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const createTransaction = async (
-    cartIds,
-    paymentMethodId,
-    proofPaymentUrl
-  ) => {
+  const createTransaction = async (cartIds, paymentMethodId) => {
     setLoading(true);
     try {
       const response = await axios.post(
@@ -17,7 +13,6 @@ const useTransaction = () => {
         {
           cartIds,
           paymentMethodId,
-          proofPaymentUrl,
         },
         {
           headers: {
@@ -30,7 +25,7 @@ const useTransaction = () => {
       setLoading(false);
       return {
         success: response.data.status === "OK",
-        transaction: response.data.data, // Ensure transaction data is correctly accessed
+        transactionId: response.data.data?.transaction?.id, // Handle transaction ID
       };
     } catch (error) {
       console.error("Error creating transaction:", error);

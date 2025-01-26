@@ -10,9 +10,9 @@ import DestinationsPage from "./pages/ActivityPage";
 import PromoPage from "./pages/PromoPage";
 import ActivityDetailPage from "./pages/ActivityDetailPage";
 import CartPage from "./pages/CartPage";
-import CheckoutPage from "./pages/CheckoutPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import TransactionDetailPage from "./pages/TransactionDetailPage";
+import PaymentsPage from "./pages/PaymentsPage";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from './context/CartContext';
 
@@ -58,14 +58,6 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/checkout"
-                element={
-                  <ProtectedRoute>
-                    <CheckoutPage />
-                  </ProtectedRoute>
-                }
-              />
               <Route path="/signin" element={<SinginPage />}></Route>
               <Route path="/signup" element={<SignupPage />}></Route>
               <Route
@@ -81,6 +73,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <TransactionDetailPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/payments/:transactionId"
+                element={
+                  <ProtectedRoute>
+                    <PaymentsPage />
                   </ProtectedRoute>
                 }
               />
