@@ -3,19 +3,11 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import useCart from "../hooks/useCart";
 import useTransaction from "../hooks/useTransaction";
-import {
-  Minus,
-  Plus,
-  Trash2,
-  CreditCard,
-  Wallet,
-  Upload,
-  X,
-} from "lucide-react";
+import { Minus, Plus, Trash2, CreditCard, Wallet } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Toast from "../components/Toast";
-import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
-import { useCartContext } from "../context/CartContext";
+import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
+import { useCartContext } from '../context/CartContext';
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -30,20 +22,10 @@ const CartPage = () => {
     toggleAllItems,
     getSelectedItemsTotal,
   } = useCart();
-  const {
-    paymentMethods,
-    createTransaction,
-    uploadProofOfPayment,
-    updateProofPayment,
-    loading: creatingTransaction,
-  } = useTransaction();
+  const { paymentMethods, createTransaction, loading: creatingTransaction } = useTransaction();
   const [deleteItem, setDeleteItem] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const { updateCartCount } = useCartContext();
-  const [showModal, setShowModal] = useState(false);
-  const [transactionId, setTransactionId] = useState(null);
-  const [proofImage, setProofImage] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
 
   if (loading) {
     return (
@@ -119,15 +101,11 @@ const CartPage = () => {
         selectedItems,
         selectedPayment,
       });
-      const createResult = await createTransaction(
-        selectedItems,
-        selectedPayment
-      );
+      const createResult = await createTransaction(selectedItems, selectedPayment);
       console.log("Create transaction result:", createResult);
       if (createResult.success) {
-        console.log("Transaction created successfully, showing upload modal");
-        setTransactionId(createResult.transactionId);
-        setShowModal(true);
+        console.log("Transaction created successfully, redirecting to payment page");
+        navigate(`/payments/${createResult.transactionId}`);
       } else {
         setToast({
           show: true,
@@ -142,52 +120,6 @@ const CartPage = () => {
         message: error.message,
         type: "error",
       });
-    }
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setProofImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewUrl(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleRemoveImage = () => {
-    setProofImage(null);
-    setPreviewUrl(null);
-  };
-
-  const handleUploadProof = async () => {
-    if (proofImage) {
-      const uploadResult = await uploadProofOfPayment(proofImage);
-      if (uploadResult.success) {
-        const updateResult = await updateProofPayment(
-          transactionId,
-          uploadResult.imageUrl
-        );
-        if (updateResult.success) {
-          setToast({
-            show: true,
-            message: "Payment proof uploaded successfully",
-            type: "success",
-          });
-          setShowModal(false);
-          setTimeout(() => {
-            navigate("/");
-          }, 1000); // Redirect to homepages
-        } else {
-          setToast({
-            show: true,
-            message: updateResult.error,
-            type: "error",
-          });
-        }
-      }
     }
   };
 
@@ -301,9 +233,7 @@ const CartPage = () => {
                             <motion.button
                               whileHover={{ scale: 1.1, color: "#ef4444" }}
                               whileTap={{ scale: 0.95 }}
-                              onClick={() =>
-                                handleDelete(item.id, item.activity.title)
-                              }
+                              onClick={() => handleDelete(item.id, item.activity.title)}
                               className="p-2 rounded-full hover:bg-red-50 text-red-500"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -343,9 +273,7 @@ const CartPage = () => {
                   </div>
                   <div className="flex justify-between">
                     <span>Total Price</span>
-                    <span>
-                      IDR {getSelectedItemsTotal().toLocaleString("id-ID")}
-                    </span>
+                    <span>IDR {getSelectedItemsTotal().toLocaleString("id-ID")}</span>
                   </div>
                 </div>
               </div>
@@ -400,73 +328,6 @@ const CartPage = () => {
         onConfirm={confirmDelete}
         itemName={deleteItem?.name}
       />
-
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-2xl shadow-lg p-8 transition-all hover:shadow-xl w-full max-w-lg">
-            <h2 className="text-xl font-bold mb-6 text-gray-900">
-              Upload Proof of Payment
-            </h2>
-            <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-500 transition-colors">
-              <input
-                type="file"
-                onChange={handleFileChange}
-                className="hidden"
-                id="proof-upload"
-                accept="image/*"
-              />
-              {previewUrl ? (
-                <div className="space-y-4">
-                  <div className="relative w-full max-w-md mx-auto">
-                    <img
-                      src={previewUrl}
-                      alt="Payment proof preview"
-                      className="w-full h-auto rounded-lg shadow-md"
-                    />
-                    <button
-                      onClick={handleRemoveImage}
-                      className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                  <p className="text-sm text-gray-500">
-                    Click "Change Image" to upload this proof of payment
-                  </p>
-                </div>
-              ) : (
-                <label
-                  htmlFor="proof-upload"
-                  className="cursor-pointer flex flex-col items-center gap-4"
-                >
-                  <Upload className="w-10 h-10 text-gray-400" />
-                  <span className="text-sm text-gray-600">
-                    Drop your file here or{" "}
-                    <span className="text-blue-600">browse</span>
-                  </span>
-                  <p className="text-xs text-gray-400">
-                    Supported formats: JPG, PNG, JPEG
-                  </p>
-                </label>
-              )}
-            </div>
-            {proofImage && (
-              <button
-                onClick={handleUploadProof}
-                className="mt-6 w-full px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
-              >
-                Upload Image
-              </button>
-            )}
-            <button
-              onClick={() => setShowModal(false)}
-              className="mt-4 w-full px-6 py-3 bg-gray-600 text-white rounded-xl font-medium hover:bg-gray-700 transition-colors"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
