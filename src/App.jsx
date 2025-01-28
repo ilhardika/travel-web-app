@@ -12,9 +12,8 @@ import ActivityDetailPage from "./pages/ActivityDetailPage";
 import CartPage from "./pages/CartPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import TransactionDetailPage from "./pages/TransactionDetailPage";
-import PaymentsPage from "./pages/PaymentsPage";
 import { AuthProvider } from "./context/AuthContext";
-import { CartProvider } from './context/CartContext';
+import { CartProvider } from "./context/CartContext";
 
 const App = () => {
   return (
@@ -73,14 +72,6 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <TransactionDetailPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/payments/:transactionId"
-                element={
-                  <ProtectedRoute>
-                    <PaymentsPage />
                   </ProtectedRoute>
                 }
               />
