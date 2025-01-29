@@ -39,9 +39,9 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gray-900 flex">
       <AdminSidebar />
-      <div className="ml-64 p-8">
+      <div className="flex-1 p-8 transition-all duration-300" style={{ marginLeft: "5rem" }}>
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Dashboard</h1>
           <p className="text-gray-400">Welcome back, {userData?.name || 'Admin'}!</p>
