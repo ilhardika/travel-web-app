@@ -16,6 +16,7 @@ const UserManagement = () => {
   const { updateUserRole } = useAuth();
   const [selectedUser, setSelectedUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true); // Default to true
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -69,10 +70,11 @@ const UserManagement = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 flex">
-      <AdminSidebar />
+      <AdminSidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
       <div
-        className="flex-1 p-8 transition-all duration-300"
-        style={{ marginLeft: "5rem" }}
+        className={`flex-1 p-8 transition-all duration-300 ${
+          isExpanded ? "ml-64" : "ml-20"
+        }`}
       >
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Manajemen Pengguna</h1>

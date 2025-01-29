@@ -18,6 +18,7 @@ const AdminDashboard = () => {
     promos: 0,
     banners: 0
   });
+  const [isExpanded, setIsExpanded] = useState(true); // Default to true
 
   useEffect(() => {
     if (!activitiesLoading && !categoriesLoading && !promosLoading && !bannersLoading) {
@@ -40,8 +41,12 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 flex">
-      <AdminSidebar />
-      <div className="flex-1 p-8 transition-all duration-300" style={{ marginLeft: "5rem" }}>
+      <AdminSidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
+      <div
+        className={`flex-1 p-8 transition-all duration-300 ${
+          isExpanded ? "ml-64" : "ml-20"
+        }`}
+      >
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Dashboard</h1>
           <p className="text-gray-400">Welcome back, {userData?.name || 'Admin'}!</p>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
-  LayoutDashboard,
+  User,
   Users,
   LayoutPanelTop,
   Plane,
@@ -12,8 +12,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-const AdminSidebar = () => {
-  const [isExpanded, setIsExpanded] = useState(true);
+const AdminSidebar = ({ isExpanded, setIsExpanded }) => {
   const activeClassName = "bg-blue-600 text-white";
   const inactiveClassName = "text-gray-300 hover:bg-gray-700 hover:text-white";
 
@@ -29,7 +28,7 @@ const AdminSidebar = () => {
         }`}
       >
         <div className="flex items-center gap-2">
-          <LayoutDashboard className="w-6 h-6 flex-shrink-0" />
+          <User className="w-6 h-6 flex-shrink-0" />
           <h1
             className={`text-xl font-bold whitespace-nowrap transition-opacity duration-300
             ${isExpanded ? "opacity-100" : "opacity-0 w-0"}`}
@@ -50,7 +49,7 @@ const AdminSidebar = () => {
             ${isActive ? activeClassName : inactiveClassName}`
           }
         >
-          <LayoutDashboard className="w-5 h-5 flex-shrink-0" />
+          <User className="w-5 h-5 flex-shrink-0" />
           <span
             className={`whitespace-nowrap transition-opacity duration-300
             ${isExpanded ? "opacity-100" : "opacity-0 w-0 hidden"}`}
