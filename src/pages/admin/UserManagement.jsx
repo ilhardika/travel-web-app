@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AdminSidebar from "../../components/AdminSidebar";
 import {
   PencilIcon,
@@ -12,11 +12,16 @@ import { useAuth } from "../../hooks/useAuth";
 const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
-  const { users, loading, error } = useUserManagement();
+  const { users: initialUsers, loading, error } = useUserManagement();
   const { updateUserRole } = useAuth();
+  const [users, setUsers] = useState([]); // Local state for users
   const [selectedUser, setSelectedUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true); // Default to true
+
+  useEffect(() => {
+    setUsers(initialUsers);
+  }, [initialUsers]);
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,11 +47,19 @@ const UserManagement = () => {
     }
   };
 
-  const handleRoleUpdate = async (userId, newRole) => {
-    const success = await updateUserRole(userId, newRole);
-    if (success) {
-      setShowEditModal(false);
-      setSelectedUser(null);
+  const handleRoleUpdate = async () => {
+    if (selectedUser) {
+      console.log(`Updating role for user ${selectedUser.id} to ${selectedUser.role}`);
+      const success = await updateUserRole(selectedUser.id, selectedUser.role);
+      if (success) {
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.id === selectedUser.id ? { ...user, role: selectedUser.role } : user
+          )
+        );
+        setShowEditModal(false);
+        setSelectedUser(null);
+      }
     }
   };
 
@@ -216,7 +229,7 @@ const UserManagement = () => {
                 className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg mb-4"
                 value={selectedUser.role}
                 onChange={(e) =>
-                  handleRoleUpdate(selectedUser.id, e.target.value)
+                  setSelectedUser({ ...selectedUser, role: e.target.value })
                 }
               >
                 <option value="user">User</option>
@@ -231,9 +244,7 @@ const UserManagement = () => {
                 </button>
                 <button
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg"
-                  onClick={() =>
-                    handleRoleUpdate(selectedUser.id, selectedUser.role)
-                  }
+                  onClick={handleRoleUpdate}
                 >
                   Save
                 </button>

@@ -89,6 +89,7 @@ export const useAuth = () => {
     setError("");
     setLoading(true);
     try {
+      console.log(`Updating role for user ${userId} to ${role}`);
       const response = await fetch(
         `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/update-user-role/${userId}`,
         {
@@ -102,6 +103,7 @@ export const useAuth = () => {
         }
       );
       const data = await response.json();
+      console.log('Response:', data);
       if (!response.ok) throw new Error(data.message);
       return true;
     } catch (err) {
