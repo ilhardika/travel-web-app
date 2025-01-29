@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import useActivities from "../../hooks/useActivity"; // Changed from useDestinations
+import useActivity from "../../hooks/useActivity"; // Changed from useDestinations
 import { useCategories } from "../../hooks/useCategories";
 import Navbar from "../../components/Navbar";
 import { MapPin, Star, Users, Clock } from "lucide-react";
@@ -126,7 +126,7 @@ const DestinationsPage = () => {
     activities,
     loading: activitiesLoading,
     error: activitiesError,
-  } = useActivities();
+  } = useActivity();
   const { categories, loading: categoriesLoading } = useCategories();
   const [searchQuery, setSearchQuery] = useState("");
 

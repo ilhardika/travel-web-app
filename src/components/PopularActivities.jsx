@@ -1,10 +1,10 @@
 import React from "react";
-import useActivities from "../hooks/useActivity";
+import { useActivity } from "../hooks/useActivity";
 import { Star, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const ActivityList = () => {
-  const { activities, loading, error } = useActivities();
+  const { activities, loading, error } = useActivity();
 
   if (loading) {
     return (

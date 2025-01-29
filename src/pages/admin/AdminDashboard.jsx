@@ -1,15 +1,74 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import AdminSidebar from "../../components/AdminSidebar";
+import { useActivity } from "../../hooks/useActivity";
+import { useCategory } from "../../hooks/useCategory";
+import { usePromo } from "../../hooks/usePromo";
+import { useBanners } from "../../hooks/useBanners";
+import useUserProfile from "../../hooks/useUserProfile";
 
 const AdminDashboard = () => {
+  const { activities, loading: activitiesLoading } = useActivity();
+  const { categories, loading: categoriesLoading } = useCategory();
+  const { promos, loading: promosLoading } = usePromo();
+  const { banners, loading: bannersLoading } = useBanners();
+  const { userData, loading: userLoading } = useUserProfile();
+  const [stats, setStats] = useState({
+    users: 0,
+    activities: 0,
+    promos: 0,
+    banners: 0
+  });
+
+  useEffect(() => {
+    if (!activitiesLoading && !categoriesLoading && !promosLoading && !bannersLoading) {
+      setStats({
+        activities: activities?.length || 0,
+        categories: categories?.length || 0,
+        promos: promos?.length || 0,
+        banners: banners?.length || 0
+      });
+    }
+  }, [activities, categories, promos, banners, activitiesLoading, categoriesLoading, promosLoading, bannersLoading]);
+
+  if (activitiesLoading || categoriesLoading || promosLoading || bannersLoading || userLoading) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-      <h1 className="text-4xl font-bold mb-8">Admin Dashboard</h1>
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <p className="text-lg mb-4">Welcome, Admin!</p>
-        <Link to="/" className="text-blue-600 hover:text-blue-800">
-          Go to Home
-        </Link>
+    <div className="min-h-screen bg-gray-900">
+      <AdminSidebar />
+      <div className="ml-64 p-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+          <p className="text-gray-400">Welcome back, {userData?.name || 'Admin'}!</p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-gray-800 rounded-xl shadow-lg p-6">
+            <h3 className="text-gray-400 text-sm font-medium">Total Activities</h3>
+            <p className="text-3xl font-bold text-white mt-2">{stats.activities}</p>
+          </div>
+          
+          <div className="bg-gray-800 rounded-xl shadow-lg p-6">
+            <h3 className="text-gray-400 text-sm font-medium">Total Categories</h3>
+            <p className="text-3xl font-bold text-white mt-2">{stats.categories}</p>
+          </div>
+          
+          <div className="bg-gray-800 rounded-xl shadow-lg p-6">
+            <h3 className="text-gray-400 text-sm font-medium">Active Promos</h3>
+            <p className="text-3xl font-bold text-white mt-2">{stats.promos}</p>
+          </div>
+          
+          <div className="bg-gray-800 rounded-xl shadow-lg p-6">
+            <h3 className="text-gray-400 text-sm font-medium">Total Banners</h3>
+            <p className="text-3xl font-bold text-white mt-2">{stats.banners}</p>
+          </div>
+        </div>
+
       </div>
     </div>
   );
