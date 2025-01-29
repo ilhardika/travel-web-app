@@ -14,6 +14,7 @@ import TransactionsPage from "./pages/user/TransactionsPage";
 import TransactionDetailPage from "./pages/user/TransactionDetailPage";
 import PaymentsPage from "./pages/user/PaymentsPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import UserManagement from "./pages/admin/UserManagement";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 
@@ -90,6 +91,14 @@ const App = () => {
                 element={
                   <ProtectedRoute adminOnly>
                     <AdminDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/user-management"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <UserManagement />
                   </ProtectedRoute>
                 }
               />

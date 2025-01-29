@@ -60,7 +60,7 @@ const AdminSidebar = () => {
         </NavLink>
 
         <NavLink
-          to="/admin/user-management"
+          to="/user-management"
           className={({ isActive }) =>
             `flex items-center gap-3 py-3 transition-colors ${
               isExpanded ? "px-6" : "px-4 justify-center"
@@ -78,7 +78,7 @@ const AdminSidebar = () => {
         </NavLink>
 
         <NavLink
-          to="/admin/category-management"
+          to="/category-management"
           className={({ isActive }) =>
             `flex items-center gap-3 py-3 transition-colors ${
               isExpanded ? "px-6" : "px-4 justify-center"
@@ -96,7 +96,7 @@ const AdminSidebar = () => {
         </NavLink>
 
         <NavLink
-          to="/admin/activity-management"
+          to="/activity-management"
           className={({ isActive }) =>
             `flex items-center gap-3 py-3 transition-colors ${
               isExpanded ? "px-6" : "px-4 justify-center"
@@ -114,7 +114,7 @@ const AdminSidebar = () => {
         </NavLink>
 
         <NavLink
-          to="/admin/promo-management"
+          to="/promo-management"
           className={({ isActive }) =>
             `flex items-center gap-3 py-3 transition-colors ${
               isExpanded ? "px-6" : "px-4 justify-center"
@@ -132,7 +132,7 @@ const AdminSidebar = () => {
         </NavLink>
 
         <NavLink
-          to="/admin/banner-management"
+          to="/banner-management"
           className={({ isActive }) =>
             `flex items-center gap-3 py-3 transition-colors ${
               isExpanded ? "px-6" : "px-4 justify-center"
@@ -150,7 +150,7 @@ const AdminSidebar = () => {
         </NavLink>
 
         <NavLink
-          to="/admin/transaction-management"
+          to="/transaction-management"
           className={({ isActive }) =>
             `flex items-center gap-3 py-3 transition-colors ${
               isExpanded ? "px-6" : "px-4 justify-center"
