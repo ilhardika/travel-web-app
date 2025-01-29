@@ -85,5 +85,32 @@ export const useAuth = () => {
     return success;
   };
 
-  return { login, register, updateProfile, error, loading };
+  const updateUserRole = async (userId, role) => {
+    setError("");
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/update-user-role/${userId}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          body: JSON.stringify({ role }),
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message);
+      return true;
+    } catch (err) {
+      setError(err.message);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { login, register, updateProfile, updateUserRole, error, loading };
 };

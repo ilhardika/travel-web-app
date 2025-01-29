@@ -7,11 +7,13 @@ import {
   ChevronRight,
 } from "lucide-react";
 import useUserManagement from "../../hooks/useUserManagement";
+import { useAuth } from "../../hooks/useAuth";
 
 const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
-  const { users, loading, error, updateUserRole } = useUserManagement();
+  const { users, loading, error } = useUserManagement();
+  const { updateUserRole } = useAuth();
   const [selectedUser, setSelectedUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
 
