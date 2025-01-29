@@ -13,6 +13,7 @@ import CartPage from "./pages/user/CartPage";
 import TransactionsPage from "./pages/user/TransactionsPage";
 import TransactionDetailPage from "./pages/user/TransactionDetailPage";
 import PaymentsPage from "./pages/user/PaymentsPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 
@@ -81,6 +82,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <PaymentsPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin-dashboard"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <AdminDashboard />
                   </ProtectedRoute>
                 }
               />
