@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import useCart from "../hooks/useCart";
-import useTransaction from "../hooks/useTransaction";
+import Navbar from "../../components/Navbar";
+import useCart from "../../hooks/useCart";
+import useTransaction from "../../hooks/useTransaction";
 import { Minus, Plus, Trash2, CreditCard, Wallet } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Toast from "../components/Toast";
-import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
-import { useCartContext } from '../context/CartContext';
+import Toast from "../../components/Toast";
+import DeleteConfirmationModal from "../../components/DeleteConfirmationModal";
+import { useCartContext } from "../../context/CartContext";
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -22,7 +22,11 @@ const CartPage = () => {
     toggleAllItems,
     getSelectedItemsTotal,
   } = useCart();
-  const { paymentMethods, createTransaction, loading: creatingTransaction } = useTransaction();
+  const {
+    paymentMethods,
+    createTransaction,
+    loading: creatingTransaction,
+  } = useTransaction();
   const [deleteItem, setDeleteItem] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const { updateCartCount } = useCartContext();
@@ -101,10 +105,15 @@ const CartPage = () => {
         selectedItems,
         selectedPayment,
       });
-      const createResult = await createTransaction(selectedItems, selectedPayment);
+      const createResult = await createTransaction(
+        selectedItems,
+        selectedPayment
+      );
       console.log("Create transaction result:", createResult);
       if (createResult.success) {
-        console.log("Transaction created successfully, redirecting to payment page");
+        console.log(
+          "Transaction created successfully, redirecting to payment page"
+        );
         navigate(`/payments/${createResult.transactionId}`);
       } else {
         setToast({
@@ -233,7 +242,9 @@ const CartPage = () => {
                             <motion.button
                               whileHover={{ scale: 1.1, color: "#ef4444" }}
                               whileTap={{ scale: 0.95 }}
-                              onClick={() => handleDelete(item.id, item.activity.title)}
+                              onClick={() =>
+                                handleDelete(item.id, item.activity.title)
+                              }
                               className="p-2 rounded-full hover:bg-red-50 text-red-500"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -273,7 +284,9 @@ const CartPage = () => {
                   </div>
                   <div className="flex justify-between">
                     <span>Total Price</span>
-                    <span>IDR {getSelectedItemsTotal().toLocaleString("id-ID")}</span>
+                    <span>
+                      IDR {getSelectedItemsTotal().toLocaleString("id-ID")}
+                    </span>
                   </div>
                 </div>
               </div>

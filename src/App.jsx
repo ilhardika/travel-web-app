@@ -1,20 +1,20 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./routes/ProtectedRoutes";
-import LandingPage from "./pages/LandingPage";
-import SinginPage from "./pages/SigninPage";
-import SignupPage from "./pages/SignupPage";
-import ProfilePage from "./pages/ProfilePage";
-import UpdateProfilePage from "./pages/UpdateProfilePage";
-import DestinationsPage from "./pages/ActivityPage";
-import PromoPage from "./pages/PromoPage";
-import ActivityDetailPage from "./pages/ActivityDetailPage";
-import CartPage from "./pages/CartPage";
-import TransactionsPage from "./pages/TransactionsPage";
-import TransactionDetailPage from "./pages/TransactionDetailPage";
-import PaymentsPage from "./pages/PaymentsPage";
+import LandingPage from "./pages/user/LandingPage";
+import SinginPage from "./pages/user/SigninPage";
+import SignupPage from "./pages/user/SignupPage";
+import ProfilePage from "./pages/user/ProfilePage";
+import UpdateProfilePage from "./pages/user/UpdateProfilePage";
+import DestinationsPage from "./pages/user/ActivityPage";
+import PromoPage from "./pages/user/PromoPage";
+import ActivityDetailPage from "./pages/user/ActivityDetailPage";
+import CartPage from "./pages/user/CartPage";
+import TransactionsPage from "./pages/user/TransactionsPage";
+import TransactionDetailPage from "./pages/user/TransactionDetailPage";
+import PaymentsPage from "./pages/user/PaymentsPage";
 import { AuthProvider } from "./context/AuthContext";
-import { CartProvider } from './context/CartContext';
+import { CartProvider } from "./context/CartContext";
 
 const App = () => {
   return (

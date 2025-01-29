@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import { useActivityDetails } from "../hooks/useActivity"; // Changed from useActivityDetails
-import { useAuth } from "../context/AuthContext";
+import Navbar from "../../components/Navbar";
+import { useActivityDetails } from "../../hooks/useActivity"; // Changed from useActivityDetails
+import { useAuth } from "../../context/AuthContext";
 import {
   MapPin,
   Clock,
@@ -12,9 +12,9 @@ import {
   Info,
   Share2,
 } from "lucide-react";
-import useCart from "../hooks/useCart"; // This will now include addToCart functionality
-import Toast from "../components/Toast";
-import { useCartContext } from "../context/CartContext";
+import useCart from "../../hooks/useCart"; // This will now include addToCart functionality
+import Toast from "../../components/Toast";
+import { useCartContext } from "../../context/CartContext";
 
 const ActivityDetailPage = () => {
   const { activityId } = useParams();

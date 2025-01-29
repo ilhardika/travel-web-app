@@ -1,7 +1,7 @@
 // pages/PromoPage.jsx
 import React from "react";
-import { usePromos } from "../hooks/usePromos";
-import Navbar from "../components/Navbar";
+import { usePromos } from "../../hooks/usePromos";
+import Navbar from "../../components/Navbar";
 
 const PromoPage = () => {
   const { promos, loading, error } = usePromos();

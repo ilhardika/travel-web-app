@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import useActivities from "../hooks/useActivity"; // Changed from useDestinations
-import { useCategories } from "../hooks/useCategories";
-import Navbar from "../components/Navbar";
+import useActivities from "../../hooks/useActivity"; // Changed from useDestinations
+import { useCategories } from "../../hooks/useCategories";
+import Navbar from "../../components/Navbar";
 import { MapPin, Star, Users, Clock } from "lucide-react";
 
 const ActivityCard = ({ activity }) => {
@@ -122,10 +122,14 @@ const CategoryFilter = ({ categories, categoryName }) => {
 
 const DestinationsPage = () => {
   const { categoryName } = useParams();
-  const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
+  const {
+    activities,
+    loading: activitiesLoading,
+    error: activitiesError,
+  } = useActivities();
   const { categories, loading: categoriesLoading } = useCategories();
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   // Show loading state
   if (activitiesLoading || categoriesLoading) {
     return (
@@ -160,12 +164,18 @@ const DestinationsPage = () => {
   }
 
   // Filter activities
-  const filteredActivities = activities?.filter((activity) => {
-    const matchesSearch = activity.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = !categoryName || 
-      (categories?.find(cat => cat.name.toLowerCase() === categoryName.toLowerCase())?.id === activity.categoryId);
-    return matchesSearch && matchesCategory;
-  }) || [];
+  const filteredActivities =
+    activities?.filter((activity) => {
+      const matchesSearch = activity.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesCategory =
+        !categoryName ||
+        categories?.find(
+          (cat) => cat.name.toLowerCase() === categoryName.toLowerCase()
+        )?.id === activity.categoryId;
+      return matchesSearch && matchesCategory;
+    }) || [];
 
   // Filter out activities without images
   const validDestinations = filteredActivities.filter(

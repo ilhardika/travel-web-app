@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import useTransactions from "../hooks/useMyTransactions";
+import useTransactions from "../../hooks/useMyTransactions";
 import { Calendar, CreditCard, ChevronRight } from "lucide-react";
 
 const TransactionsPage = () => {

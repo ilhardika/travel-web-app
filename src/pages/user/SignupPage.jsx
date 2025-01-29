@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Lock, Mail, User, Phone } from "lucide-react";
-import { useAuth } from "../hooks/useAuth";
-import { useForm } from "../hooks/useForm";
-import { useBanners } from "../hooks/useBanners";
+import { useAuth } from "../../hooks/useAuth";
+import { useForm } from "../../hooks/useForm";
+import { useBanners } from "../../hooks/useBanners";
 
 const SignUpPage = () => {
   const { values, handleChange } = useForm({

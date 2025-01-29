@@ -1,8 +1,8 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import useTransactions from "../hooks/useMyTransactions";
-import useUserProfile from "../hooks/useUserProfile";
+import useTransactions from "../../hooks/useMyTransactions";
+import useUserProfile from "../../hooks/useUserProfile";
 import {
   User,
   Mail,

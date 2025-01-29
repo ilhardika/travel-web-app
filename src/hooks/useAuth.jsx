@@ -48,7 +48,8 @@ export const useAuth = () => {
       { email, password }
     );
     if (success) {
-      const redirectTo = new URLSearchParams(location.search).get('prev') || "/";
+      const user = JSON.parse(localStorage.getItem("user"));
+      const redirectTo = user.role === "admin" ? "/admin-dashboard" : new URLSearchParams(location.search).get('prev') || "/";
       navigate(redirectTo);
     }
     return success;

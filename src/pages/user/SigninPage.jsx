@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Lock, Mail } from "lucide-react";
-import { useAuth } from "../hooks/useAuth";
-import { useForm } from "../hooks/useForm";
-import { useBanners } from "../hooks/useBanners";
+import { useAuth } from "../../hooks/useAuth";
+import { useForm } from "../../hooks/useForm";
+import { useBanners } from "../../hooks/useBanners";
 
 const SigninPage = () => {
   const { values, handleChange } = useForm({
@@ -28,7 +28,8 @@ const SigninPage = () => {
   useEffect(() => {
     if (successMessage) {
       const timer = setTimeout(() => {
-        const prevPath = new URLSearchParams(location.search).get("prev") || "/";
+        const prevPath =
+          new URLSearchParams(location.search).get("prev") || "/";
         setSuccessMessage("");
         navigate(prevPath);
       }, 2000);

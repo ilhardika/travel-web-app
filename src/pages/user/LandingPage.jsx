@@ -1,10 +1,10 @@
 import React from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import Hero from "../components/Hero";
-import Features from "../components/Features";
-import Testimonials from "../components/Testimonials/index";
-import PopularActivities from "../components/PopularActivities";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
+import Hero from "../../components/Hero";
+import Features from "../../components/Features";
+import Testimonials from "../../components/Testimonials/index";
+import PopularActivities from "../../components/PopularActivities";
 
 const LandingPage = () => {
   return (
