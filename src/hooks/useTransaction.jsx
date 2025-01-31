@@ -6,11 +6,15 @@ const useTransaction = () => {
   const [error, setError] = useState(null);
   const [transaction, setTransaction] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState([]);
-  const [myTransactions, setMyTransactions] = useState([]);
+  const [transactions, setTransactions] = useState([]);
 
   const createTransaction = async (cartIds, paymentMethodId) => {
     setLoading(true);
     try {
+      console.log("Creating transaction with data:", {
+        cartIds,
+        paymentMethodId,
+      });
       const response = await axios.post(
         "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/create-transaction",
         {
@@ -26,7 +30,7 @@ const useTransaction = () => {
       );
       console.log("Create transaction response data:", response.data);
 
-      // Fetch the latest transaction based on createdAt
+      // Fetch the latest transactions to get the transaction ID
       const transactionsResponse = await axios.get(
         "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/my-transactions",
         {
@@ -36,15 +40,20 @@ const useTransaction = () => {
           },
         }
       );
+
+      // Sort transactions by createdAt in descending order
       const sortedTransactions = transactionsResponse.data.data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
       const latestTransaction = sortedTransactions[0];
+      const transactionId = latestTransaction?.id;
 
       setLoading(false);
+      console.log("Transaction ID retrieved:", transactionId);
+      console.log("Full response data:", response.data); // Additional logging
       return {
         success: response.data.status === "OK",
-        transactionId: latestTransaction.id, // Use the latest transaction ID
+        transactionId, // Ensure transactionId is correctly retrieved
       };
     } catch (error) {
       console.error("Error creating transaction:", error);
@@ -62,24 +71,23 @@ const useTransaction = () => {
       const formData = new FormData();
       formData.append("image", file);
 
-      const response = await fetch(
+      const response = await axios.post(
         "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/upload-image",
+        formData,
         {
-          method: "POST",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+            "Content-Type": "multipart/form-data",
           },
-          body: formData,
         }
       );
 
-      const data = await response.json();
-      console.log("Upload proof of payment response data:", data);
-      if (data.code === "200") {
-        return { success: true, imageUrl: data.url };
+      console.log("Upload proof of payment response data:", response.data);
+      if (response.data.code === "200") {
+        return { success: true, imageUrl: response.data.url };
       }
-      throw new Error(data.message);
+      throw new Error(response.data.message);
     } catch (err) {
       console.error("Error uploading proof of payment:", err);
       setError(err.message);
@@ -102,14 +110,12 @@ const useTransaction = () => {
         }
       );
       if (response.status === 404) {
-        setLoading(false);
         throw new Error("Transaction not found");
       }
       const data = await response.json();
       console.log("Fetch transaction response data:", data);
       if (data.code === "200") {
         setTransaction(data.data);
-        setLoading(false);
         return { success: true, transaction: data.data };
       }
       throw new Error(data.message);
@@ -145,7 +151,6 @@ const useTransaction = () => {
 
   const fetchMyTransactions = async () => {
     try {
-      setLoading(true);
       const response = await axios.get(
         "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/my-transactions",
         {
@@ -155,7 +160,7 @@ const useTransaction = () => {
           },
         }
       );
-      setMyTransactions(response.data.data);
+      setTransactions(response.data.data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -166,25 +171,20 @@ const useTransaction = () => {
   const updateProofPayment = async (transactionId, proofPaymentUrl) => {
     try {
       setLoading(true);
-      const response = await fetch(
+      const response = await axios.post(
         `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/update-transaction-proof-payment/${transactionId}`,
+        { proofPaymentUrl },
         {
-          method: "POST",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
           },
-          body: JSON.stringify({ proofPaymentUrl }),
         }
       );
-
-      const data = await response.json();
-      console.log("Update proof of payment response data:", data);
-      if (data.code === "200") {
+      if (response.data.status === "OK") {
         return { success: true };
       }
-      throw new Error(data.message);
+      throw new Error(response.data.message);
     } catch (err) {
       console.error("Error updating proof of payment:", err);
       setError(err.message);
@@ -196,6 +196,7 @@ const useTransaction = () => {
 
   useEffect(() => {
     fetchPaymentMethods();
+    fetchMyTransactions();
   }, []);
 
   return {
@@ -203,7 +204,7 @@ const useTransaction = () => {
     error,
     transaction,
     paymentMethods,
-    myTransactions,
+    transactions,
     createTransaction,
     uploadProofOfPayment,
     fetchTransaction,

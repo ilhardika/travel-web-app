@@ -101,19 +101,17 @@ const CartPage = () => {
     }
 
     try {
-      console.log("Creating transaction with:", {
-        selectedItems,
-        selectedPayment,
-      });
+      console.log("Selected items:", selectedItems);
+      const selectedItemIds = selectedItems.map((item) => item);
+      console.log("Selected item IDs:", selectedItemIds);
+      console.log("Selected payment method:", selectedPayment);
       const createResult = await createTransaction(
-        selectedItems,
+        selectedItemIds,
         selectedPayment
       );
       console.log("Create transaction result:", createResult);
       if (createResult.success) {
-        console.log(
-          "Transaction created successfully, redirecting to payment page"
-        );
+        console.log("Navigating to payments page with transaction ID:", createResult.transactionId);
         navigate(`/payments/${createResult.transactionId}`);
       } else {
         setToast({
@@ -123,7 +121,6 @@ const CartPage = () => {
         });
       }
     } catch (error) {
-      console.error("Error creating transaction:", error);
       setToast({
         show: true,
         message: error.message,
@@ -150,7 +147,9 @@ const CartPage = () => {
             <div className="flex items-center gap-2 ml-6">
               <input
                 type="checkbox"
-                checked={selectedItems && selectedItems.length === cartItems.length}
+                checked={
+                  selectedItems && selectedItems.length === cartItems.length
+                }
                 onChange={(e) => toggleAllItems(e.target.checked)}
                 className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
@@ -179,98 +178,109 @@ const CartPage = () => {
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="flex-1 space-y-4">
               <AnimatePresence>
-                {cartItems && cartItems.map((item) => (
-                  <motion.div
-                    key={item.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, x: -100 }}
-                    className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex gap-6">
-                      <div className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={selectedItems && selectedItems.includes(item.id)}
-                          onChange={() => toggleItemSelection(item.id)}
-                          className="mt-2 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                {cartItems &&
+                  cartItems.map((item) => (
+                    <motion.div
+                      key={item.id}
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, x: -100 }}
+                      className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex gap-6">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            checked={
+                              selectedItems && selectedItems.includes(item.id)
+                            }
+                            onChange={() => toggleItemSelection(item.id)}
+                            className="mt-2 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          />
+                        </div>
+                        <img
+                          src={item.activity.imageUrls[0]}
+                          alt={item.activity.title}
+                          className="w-32 h-32 object-cover rounded-lg"
                         />
-                      </div>
-                      <img
-                        src={item.activity.imageUrls[0]}
-                        alt={item.activity.title}
-                        className="w-32 h-32 object-cover rounded-lg"
-                      />
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900">
-                          {item.activity.title}
-                        </h3>
-                        <p className="text-gray-600 mt-1">
-                          {item.activity.city}, {item.activity.province}
-                        </p>
-                        <div className="mt-4 flex items-center justify-between">
-                          <div className="flex items-center gap-4">
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() =>
-                                handleQuantityChange(item.id, item.quantity, -1)
-                              }
-                              className="p-2 rounded-full hover:bg-gray-100"
-                            >
-                              <Minus className="w-4 h-4" />
-                            </motion.button>
-                            <motion.span
-                              key={item.quantity}
-                              initial={{ scale: 1.2 }}
-                              animate={{ scale: 1 }}
-                              className="font-medium w-8 text-center"
-                            >
-                              {item.quantity}
-                            </motion.span>
-                            <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() =>
-                                handleQuantityChange(item.id, item.quantity, 1)
-                              }
-                              className="p-2 rounded-full hover:bg-gray-100"
-                            >
-                              <Plus className="w-4 h-4" />
-                            </motion.button>
-                            <motion.button
-                              whileHover={{ scale: 1.1, color: "#ef4444" }}
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() =>
-                                handleDelete(item.id, item.activity.title)
-                              }
-                              className="p-2 rounded-full hover:bg-red-50 text-red-500"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </motion.button>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-lg font-semibold text-gray-900">
-                              IDR{" "}
-                              {(
-                                item.activity.price * item.quantity
-                              ).toLocaleString("id-ID")}
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold text-gray-900">
+                            {item.activity.title}
+                          </h3>
+                          <p className="text-gray-600 mt-1">
+                            {item.activity.city}, {item.activity.province}
+                          </p>
+                          <div className="mt-4 flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() =>
+                                  handleQuantityChange(
+                                    item.id,
+                                    item.quantity,
+                                    -1
+                                  )
+                                }
+                                className="p-2 rounded-full hover:bg-gray-100"
+                              >
+                                <Minus className="w-4 h-4" />
+                              </motion.button>
+                              <motion.span
+                                key={item.quantity}
+                                initial={{ scale: 1.2 }}
+                                animate={{ scale: 1 }}
+                                className="font-medium w-8 text-center"
+                              >
+                                {item.quantity}
+                              </motion.span>
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() =>
+                                  handleQuantityChange(
+                                    item.id,
+                                    item.quantity,
+                                    1
+                                  )
+                                }
+                                className="p-2 rounded-full hover:bg-gray-100"
+                              >
+                                <Plus className="w-4 h-4" />
+                              </motion.button>
+                              <motion.button
+                                whileHover={{ scale: 1.1, color: "#ef4444" }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() =>
+                                  handleDelete(item.id, item.activity.title)
+                                }
+                                className="p-2 rounded-full hover:bg-red-50 text-red-500"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </motion.button>
                             </div>
-                            {item.activity.price_discount && (
-                              <div className="text-sm text-gray-500 line-through">
+                            <div className="text-right">
+                              <div className="text-lg font-semibold text-gray-900">
                                 IDR{" "}
                                 {(
-                                  item.activity.price_discount * item.quantity
+                                  item.activity.price * item.quantity
                                 ).toLocaleString("id-ID")}
                               </div>
-                            )}
+                              {item.activity.price_discount && (
+                                <div className="text-sm text-gray-500 line-through">
+                                  IDR{" "}
+                                  {(
+                                    item.activity.price_discount * item.quantity
+                                  ).toLocaleString("id-ID")}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  ))}
               </AnimatePresence>
             </div>
 

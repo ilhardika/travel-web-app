@@ -12,7 +12,6 @@ const PaymentsPage = () => {
     uploadProofOfPayment,
     updateProofPayment,
     fetchTransaction,
-    transaction,
     loading,
     error,
   } = useTransaction();
@@ -21,9 +20,24 @@ const PaymentsPage = () => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [previewUrl, setPreviewUrl] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [transaction, setTransaction] = useState(null);
 
   useEffect(() => {
-    fetchTransaction(transactionId);
+    console.log("Transaction ID from URL:", transactionId);
+    console.log("Current URL:", window.location.href);
+    if (transactionId) {
+      fetchTransaction(transactionId).then((result) => {
+        if (result.success) {
+          setTransaction(result.transaction);
+        } else {
+          setToast({
+            show: true,
+            message: result.error || "Failed to fetch transaction",
+            type: "error",
+          });
+        }
+      });
+    }
   }, [transactionId]);
 
   const handleFileChange = (e) => {

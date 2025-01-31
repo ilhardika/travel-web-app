@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   User,
@@ -18,7 +19,15 @@ import Navbar from "../../components/Navbar";
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { userData, loading, error } = useUserProfile();
-  const { transactions, loading: transactionsLoading } = useTransactions();
+  const {
+    transactions = [],
+    loading: transactionsLoading,
+    fetchMyTransactions,
+  } = useTransactions();
+
+  useEffect(() => {
+    fetchMyTransactions();
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");

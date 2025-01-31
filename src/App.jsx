@@ -1,5 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
 import ProtectedRoute from "./routes/ProtectedRoutes";
 import LandingPage from "./pages/user/LandingPage";
 import SinginPage from "./pages/user/SigninPage";
@@ -15,9 +17,7 @@ import TransactionDetailPage from "./pages/user/TransactionDetailPage";
 import PaymentsPage from "./pages/user/PaymentsPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import UserManagement from "./pages/admin/UserManagement";
-import CategoryManagement from "./pages/admin/CategoryManagement"; // Import CategoryManagement
-import { AuthProvider } from "./context/AuthContext";
-import { CartProvider } from "./context/CartContext";
+import CategoryManagement from "./pages/admin/CategoryManagement";
 
 const App = () => {
   return (
