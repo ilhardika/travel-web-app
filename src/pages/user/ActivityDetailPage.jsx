@@ -1,18 +1,10 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
-import { useActivityDetails } from "../../hooks/useActivity"; // Changed from useActivityDetails
 import { useAuth } from "../../context/AuthContext";
-import {
-  MapPin,
-  Clock,
-  Users,
-  Star,
-  DollarSign,
-  Info,
-  Share2,
-} from "lucide-react";
-import useCart from "../../hooks/useCart"; // This will now include addToCart functionality
+import useActivityDetails from "../../hooks/useActivity";
+import Navbar from "../../components/Navbar";
+import { MapPin, Clock, Users, Star } from "lucide-react";
+import useCart from "../../hooks/useCart";
 import Toast from "../../components/Toast";
 import { useCartContext } from "../../context/CartContext";
 
@@ -32,7 +24,7 @@ const ActivityDetailPage = () => {
     message: "",
     type: "success",
   });
-  const { cartCount, setCartCount, updateCartCount } = useCartContext(); // Remove refreshCart
+  const { updateCartCount } = useCartContext();
 
   if (activityLoading) {
     return (
@@ -64,7 +56,7 @@ const ActivityDetailPage = () => {
 
   const handleBooking = async () => {
     if (!isAuthenticated) {
-      navigate(`/signin?prev=/activity/detail/${activityId}`); // Changed from '/login' to '/signin'
+      navigate(`/signin?prev=/activity/detail/${activityId}`);
       return;
     }
 

@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const useActivity = () => {
   const [activities, setActivities] = useState([]);
@@ -7,7 +8,7 @@ const useActivity = () => {
 
   const fetchActivities = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/activities",
         {
           headers: {
@@ -15,8 +16,7 @@ const useActivity = () => {
           },
         }
       );
-      const data = await response.json();
-      setActivities(data.data);
+      setActivities(response.data.data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -26,20 +26,18 @@ const useActivity = () => {
 
   const createActivity = async (activityData) => {
     try {
-      const response = await fetch(
+      const response = await axios.post(
         "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/create-activity",
+        activityData,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
             apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-          body: JSON.stringify(activityData),
         }
       );
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message);
+      if (response.status !== 200) throw new Error(response.data.message);
       await fetchActivities();
       return { success: true };
     } catch (err) {
@@ -49,20 +47,18 @@ const useActivity = () => {
 
   const updateActivity = async (id, activityData) => {
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/update-activity/${id}`,
+        activityData,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
             apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-          body: JSON.stringify(activityData),
         }
       );
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message);
+      if (response.status !== 200) throw new Error(response.data.message);
       await fetchActivities();
       return { success: true };
     } catch (err) {
@@ -72,18 +68,16 @@ const useActivity = () => {
 
   const deleteActivity = async (id) => {
     try {
-      const response = await fetch(
+      const response = await axios.delete(
         `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/delete-activity/${id}`,
         {
-          method: "DELETE",
           headers: {
             apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message);
+      if (response.status !== 200) throw new Error(response.data.message);
       await fetchActivities();
       return { success: true };
     } catch (err) {
@@ -123,7 +117,7 @@ export const useActivityDetails = (activityId) => {
       }
 
       try {
-        const response = await fetch(
+        const response = await axios.get(
           `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/activity/${activityId}`,
           {
             headers: {
@@ -132,11 +126,11 @@ export const useActivityDetails = (activityId) => {
           }
         );
 
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
+        const data = response.data;
         if (data && data.data) {
           setActivity(data.data);
         } else {
@@ -155,5 +149,4 @@ export const useActivityDetails = (activityId) => {
   return { activity, loading, error };
 };
 
-export { useActivity };
 export default useActivity;
