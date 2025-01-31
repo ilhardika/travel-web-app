@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import AdminSidebar from "../../components/AdminSidebar";
+import { useState } from "react";
 import {
   PencilIcon,
   TrashIcon,
@@ -9,7 +8,8 @@ import {
   ChevronRight,
 } from "lucide-react";
 import useCategories from "../../hooks/useCategories";
-import { useAuth } from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
+import AdminSidebar from "../../components/AdminSidebar";
 
 const CategoryManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");

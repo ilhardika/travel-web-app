@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import AdminSidebar from "../../components/AdminSidebar";
+import { useEffect, useState } from "react";
 import useCategories from "../../hooks/useCategories";
-import { usePromo } from "../../hooks/usePromo";
-import { useBanners } from "../../hooks/useBanners";
+import usePromos from "../../hooks/usePromos";
+import useBanners from "../../hooks/useBanners";
 import useUserProfile from "../../hooks/useUserProfile";
+import AdminSidebar from "../../components/AdminSidebar";
 
 const AdminDashboard = () => {
   const { categories, loading: categoriesLoading } = useCategories();
-  const { promos, loading: promosLoading } = usePromo();
+  const { promos, loading: promosLoading } = usePromos();
   const { banners, loading: bannersLoading } = useBanners();
   const { userData, loading: userLoading } = useUserProfile();
   const [stats, setStats] = useState({

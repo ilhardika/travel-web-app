@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Phone, Save } from "lucide-react";
-import { useForm } from "../../hooks/useForm";
-import { useAuth } from "../../hooks/useAuth";
+import useForm from "../../hooks/useForm";
+import useAuth from "../../hooks/useAuth";
 
 const UpdateProfilePage = () => {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import AdminSidebar from "../../components/AdminSidebar";
 import {
   PencilIcon,
@@ -7,7 +7,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import useUserManagement from "../../hooks/useUserManagement";
-import { useAuth } from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 
 const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -49,12 +49,16 @@ const UserManagement = () => {
 
   const handleRoleUpdate = async () => {
     if (selectedUser) {
-      console.log(`Updating role for user ${selectedUser.id} to ${selectedUser.role}`);
+      console.log(
+        `Updating role for user ${selectedUser.id} to ${selectedUser.role}`
+      );
       const success = await updateUserRole(selectedUser.id, selectedUser.role);
       if (success) {
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
-            user.id === selectedUser.id ? { ...user, role: selectedUser.role } : user
+            user.id === selectedUser.id
+              ? { ...user, role: selectedUser.role }
+              : user
           )
         );
         setShowEditModal(false);
