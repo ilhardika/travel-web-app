@@ -14,9 +14,6 @@ const useAuth = () => {
         headers: {
           "Content-Type": "application/json",
           apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
-          ...(url.includes("update-profile") && {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          }),
         },
       });
 
@@ -81,44 +78,7 @@ const useAuth = () => {
     return success;
   };
 
-  const updateProfile = async (userData) => {
-    setError("");
-    setLoading(true);
-    const success = await handleAuthRequest(
-      "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/update-profile",
-      userData
-    );
-    if (success) navigate("/profile");
-    return success;
-  };
-
-  const updateUserRole = async (userId, role) => {
-    setError("");
-    setLoading(true);
-    try {
-      console.log(`Updating role for user ${userId} to ${role}`);
-      const response = await axios.post(
-        `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/update-user-role/${userId}`,
-        { role },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      if (response.status !== 200) throw new Error(response.data.message);
-      return true;
-    } catch (err) {
-      setError(err.message);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return { login, register, updateProfile, updateUserRole, error, loading };
+  return { login, register, error, loading };
 };
 
 export default useAuth;

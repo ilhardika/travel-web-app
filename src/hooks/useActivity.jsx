@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const useActivity = () => {
+const useActivity = (activityId = null) => {
   const [activities, setActivities] = useState([]);
+  const [activity, setActivity] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -17,6 +18,27 @@ const useActivity = () => {
         }
       );
       setActivities(response.data.data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchActivityDetail = async (id) => {
+    try {
+      const response = await axios.get(
+        `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/activity/${id}`,
+        {
+          headers: {
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+          },
+        }
+      );
+      if (response.status !== 200) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setActivity(response.data.data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -86,11 +108,16 @@ const useActivity = () => {
   };
 
   useEffect(() => {
-    fetchActivities();
-  }, []);
+    if (activityId) {
+      fetchActivityDetail(activityId);
+    } else {
+      fetchActivities();
+    }
+  }, [activityId]);
 
   return {
     activities,
+    activity,
     loading,
     error,
     createActivity,
@@ -98,55 +125,6 @@ const useActivity = () => {
     deleteActivity,
     refreshActivities: fetchActivities,
   };
-};
-
-export const useActivityDetails = (activityId) => {
-  const [activity, setActivity] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchActivityDetail = async () => {
-      setLoading(true);
-      setError(null);
-
-      if (!activityId) {
-        setError("No activity ID provided");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const response = await axios.get(
-          `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/activity/${activityId}`,
-          {
-            headers: {
-              apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
-            },
-          }
-        );
-
-        if (response.status !== 200) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = response.data;
-        if (data && data.data) {
-          setActivity(data.data);
-        } else {
-          throw new Error("Invalid response data");
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchActivityDetail();
-  }, [activityId]);
-
-  return { activity, loading, error };
 };
 
 export default useActivity;
