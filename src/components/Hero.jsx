@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ArrowRight, Map, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useBanners } from "../hooks/useBanners";
+import useBanners from "../hooks/useBanners";
 
 const AnimatedNumber = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
@@ -69,7 +69,7 @@ const Hero = () => {
             <div
               key={banner.id}
               className={`absolute inset-0 transition-opacity duration-700 
-                ${index === currentBanner ? 'opacity-100' : 'opacity-0'}`}
+                ${index === currentBanner ? "opacity-100" : "opacity-0"}`}
             >
               <img
                 src={banner.imageUrl}
