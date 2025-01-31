@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
-import useCart from "../../hooks/useCart";
-import useTransaction from "../../hooks/useTransaction";
 import { Minus, Plus, Trash2, CreditCard, Wallet } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCartContext } from "../../context/CartContext";
+import useTransaction from "../../hooks/useTransaction";
+import useCart from "../../hooks/useCart";
 import Toast from "../../components/Toast";
 import DeleteConfirmationModal from "../../components/DeleteConfirmationModal";
-import { useCartContext } from "../../context/CartContext";
+import Navbar from "../../components/Navbar";
 
 const CartPage = () => {
   const navigate = useNavigate();

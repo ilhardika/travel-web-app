@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { useCartContext } from "../context/CartContext";
 
 const API_BASE_URL = "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1";
@@ -19,14 +20,14 @@ const useCart = () => {
 
   const handleApiRequest = async (url, method = "GET", body = null) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${url}`, {
+      const response = await axios({
+        url: `${API_BASE_URL}${url}`,
         method,
         headers: getHeaders(),
-        ...(body && { body: JSON.stringify(body) }),
+        data: body,
       });
-      const data = await response.json();
-      if (data.code === "200") return { success: true, data: data.data };
-      throw new Error(data.message);
+      if (response.status === 200) return { success: true, data: response.data.data };
+      throw new Error(response.data.message);
     } catch (err) {
       console.error(`Cart operation failed:`, err);
       setError(err.message);

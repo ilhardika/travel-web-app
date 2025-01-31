@@ -1,9 +1,8 @@
-import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import useActivity from "../../hooks/useActivity"; // Changed from useDestinations
+import { MapPin, Star, Users, Clock } from "lucide-react";
+import useActivity from "../../hooks/useActivity";
 import useCategories from "../../hooks/useCategories";
 import Navbar from "../../components/Navbar";
-import { MapPin, Star, Users, Clock } from "lucide-react";
 
 const ActivityCard = ({ activity }) => {
   const [imageError, setImageError] = useState(false);
@@ -128,7 +127,7 @@ const DestinationsPage = () => {
     error: activitiesError,
   } = useActivity();
   const { categories, loading: categoriesLoading } = useCategories();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery] = useState("");
 
   // Show loading state
   if (activitiesLoading || categoriesLoading) {
