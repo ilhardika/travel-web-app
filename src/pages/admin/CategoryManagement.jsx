@@ -8,7 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { useCategories } from "../../hooks/useCategories";
+import useCategories from "../../hooks/useCategories";
 import { useAuth } from "../../hooks/useAuth";
 
 const CategoryManagement = () => {

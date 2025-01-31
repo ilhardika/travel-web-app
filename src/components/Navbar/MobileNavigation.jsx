@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "lucide-react";
 
-export const MobileNavigation = ({ onMobileMenuToggle }) => (
+const MobileNavigation = ({ onMobileMenuToggle }) => (
   <>
     {/* Mobile Menu Button */}
     <div className="lg:hidden flex items-center space-x-4">
@@ -21,3 +21,5 @@ export const MobileNavigation = ({ onMobileMenuToggle }) => (
     </div>
   </>
 );
+
+export default MobileNavigation;

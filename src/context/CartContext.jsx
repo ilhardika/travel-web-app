@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const CartContext = createContext();
 
@@ -19,7 +19,7 @@ export const CartProvider = ({ children }) => {
       const data = await response.json();
       setCartCount(data.data?.length || 0);
     } catch (error) {
-      console.error('Error fetching cart count:', error);
+      console.error("Error fetching cart count:", error);
     }
   };
 

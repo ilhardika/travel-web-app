@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 
-export const useCategories = () => {
+const useCategories = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/categories",
         {
           headers: {
@@ -15,8 +16,7 @@ export const useCategories = () => {
           },
         }
       );
-      const data = await response.json();
-      setCategories(data.data);
+      setCategories(response.data.data);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -26,23 +26,21 @@ export const useCategories = () => {
 
   const createCategory = async (categoryData) => {
     try {
-      const response = await fetch(
+      const response = await axios.post(
         "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/create-category",
         {
-          method: "POST",
+          name: categoryData.name,
+          imageUrl: categoryData.imageUrl,
+        },
+        {
           headers: {
             "Content-Type": "application/json",
             apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-          body: JSON.stringify({
-            name: categoryData.name,
-            imageUrl: categoryData.imageUrl, // Ensure imageUrl is included
-          }),
         }
       );
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message);
+      if (response.status !== 200) throw new Error(response.data.message);
       await fetchCategories();
       return true;
     } catch (err) {
@@ -52,20 +50,18 @@ export const useCategories = () => {
 
   const updateCategory = async (id, categoryData) => {
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/update-category/${id}`,
+        categoryData,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
             apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-          body: JSON.stringify(categoryData),
         }
       );
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message);
+      if (response.status !== 200) throw new Error(response.data.message);
       await fetchCategories();
       return { success: true };
     } catch (err) {
@@ -75,18 +71,16 @@ export const useCategories = () => {
 
   const deleteCategory = async (id) => {
     try {
-      const response = await fetch(
+      const response = await axios.delete(
         `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/delete-category/${id}`,
         {
-          method: "DELETE",
           headers: {
             apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message);
+      if (response.status !== 200) throw new Error(response.data.message);
       await fetchCategories();
       return { success: true };
     } catch (err) {
@@ -108,3 +102,5 @@ export const useCategories = () => {
     refreshCategories: fetchCategories,
   };
 };
+
+export default useCategories;

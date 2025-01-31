@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ShoppingCart, X, ChevronDown, CircleUser } from "lucide-react";
-import { useCategories } from "../../hooks/useCategories";
-import { MobileNavigation } from "./MobileNavigation";
-import { useCartContext } from '../../context/CartContext'; // Add this import
+import useCategories from "../../hooks/useCategories";
+import MobileNavigation from "./MobileNavigation";
+import { useCartContext } from "../../context/CartContext";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -13,7 +13,7 @@ const Navbar = () => {
     useState(false);
 
   const { categories, loading: categoriesLoading } = useCategories();
-  const { cartCount } = useCartContext(); // Only use cartCount from context
+  const { cartCount } = useCartContext();
 
   const location = useLocation();
   const navigate = useNavigate();
