@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { MapPin, Star, Users, Clock } from "lucide-react";
 import useActivity from "../../hooks/useActivity";
@@ -81,7 +82,7 @@ const ActivityCard = ({ activity }) => {
 };
 
 const CategoryFilter = ({ categories, categoryName }) => {
-  const scrollContainerRef = React.useRef(null);
+  const scrollContainerRef = useRef(null); // Update this line
 
   return (
     <div className="relative">

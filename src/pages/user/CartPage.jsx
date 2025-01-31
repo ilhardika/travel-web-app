@@ -82,7 +82,7 @@ const CartPage = () => {
   };
 
   const handleCreateTransaction = async () => {
-    if (!selectedItems.length) {
+    if (!selectedItems || !selectedItems.length) {
       setToast({
         show: true,
         message: "Please select items to checkout",
@@ -146,11 +146,11 @@ const CartPage = () => {
           <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 lg:mb-0">
             Activity Cart
           </h1>
-          {cartItems.length > 0 && (
+          {cartItems && cartItems.length > 0 && (
             <div className="flex items-center gap-2 ml-6">
               <input
                 type="checkbox"
-                checked={selectedItems.length === cartItems.length}
+                checked={selectedItems && selectedItems.length === cartItems.length}
                 onChange={(e) => toggleAllItems(e.target.checked)}
                 className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
@@ -159,7 +159,7 @@ const CartPage = () => {
           )}
         </div>
 
-        {cartItems.length === 0 ? (
+        {cartItems && cartItems.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -179,7 +179,7 @@ const CartPage = () => {
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="flex-1 space-y-4">
               <AnimatePresence>
-                {cartItems.map((item) => (
+                {cartItems && cartItems.map((item) => (
                   <motion.div
                     key={item.id}
                     layout
@@ -192,7 +192,7 @@ const CartPage = () => {
                       <div className="flex items-center">
                         <input
                           type="checkbox"
-                          checked={selectedItems.includes(item.id)}
+                          checked={selectedItems && selectedItems.includes(item.id)}
                           onChange={() => toggleItemSelection(item.id)}
                           className="mt-2 w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                         />
@@ -280,7 +280,7 @@ const CartPage = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Total Selected</span>
-                    <span>{selectedItems.length} items</span>
+                    <span>{selectedItems && selectedItems.length} items</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Total Price</span>

@@ -17,7 +17,7 @@ const ActivityDetailPage = () => {
     error: activityError,
   } = useActivityDetails(activityId);
   const [selectedImage, setSelectedImage] = useState(0);
-  const { addToCart, loading: isBooking, error: bookingError } = useCart();
+  const { addToCart, loading: isBooking } = useCart();
   const { isAuthenticated } = useAuth();
   const [toast, setToast] = useState({
     show: false,
@@ -68,12 +68,6 @@ const ActivityDetailPage = () => {
           show: true,
           message: "Successfully added to cart!",
           type: "success",
-        });
-      } else {
-        setToast({
-          show: true,
-          message: result.message || "Failed to add to cart",
-          type: "error",
         });
       }
     } catch (error) {

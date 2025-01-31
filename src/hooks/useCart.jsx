@@ -6,6 +6,7 @@ const useCart = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
   const { updateCartCount } = useCartContext();
 
   const fetchCartItems = async () => {
@@ -92,6 +93,29 @@ const useCart = () => {
     }
   };
 
+  const getSelectedItemsTotal = () => {
+    return selectedItems.reduce((total, itemId) => {
+      const item = cartItems.find((item) => item.id === itemId);
+      return total + (item ? item.activity.price * item.quantity : 0);
+    }, 0);
+  };
+
+  const toggleItemSelection = (itemId) => {
+    setSelectedItems((prevSelectedItems) =>
+      prevSelectedItems.includes(itemId)
+        ? prevSelectedItems.filter((id) => id !== itemId)
+        : [...prevSelectedItems, itemId]
+    );
+  };
+
+  const toggleAllItems = (selectAll) => {
+    if (selectAll) {
+      setSelectedItems(cartItems.map((item) => item.id));
+    } else {
+      setSelectedItems([]);
+    }
+  };
+
   useEffect(() => {
     fetchCartItems();
   }, []);
@@ -104,6 +128,10 @@ const useCart = () => {
     updateQuantity,
     deleteCartItem,
     refreshCartItems: fetchCartItems,
+    getSelectedItemsTotal,
+    selectedItems,
+    toggleItemSelection,
+    toggleAllItems,
   };
 };
 
