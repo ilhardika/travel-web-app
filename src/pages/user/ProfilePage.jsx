@@ -1,8 +1,4 @@
-import React from "react";
-import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import useTransactions from "../../hooks/useMyTransactions";
-import useUserProfile from "../../hooks/useUserProfile";
 import {
   User,
   Mail,
@@ -15,6 +11,9 @@ import {
   CreditCard,
   ChevronRight,
 } from "lucide-react";
+import useTransactions from "../../hooks/useMyTransactions";
+import useUserProfile from "../../hooks/useUserProfile";
+import Navbar from "../../components/Navbar";
 
 const ProfilePage = () => {
   const navigate = useNavigate();

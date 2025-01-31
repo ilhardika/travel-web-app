@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar/index.jsx";
-import useTransaction from "../../hooks/useTransaction.jsx";
-import Toast from "../../components/Toast.jsx";
 import { Upload, X, CheckCircle } from "lucide-react";
+import useTransaction from "../../hooks/useTransaction.jsx";
+import Navbar from "../../components/Navbar/index.jsx";
+import Toast from "../../components/Toast.jsx";
 
 const PaymentsPage = () => {
   const { transactionId } = useParams();
