@@ -1,4 +1,4 @@
-import usePromos from "../../hooks/usePromos";
+import usePromos from "../../hooks/usePromo";
 import Navbar from "../../components/Navbar";
 
 const PromoPage = () => {

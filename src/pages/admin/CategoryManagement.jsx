@@ -7,7 +7,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import useCategories from "../../hooks/useCategories";
+import useCategories from "../../hooks/useCategory";
 import useAuth from "../../hooks/useAuth";
 import AdminSidebar from "../../components/AdminSidebar";
 

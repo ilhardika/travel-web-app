@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Lock, Mail } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
-import useForm from "../../hooks/useForm";
-import useBanners from "../../hooks/useBanners";
+import useForm from "../../hooks/local/useForm";
+import useBanners from "../../hooks/useBanner";
 
 const SigninPage = () => {
   const { values, handleChange } = useForm({

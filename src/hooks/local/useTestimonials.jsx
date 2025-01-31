@@ -1,4 +1,3 @@
-// src/hooks/useTestimonials.js
 import { useState } from "react";
 import {
   UserCircle2,

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import useCategories from "../../hooks/useCategories";
-import usePromos from "../../hooks/usePromos";
-import useBanners from "../../hooks/useBanners";
-import useUserProfile from "../../hooks/useUserProfile";
+import useCategories from "../../hooks/useCategory";
+import usePromos from "../../hooks/usePromo";
+import useBanners from "../../hooks/useBanner";
+import useUserProfile from "../../hooks/useUser";
 import AdminSidebar from "../../components/AdminSidebar";
 
 const AdminDashboard = () => {

@@ -1,11 +1,10 @@
-import React from "react";
 import Slider from "react-slick";
-import { useTestimonials } from "../../hooks/useTestimonials";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { useTestimonials } from "../../hooks/local/useTestimonials";
 import CustomPrevArrow from "../Arrows/CustomPrevArrow";
 import CustomNextArrow from "../Arrows/CustomNextArrow";
 import TestimonialCard from "./TestimonialCard";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 
 function Testimonials() {
   const { testimonials } = useTestimonials();

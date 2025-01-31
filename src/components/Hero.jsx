@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ArrowRight, Map, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-import useBanners from "../hooks/useBanners";
+import useBanners from "../hooks/useBanner";
 
 const AnimatedNumber = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);

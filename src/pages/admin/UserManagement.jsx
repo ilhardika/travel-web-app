@@ -6,7 +6,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import useUserManagement from "../../hooks/useUserManagement";
+import useUserManagement from "../../hooks/useUser";
 import useAuth from "../../hooks/useAuth";
 
 const UserManagement = () => {

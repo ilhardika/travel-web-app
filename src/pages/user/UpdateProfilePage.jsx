@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Phone, Save } from "lucide-react";
-import useForm from "../../hooks/useForm";
+import useForm from "../../hooks/local/useForm";
 import useAuth from "../../hooks/useAuth";
 
 const UpdateProfilePage = () => {

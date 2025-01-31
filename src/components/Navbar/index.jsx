@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ShoppingCart, X, ChevronDown, CircleUser } from "lucide-react";
 import { useCartContext } from "../../context/CartContext";
-import useCategories from "../../hooks/useCategories";
+import useCategories from "../../hooks/useCategory";
 import MobileNavigation from "./MobileNavigation";
 
 const Navbar = () => {

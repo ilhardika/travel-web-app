@@ -11,8 +11,8 @@ import {
   CreditCard,
   ChevronRight,
 } from "lucide-react";
-import useTransactions from "../../hooks/useMyTransactions";
-import useUserProfile from "../../hooks/useUserProfile";
+import useTransactions from "../../hooks/useTransaction";
+import useUserProfile from "../../hooks/useUser";
 import Navbar from "../../components/Navbar";
 
 const ProfilePage = () => {

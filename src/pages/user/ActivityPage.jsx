@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { MapPin, Star, Users, Clock } from "lucide-react";
 import useActivity from "../../hooks/useActivity";
-import useCategories from "../../hooks/useCategories";
+import useCategories from "../../hooks/useCategory";
 import Navbar from "../../components/Navbar";
 
 const ActivityCard = ({ activity }) => {

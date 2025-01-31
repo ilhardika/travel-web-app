@@ -1,6 +1,5 @@
-// src/components/Features.jsx
 import React from "react";
-import { useFeatures } from "../hooks/useFeatures";
+import { useFeatures } from "../hooks/local/useFeatures";
 
 function Features() {
   const { features } = useFeatures();
