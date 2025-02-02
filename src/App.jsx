@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import ProtectedRoute from "./routes/ProtectedRoutes";
+// user pages
 import LandingPage from "./pages/user/LandingPage";
 import SinginPage from "./pages/user/SigninPage";
 import SignupPage from "./pages/user/SignupPage";
@@ -15,9 +16,12 @@ import CartPage from "./pages/user/CartPage";
 import TransactionsPage from "./pages/user/TransactionsPage";
 import TransactionDetailPage from "./pages/user/TransactionDetailPage";
 import PaymentsPage from "./pages/user/PaymentsPage";
+// admin pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import UserManagement from "./pages/admin/UserManagement";
 import CategoryManagement from "./pages/admin/CategoryManagement";
+import ActivityManagement from "./pages/admin/ActivityManagement";
+import ActivityDetailManagement from "./pages/admin/ActivityDetailManagement";
 
 const App = () => {
   return (
@@ -108,6 +112,22 @@ const App = () => {
                 element={
                   <ProtectedRoute adminOnly>
                     <CategoryManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/activity-management"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <ActivityManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/activity-management/:activityId"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <ActivityDetailManagement />
                   </ProtectedRoute>
                 }
               />

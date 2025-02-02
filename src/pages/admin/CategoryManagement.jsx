@@ -50,7 +50,7 @@ const CategoryManagement = () => {
   const handleCreateCategory = async (categoryData) => {
     const success = await createCategory({
       name: categoryData.name,
-      imageUrl: categoryData.imageUrl, // Ensure imageUrl is included
+      imageUrl: categoryData.imageUrl, 
     });
     if (success) {
       setShowCreateModal(false);
@@ -61,7 +61,7 @@ const CategoryManagement = () => {
     if (selectedCategory) {
       const success = await updateCategory(selectedCategory.id, {
         name: selectedCategory.name,
-        imageUrl: selectedCategory.imageUrl, // Ensure imageUrl is included
+        imageUrl: selectedCategory.imageUrl, 
       });
       if (success) {
         setShowEditModal(false);
@@ -226,6 +226,7 @@ const CategoryManagement = () => {
               <h2 className="text-xl font-bold text-white mb-4">
                 Tambah Kategori
               </h2>
+              <label className="block text-gray-400 mb-2">Nama Kategori</label>
               <input
                 type="text"
                 placeholder="Nama Kategori"
@@ -238,6 +239,7 @@ const CategoryManagement = () => {
                   })
                 }
               />
+              <label className="block text-gray-400 mb-2">URL Gambar</label>
               <input
                 type="text"
                 placeholder="URL Gambar"
@@ -273,6 +275,7 @@ const CategoryManagement = () => {
               <h2 className="text-xl font-bold text-white mb-4">
                 Edit Kategori
               </h2>
+              <label className="block text-gray-400 mb-2">Nama Kategori</label>
               <input
                 type="text"
                 placeholder="Nama Kategori"
@@ -285,6 +288,7 @@ const CategoryManagement = () => {
                   })
                 }
               />
+              <label className="block text-gray-400 mb-2">URL Gambar</label>
               <input
                 type="text"
                 placeholder="URL Gambar"

@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import usePromos from "../../hooks/usePromo";
 import useUserProfile from "../../hooks/useUser";
 import useTransactions from "../../hooks/useTransaction";
-import useActivities from "../../hooks/useActivity"; // Import the useActivities hook
+import useActivities from "../../hooks/useActivity"; 
 import AdminSidebar from "../../components/AdminSidebar";
 
 const AdminDashboard = () => {
   const { promos, loading: promosLoading } = usePromos();
   const { userData, users, loading: usersLoading } = useUserProfile();
   const { transactions, loading: transactionsLoading } = useTransactions();
-  const { activities, loading: activitiesLoading } = useActivities(); // Use the useActivities hook
+  const { activities, loading: activitiesLoading } = useActivities(); 
   const [stats, setStats] = useState({
     users: 0,
     activities: 0,
