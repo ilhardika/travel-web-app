@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Lock, Mail, User, Phone } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
 import useForm from "../../hooks/local/useForm";
-import useBanners from "../../hooks/useBanner";
+import useBanner from "../../hooks/useBanner";
 
 const SignUpPage = () => {
   const { values, handleChange } = useForm({
@@ -14,8 +14,13 @@ const SignUpPage = () => {
   });
 
   const { register, error, loading } = useAuth();
-  const { banners } = useBanners();
+  const { banners } = useBanner();
   const [successMessage, setSuccessMessage] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const bgImage = banners[8]?.imageUrl;
+  console.log(bgImage);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -27,16 +32,25 @@ const SignUpPage = () => {
 
   useEffect(() => {
     if (successMessage) {
-      const timer = setTimeout(() => setSuccessMessage(""), 3000);
+      const timer = setTimeout(() => {
+        const prevPath =
+          new URLSearchParams(location.search).get("prev") || "/";
+        setSuccessMessage("");
+        navigate(prevPath);
+      }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [successMessage]);
+  }, [successMessage, location, navigate]);
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center p-6 relative"
-      style={{ backgroundImage: `url(${banners[0]?.imageUrl})` }}
-    >
+    <div className="min-h-screen flex items-center justify-center p-6 relative">
+      {banners.length > 0 && (
+        <img
+          src={bgImage}
+          alt="Background"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      )}
       <div className="absolute inset-0 bg-black opacity-60"></div>
       <div className="relative w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
         <div className="bg-gradient-to-r from-blue-500 to-sky-400 p-6 text-center">
@@ -137,7 +151,7 @@ const SignUpPage = () => {
             <p className="text-gray-600">
               Sudah punya akun?{" "}
               <Link
-                to="/signin"
+                to={`/signin?prev=${location.pathname}${location.search}`}
                 className="text-blue-600 hover:text-blue-800 font-semibold"
               >
                 Masuk

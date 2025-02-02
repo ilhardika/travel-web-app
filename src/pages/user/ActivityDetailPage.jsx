@@ -56,7 +56,7 @@ const ActivityDetailPage = () => {
 
   const handleBooking = async () => {
     if (!isAuthenticated) {
-      navigate(`/signin?prev=/activity/detail/${activityId}`);
+      navigate(`/signin?prev=${location.pathname}${location.search}`);
       return;
     }
 

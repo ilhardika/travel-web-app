@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const useBanners = () => {
+const useBanner = () => {
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,4 +31,4 @@ const useBanners = () => {
   return { banners, loading, error };
 };
 
-export default useBanners;
+export default useBanner;

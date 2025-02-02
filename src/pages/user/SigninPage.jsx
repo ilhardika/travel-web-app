@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Lock, Mail } from "lucide-react";
 import useAuth from "../../hooks/useAuth";
 import useForm from "../../hooks/local/useForm";
-import useBanners from "../../hooks/useBanner";
+import useBanner from "../../hooks/useBanner";
 
 const SigninPage = () => {
   const { values, handleChange } = useForm({
@@ -12,10 +12,13 @@ const SigninPage = () => {
   });
 
   const { login, error, loading } = useAuth();
-  const { banners } = useBanners();
+  const { banners } = useBanner();
   const [successMessage, setSuccessMessage] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+
+  const bgImage = banners[8]?.imageUrl;
+  console.log(bgImage);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,10 +41,14 @@ const SigninPage = () => {
   }, [successMessage, location, navigate]);
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center p-6 relative"
-      style={{ backgroundImage: `url(${banners[0]?.imageUrl})` }}
-    >
+    <div className="min-h-screen flex items-center justify-center p-6 relative">
+      {banners.length > 0 && (
+        <img
+          src={bgImage}
+          alt="Background"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      )}
       <div className="absolute inset-0 bg-black opacity-60"></div>
       <div className="relative w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
         {/* Header */}
@@ -64,8 +71,7 @@ const SigninPage = () => {
               {successMessage}
             </div>
           )}
-
-          {/* Login Form */}
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
