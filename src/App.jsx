@@ -22,6 +22,8 @@ import UserManagement from "./pages/admin/UserManagement";
 import CategoryManagement from "./pages/admin/CategoryManagement";
 import ActivityManagement from "./pages/admin/ActivityManagement";
 import ActivityDetailManagement from "./pages/admin/ActivityDetailManagement";
+import PromoManagement from "./pages/admin/PromoManagement";
+import PromoDetailManagement from "./pages/admin/PromoDetailManagement";
 
 const App = () => {
   return (
@@ -128,6 +130,22 @@ const App = () => {
                 element={
                   <ProtectedRoute adminOnly>
                     <ActivityDetailManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/promo-management"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <PromoManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/promo-management/:promoId"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <PromoDetailManagement />
                   </ProtectedRoute>
                 }
               />
