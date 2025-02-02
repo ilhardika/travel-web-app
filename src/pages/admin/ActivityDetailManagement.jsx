@@ -25,28 +25,61 @@ const ActivityDetailManagement = () => {
         }`}
       >
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white">Activity Detail</h1>
-          <p className="text-gray-400">Detailed information about the activity.</p>
+          <h1 className="text-3xl font-bold text-white">Detail Aktivitas</h1>
+          <p className="text-gray-400">Informasi detail tentang aktivitas.</p>
         </div>
         <div className="bg-gray-800 rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold text-white">{activity.title}</h2>
           <p className="text-gray-400 mt-2">{activity.description}</p>
-          <p className="text-gray-400 mt-2">Category: {activity.category.name}</p>
-          <p className="text-gray-400 mt-2">Price: {activity.price}</p>
-          <p className="text-gray-400 mt-2">Price Discount: {activity.priceDiscount}</p>
-          <p className="text-gray-400 mt-2">Rating: {activity.rating}</p>
-          <p className="text-gray-400 mt-2">Total Reviews: {activity.totalReviews}</p>
-          <p className="text-gray-400 mt-2">Address: {activity.address}</p>
-          <p className="text-gray-400 mt-2">Province: {activity.province}</p>
-          <p className="text-gray-400 mt-2">City: {activity.city}</p>
-          <div className="text-gray-400 mt-2" dangerouslySetInnerHTML={{ __html: activity.facilities }} />
-          <div className="text-gray-400 mt-2" dangerouslySetInnerHTML={{ __html: activity.locationMaps }} />
-          <div className="mt-4">
-            <h3 className="text-xl font-bold text-white">Images</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-              {activity.imageUrls.map((url, index) => (
-                <img key={index} src={url} alt={`Activity Image ${index + 1}`} className="rounded-lg" />
-              ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            {activity.imageUrls.map((url, index) => (
+              <img
+                key={index}
+                src={url}
+                alt={`Activity Image ${index + 1}`}
+                className="rounded-lg"
+              />
+            ))}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div>
+              <p className="text-gray-400 mt-2">
+                <span className="font-bold">Kategori:</span>{" "}
+                {activity.category.name}
+              </p>
+              <p className="text-gray-400 mt-2">
+                <span className="font-bold">Harga:</span> {activity.price}
+              </p>
+              <p className="text-gray-400 mt-2">
+                <span className="font-bold">Harga Diskon:</span>{" "}
+                {activity.price_discount}
+              </p>
+              <p className="text-gray-400 mt-2">
+                <span className="font-bold">Rating:</span> {activity.rating}
+              </p>
+              <p className="text-gray-400 mt-2">
+                <span className="font-bold">Total Ulasan:</span>{" "}
+                {activity.total_reviews}
+              </p>
+              <p className="text-gray-400 mt-2">
+                <span className="font-bold">Alamat:</span> {activity.address}
+              </p>
+              <p className="text-gray-400 mt-2">
+                <span className="font-bold">Provinsi:</span> {activity.province}
+              </p>
+              <p className="text-gray-400 mt-2">
+                <span className="font-bold">Kota:</span> {activity.city}
+              </p>
+              <h3 className="text-xl font-bold text-white mt-4">Fasilitas</h3>
+              <div
+                className="text-gray-400 mt-2"
+                dangerouslySetInnerHTML={{ __html: activity.facilities }}
+              />
+              <h3 className="text-xl font-bold text-white mt-4">Peta Lokasi</h3>
+              <div
+                className="text-gray-400 mt-2"
+                dangerouslySetInnerHTML={{ __html: activity.location_maps }}
+              />
             </div>
           </div>
           <div className="mt-4">
@@ -54,7 +87,7 @@ const ActivityDetailManagement = () => {
               onClick={() => window.history.back()}
               className="p-2 bg-gray-500 text-white rounded"
             >
-              Back
+              Kembali
             </button>
           </div>
         </div>

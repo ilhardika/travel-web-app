@@ -18,7 +18,7 @@ const AdminSidebar = ({ isExpanded, setIsExpanded }) => {
 
   return (
     <div
-      className={`fixed inset-y-0 left-0 z-40 bg-gray-900 text-white transition-all duration-300 ease-in-out flex flex-col
+      className={`fixed inset-y-0 left-0 z-40 bg-zinc-900 text-white transition-all duration-300 ease-in-out flex flex-col
         ${isExpanded ? "w-64" : "w-20"}`}
     >
       {/* Header */}

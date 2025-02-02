@@ -48,9 +48,29 @@ const useActivity = (activityId = null) => {
 
   const createActivity = async (activityData) => {
     try {
+      // Validasi field wajib
+      if (!activityData.categoryId || !activityData.title) {
+        throw new Error("Category and Title are required!");
+      }
+
+      // Kirim request dengan field snake_case
       const response = await axios.post(
         "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/create-activity",
-        activityData,
+        {
+          categoryId: activityData.categoryId,
+          title: activityData.title,
+          description: activityData.description,
+          imageUrls: activityData.imageUrls || [],
+          price: Number(activityData.price),
+          price_discount: Number(activityData.price_discount),
+          rating: Number(activityData.rating),
+          total_reviews: Number(activityData.total_reviews),
+          facilities: activityData.facilities,
+          address: activityData.address,
+          province: activityData.province,
+          city: activityData.city,
+          location_maps: activityData.location_maps,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -59,11 +79,16 @@ const useActivity = (activityId = null) => {
           },
         }
       );
+
       if (response.status !== 200) throw new Error(response.data.message);
       await fetchActivities();
       return { success: true };
     } catch (err) {
-      return { success: false, error: err.message };
+      console.error("Error details:", err.response?.data, err.message); // Log detail error
+      return {
+        success: false,
+        error: err.response?.data?.message || err.message,
+      };
     }
   };
 
@@ -71,7 +96,21 @@ const useActivity = (activityId = null) => {
     try {
       const response = await axios.post(
         `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/update-activity/${id}`,
-        activityData,
+        {
+          categoryId: activityData.categoryId,
+          title: activityData.title,
+          description: activityData.description,
+          imageUrls: activityData.imageUrls || [],
+          price: Number(activityData.price),
+          price_discount: Number(activityData.price_discount),
+          rating: Number(activityData.rating),
+          total_reviews: Number(activityData.total_reviews),
+          facilities: activityData.facilities,
+          address: activityData.address,
+          province: activityData.province,
+          city: activityData.city,
+          location_maps: activityData.location_maps,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -99,10 +138,12 @@ const useActivity = (activityId = null) => {
           },
         }
       );
+
       if (response.status !== 200) throw new Error(response.data.message);
       await fetchActivities();
       return { success: true };
     } catch (err) {
+      console.error("Error details:", err.response?.data);
       return { success: false, error: err.message };
     }
   };
