@@ -24,6 +24,7 @@ import ActivityManagement from "./pages/admin/ActivityManagement";
 import ActivityDetailManagement from "./pages/admin/ActivityDetailManagement";
 import PromoManagement from "./pages/admin/PromoManagement";
 import PromoDetailManagement from "./pages/admin/PromoDetailManagement";
+import BannerManagement from "./pages/admin/BannerManagement";
 
 const App = () => {
   return (
@@ -146,6 +147,14 @@ const App = () => {
                 element={
                   <ProtectedRoute adminOnly>
                     <PromoDetailManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/banner-management"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <BannerManagement />
                   </ProtectedRoute>
                 }
               />
