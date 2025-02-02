@@ -43,6 +43,7 @@ const useUserProfile = () => {
     };
 
     fetchUserProfile();
+    fetchAllUsers(); // Add this line to fetch all users on component mount
   }, [navigate]);
 
   const updateProfile = async (userData) => {
