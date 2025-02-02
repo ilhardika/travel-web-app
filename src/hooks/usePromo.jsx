@@ -26,6 +26,14 @@ const usePromos = () => {
 
   const createPromo = async (promoData) => {
     try {
+      // Validasi field wajib
+      if (!promoData.title || !promoData.promo_code) {
+        throw new Error("Title and Promo Code are required!");
+      }
+
+      promoData.promo_discount_price = Number(promoData.promo_discount_price);
+      promoData.minimum_claim_price = Number(promoData.minimum_claim_price);
+
       const response = await axios.post(
         "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/create-promo",
         promoData,
@@ -41,12 +49,20 @@ const usePromos = () => {
       await fetchPromos();
       return { success: true };
     } catch (err) {
-      return { success: false, error: err.message };
+      console.error("Error details:", err.response?.data, err.message); // Log detail error
+      return {
+        success: false,
+        error: err.response?.data?.message || err.message,
+      };
     }
   };
 
   const updatePromo = async (id, promoData) => {
     try {
+      // Pastikan promo_discount_price dan minimum_claim_price adalah angka
+      promoData.promo_discount_price = Number(promoData.promo_discount_price);
+      promoData.minimum_claim_price = Number(promoData.minimum_claim_price);
+
       const response = await axios.post(
         `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/update-promo/${id}`,
         promoData,
