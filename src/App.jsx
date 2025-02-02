@@ -25,6 +25,8 @@ import ActivityDetailManagement from "./pages/admin/ActivityDetailManagement";
 import PromoManagement from "./pages/admin/PromoManagement";
 import PromoDetailManagement from "./pages/admin/PromoDetailManagement";
 import BannerManagement from "./pages/admin/BannerManagement";
+import TransactionManagement from "./pages/admin/TransactionManagement";
+import TransactionDetail from "./pages/admin/TransactionDetail";
 
 const App = () => {
   return (
@@ -155,6 +157,22 @@ const App = () => {
                 element={
                   <ProtectedRoute adminOnly>
                     <BannerManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/transaction-management"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <TransactionManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/transaction-management/:transactionId"
+                element={
+                  <ProtectedRoute adminOnly>
+                    <TransactionDetail />
                   </ProtectedRoute>
                 }
               />

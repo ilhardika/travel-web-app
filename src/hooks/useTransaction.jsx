@@ -194,9 +194,80 @@ const useTransaction = () => {
     }
   };
 
+  const fetchAllTransactions = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/all-transactions",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+          },
+        }
+      );
+      setTransactions(response.data.data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateTransactionStatus = async (transactionId, status) => {
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/update-transaction-status/${transactionId}`,
+        { status },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+          },
+        }
+      );
+      if (response.data.status === "OK") {
+        await fetchAllTransactions();
+        return { success: true };
+      }
+      throw new Error(response.data.message);
+    } catch (err) {
+      setError(err.message);
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteTransaction = async (transactionId) => {
+    try {
+      setLoading(true);
+      const response = await axios.delete(
+        `https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/delete-transaction/${transactionId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+          },
+        }
+      );
+      if (response.data.status === "OK") {
+        await fetchAllTransactions();
+        return { success: true };
+      }
+      throw new Error(response.data.message);
+    } catch (err) {
+      setError(err.message);
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchPaymentMethods();
-    fetchMyTransactions();
+    fetchAllTransactions();
   }, []);
 
   return {
@@ -210,6 +281,9 @@ const useTransaction = () => {
     fetchTransaction,
     fetchMyTransactions,
     updateProofPayment,
+    updateTransactionStatus,
+    deleteTransaction,
+    refreshTransactions: fetchAllTransactions,
   };
 };
 
