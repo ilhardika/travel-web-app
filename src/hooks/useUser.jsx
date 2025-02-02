@@ -43,7 +43,7 @@ const useUserProfile = () => {
     };
 
     fetchUserProfile();
-    fetchAllUsers(); // Add this line to fetch all users on component mount
+    fetchAllUsers();
   }, [navigate]);
 
   const updateProfile = async (userData) => {
@@ -88,6 +88,7 @@ const useUserProfile = () => {
         }
       );
       if (response.status !== 200) throw new Error(response.data.message);
+      fetchAllUsers();
       return true;
     } catch (err) {
       setError(err.message);

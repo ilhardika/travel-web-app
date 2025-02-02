@@ -6,18 +6,21 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import useUserManagement from "../../hooks/useUser";
-import useAuth from "../../hooks/useAuth";
+import useUserProfile from "../../hooks/useUser";
 
 const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
-  const { users: initialUsers, loading, error } = useUserManagement();
-  const { updateUserRole } = useAuth();
-  const [users, setUsers] = useState([]); // Local state for users
+  const {
+    users: initialUsers,
+    updateUserRole,
+    loading,
+    error,
+  } = useUserProfile();
+  const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(true); // Default to true
+  const [isExpanded, setIsExpanded] = useState(true);
 
   useEffect(() => {
     setUsers(initialUsers);
