@@ -10,7 +10,6 @@ import useUserProfile from "../../hooks/useUser";
 
 const UserManagement = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [roleFilter, setRoleFilter] = useState("all");
   const {
     users: initialUsers,
     updateUserRole,
@@ -31,11 +30,10 @@ const UserManagement = () => {
   const itemsPerPage = 10;
 
   const filteredUsers = users?.filter((user) => {
-    const matchesSearch =
+    return (
       user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRole = roleFilter === "all" || user.role === roleFilter;
-    return matchesSearch && matchesRole;
+      user.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   });
 
   // Pagination calculations
@@ -114,15 +112,6 @@ const UserManagement = () => {
               />
               <SearchIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
             </div>
-            <select
-              className="bg-gray-800 text-white px-4 py-2 rounded-lg"
-              value={roleFilter}
-              onChange={(e) => setRoleFilter(e.target.value)}
-            >
-              <option value="all">Semua Role</option>
-              <option value="admin">Admin</option>
-              <option value="user">User</option>
-            </select>
           </div>
         </div>
 
