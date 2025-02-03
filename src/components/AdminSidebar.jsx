@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import {
   User,
@@ -15,6 +15,23 @@ import {
 const AdminSidebar = ({ isExpanded, setIsExpanded }) => {
   const activeClassName = "bg-blue-600 text-white";
   const inactiveClassName = "text-gray-300 hover:bg-gray-700 hover:text-white";
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setIsExpanded(true);
+      } else {
+        setIsExpanded(false);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [setIsExpanded]);
 
   return (
     <div
