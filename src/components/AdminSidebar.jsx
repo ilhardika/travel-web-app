@@ -18,7 +18,7 @@ const AdminSidebar = ({ isExpanded, setIsExpanded }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 1080) {
+      if (window.innerWidth > 960) {
         setIsExpanded(true);
       } else {
         setIsExpanded(false);
