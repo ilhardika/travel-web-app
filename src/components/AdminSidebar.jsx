@@ -11,10 +11,12 @@ import {
   LogOut,
   ChevronRight,
 } from "lucide-react";
+import useAuth from "../hooks/useAuth";
 
 const AdminSidebar = ({ isExpanded, setIsExpanded }) => {
   const activeClassName = "bg-blue-600 text-white";
   const inactiveClassName = "text-gray-300 hover:bg-gray-700 hover:text-white";
+  const { logout } = useAuth();
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,6 +34,10 @@ const AdminSidebar = ({ isExpanded, setIsExpanded }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, [setIsExpanded]);
+
+  const handleLogout = async () => {
+    await logout();
+  };
 
   return (
     <div
@@ -200,9 +206,9 @@ const AdminSidebar = ({ isExpanded, setIsExpanded }) => {
 
       {/* Footer with Toggle and Logout */}
       <div className="border-t border-gray-800">
-        <NavLink
-          to="/logout"
-          className={`flex items-center gap-3 py-3 text-red-400 hover:bg-red-500/10 hover:text-red-300
+        <button
+          onClick={handleLogout}
+          className={`w-full flex items-center gap-3 py-3 text-red-400 hover:bg-red-500/10 hover:text-red-300
             ${isExpanded ? "px-4" : "px-2 justify-center"}`}
         >
           <LogOut className="w-5 h-5 flex-shrink-0" />
@@ -212,7 +218,7 @@ const AdminSidebar = ({ isExpanded, setIsExpanded }) => {
           >
             Logout
           </span>
-        </NavLink>
+        </button>
       </div>
     </div>
   );

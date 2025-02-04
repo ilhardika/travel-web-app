@@ -78,7 +78,28 @@ const useAuth = () => {
     return success;
   };
 
-  return { login, register, error, loading };
+  const logout = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      await axios.get("https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/logout", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
+        },
+      });
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      navigate("/signin");
+    } catch (error) {
+      console.error("Logout error:", error);
+      setError("Failed to logout");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { login, register, logout, error, loading };
 };
 
 export default useAuth;

@@ -4,6 +4,7 @@ import { ShoppingCart, X, ChevronDown, CircleUser } from "lucide-react";
 import { useCartContext } from "../../context/CartContext";
 import useCategories from "../../hooks/useCategory";
 import MobileNavigation from "./MobileNavigation";
+import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -14,6 +15,7 @@ const Navbar = () => {
 
   const { categories, loading: categoriesLoading } = useCategories();
   const { cartCount } = useCartContext();
+  const { logout } = useAuth();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,11 +31,8 @@ const Navbar = () => {
     setDestinationsDropdownOpen(false);
   }, [location]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-    setIsDropdownOpen(false);
-    navigate("/");
+  const handleLogout = async () => {
+    await logout();
   };
 
   const toggleMobileMenu = () => {
