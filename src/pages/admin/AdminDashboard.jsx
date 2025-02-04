@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import usePromos from "../../hooks/usePromo";
 import useUserProfile from "../../hooks/useUser";
 import useTransactions from "../../hooks/useTransaction";
-import useActivities from "../../hooks/useActivity"; 
+import useActivities from "../../hooks/useActivity";
 import AdminSidebar from "../../components/AdminSidebar";
 
 const AdminDashboard = () => {
   const { promos, loading: promosLoading } = usePromos();
   const { userData, users, loading: usersLoading } = useUserProfile();
   const { transactions, loading: transactionsLoading } = useTransactions();
-  const { activities, loading: activitiesLoading } = useActivities(); 
+  const { activities, loading: activitiesLoading } = useActivities();
   const [stats, setStats] = useState({
     users: 0,
     activities: 0,
@@ -57,11 +57,11 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex">
+    <div className="min-h-screen w-full bg-gray-900 flex">
       <AdminSidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
       <div
-        className={`flex-1 p-8 transition-all duration-300 ${
-          isExpanded ? "ml-64" : "ml-20"
+        className={`w-full p-4 transition-all duration-300 ${
+          isExpanded ? "ml-64" : "pl-14"
         }`}
       >
         <div className="mb-8">
@@ -70,7 +70,7 @@ const AdminDashboard = () => {
             Welcome back, {userData?.name || "Admin"}!
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-gray-800 rounded-xl shadow-lg p-6">
             <h3 className="text-gray-400 text-sm font-medium">Active Promos</h3>
             <p className="text-3xl font-bold text-white mt-2">{stats.promos}</p>

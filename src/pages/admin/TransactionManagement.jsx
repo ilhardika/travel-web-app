@@ -104,18 +104,18 @@ const TransactionManagement = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex">
+    <div className="min-h-screen w-full bg-gray-900 flex">
       <AdminSidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
       <div
-        className={`flex-1 p-8 transition-all duration-300 ${
-          isExpanded ? "ml-64" : "ml-20"
+        className={`w-full p-4 transition-all duration-300 ${
+          isExpanded ? "ml-64" : "pl-14"
         }`}
       >
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Manajemen Transaksi</h1>
           <p className="text-gray-400">Kelola semua transaksi di sini.</p>
         </div>
-        <div className="mb-6 flex flex-wrap gap-4 items-center justify-between">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-6 mr-12 lg:mr-0">
           <div className="flex gap-4">
             <div className="relative">
               <input
@@ -131,12 +131,12 @@ const TransactionManagement = () => {
         </div>
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto">
-            <div className="bg-gray-800 p-6 rounded-lg w-96 max-h-[90%] overflow-y-auto">
+            <div className="bg-gray-800 p-6 rounded-lg w-full max-w-lg max-h-[90%] overflow-y-auto">
               <h2 className="text-xl font-bold text-white mb-4">
                 Edit Status Transaksi
               </h2>
               <form onSubmit={handleFormSubmit}>
-                <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="mb-4">
                     <label className="text-white">Status</label>
                     <select
@@ -172,76 +172,78 @@ const TransactionManagement = () => {
           </div>
         )}
         <div className="bg-gray-800 rounded-lg overflow-hidden">
-          <table className="min-w-full">
-            <thead>
-              <tr className="bg-gray-700">
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Invoice
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Total Harga
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Metode Pembayaran
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Aksi
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-700">
-              {currentTransactions.map((transaction) => (
-                <tr key={transaction.id} className="text-gray-300">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {transaction.invoiceId}
-                  </td>
-
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {transaction.totalAmount}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {transaction.payment_method?.name || "N/A"}
-                  </td>
-                  <td
-                    className={`px-6 py-4 whitespace-nowrap ${
-                      transaction.status === "success"
-                        ? "text-green-400"
-                        : transaction.status === "pending"
-                        ? "text-yellow-400"
-                        : "text-red-400"
-                    }`}
-                  >
-                    {transaction.status}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap flex gap-4">
-                    <button
-                      onClick={() =>
-                        navigate(`/transaction-management/${transaction.id}`)
-                      }
-                      className="text-green-400 hover:text-green-300"
-                    >
-                      <EyeIcon className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={() => handleEdit(transaction)}
-                      className="text-indigo-400 hover:text-indigo-300"
-                    >
-                      <PencilIcon className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={() => deleteTransaction(transaction.id)}
-                      className="text-red-400 hover:text-red-300"
-                    >
-                      <TrashIcon className="h-5 w-5" />
-                    </button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr className="bg-gray-700">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Invoice
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Total Harga
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Metode Pembayaran
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Aksi
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-700">
+                {currentTransactions.map((transaction) => (
+                  <tr key={transaction.id} className="text-gray-300">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {transaction.invoiceId}
+                    </td>
+
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {transaction.totalAmount}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {transaction.payment_method?.name || "N/A"}
+                    </td>
+                    <td
+                      className={`px-6 py-4 whitespace-nowrap ${
+                        transaction.status === "success"
+                          ? "text-green-400"
+                          : transaction.status === "pending"
+                          ? "text-yellow-400"
+                          : "text-red-400"
+                      }`}
+                    >
+                      {transaction.status}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap flex gap-4">
+                      <button
+                        onClick={() =>
+                          navigate(`/transaction-management/${transaction.id}`)
+                        }
+                        className="text-green-400 hover:text-green-300"
+                      >
+                        <EyeIcon className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={() => handleEdit(transaction)}
+                        className="text-indigo-400 hover:text-indigo-300"
+                      >
+                        <PencilIcon className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={() => deleteTransaction(transaction.id)}
+                        className="text-red-400 hover:text-red-300"
+                      >
+                        <TrashIcon className="h-5 w-5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
         <div className="flex justify-center gap-2 mt-4">
           <button

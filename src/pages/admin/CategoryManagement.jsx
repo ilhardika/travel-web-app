@@ -96,18 +96,18 @@ const CategoryManagement = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 flex">
+    <div className="min-h-screen w-full bg-gray-900 flex">
       <AdminSidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
       <div
-        className={`flex-1 p-8 transition-all duration-300 ${
-          isExpanded ? "ml-64" : "ml-20"
+        className={`w-full p-4 transition-all duration-300 ${
+          isExpanded ? "ml-64" : "pl-14"
         }`}
       >
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Manajemen Kategori</h1>
           <p className="text-gray-400">Kelola data kategori aplikasi</p>
         </div>
-        <div className="mb-6 flex flex-wrap gap-4 items-center justify-between">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-6 mr-12 lg:mr-0">
           <div className="flex gap-4">
             <div className="relative">
               <input
@@ -129,54 +129,56 @@ const CategoryManagement = () => {
           </button>
         </div>
         <div className="bg-gray-800 rounded-lg overflow-hidden">
-          <table className="min-w-full">
-            <thead>
-              <tr className="bg-gray-700">
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Nama
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Gambar
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-700">
-              {currentCategories?.map((category) => (
-                <tr key={category.id} className="text-gray-300 ">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {category.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <img
-                      src={category.imageUrl}
-                      alt={category.name}
-                      className="h-16 w-16 object-cover rounded-lg"
-                    />
-                  </td>
-                  <td className="px-6 py-9  text-sm font-medium h-full flex gap-4">
-                    <button
-                      onClick={() => {
-                        setSelectedCategory(category);
-                        setShowEditModal(true);
-                      }}
-                      className="text-indigo-400 hover:text-indigo-300"
-                    >
-                      <PencilIcon className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteCategory(category.id)}
-                      className="text-red-400 hover:text-red-300"
-                    >
-                      <TrashIcon className="h-5 w-5" />
-                    </button>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr className="bg-gray-700">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Nama
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Gambar
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-gray-700">
+                {currentCategories?.map((category) => (
+                  <tr key={category.id} className="text-gray-300">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {category.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <img
+                        src={category.imageUrl}
+                        alt={category.name}
+                        className="h-16 w-16 object-cover rounded-lg"
+                      />
+                    </td>
+                    <td className="px-6 py-9 text-sm font-medium h-full flex gap-4">
+                      <button
+                        onClick={() => {
+                          setSelectedCategory(category);
+                          setShowEditModal(true);
+                        }}
+                        className="text-indigo-400 hover:text-indigo-300"
+                      >
+                        <PencilIcon className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteCategory(category.id)}
+                        className="text-red-400 hover:text-red-300"
+                      >
+                        <TrashIcon className="h-5 w-5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
         <div className="flex justify-center gap-2 mt-4">
           <button
