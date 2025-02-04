@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreditCard, Calendar, ChevronRight } from "lucide-react";
 import useTransactions from "../../hooks/useTransaction";
@@ -12,6 +12,9 @@ const TransactionsPage = () => {
     error,
     fetchMyTransactions,
   } = useTransactions();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const transactionsPerPage = 5;
 
   useEffect(() => {
     fetchMyTransactions();
@@ -58,13 +61,35 @@ const TransactionsPage = () => {
     (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
   );
 
+  // Pagination logic
+  const indexOfLastTransaction = currentPage * transactionsPerPage;
+  const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
+  const currentTransactions = sortedTransactions.slice(
+    indexOfFirstTransaction,
+    indexOfLastTransaction
+  );
+
+  const totalPages = Math.ceil(sortedTransactions.length / transactionsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-3xl font-bold mb-8">My Transactions</h1>
         <div className="space-y-4">
-          {sortedTransactions.map((transaction) => (
+          {currentTransactions.map((transaction) => (
             <div
               key={transaction.id}
               onClick={() => navigate(`/transactions/${transaction.id}`)}
@@ -122,6 +147,25 @@ const TransactionsPage = () => {
               <ChevronRight className="w-5 h-5 text-gray-400" />
             </div>
           ))}
+        </div>
+        <div className="flex justify-center gap-6 items-center mt-8">
+          <button
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-800 disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="text-gray-800">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-800 disabled:opacity-50"
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>
