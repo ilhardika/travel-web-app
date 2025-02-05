@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+// Hook kustom untuk mengelola banner
 const useBanner = () => {
+  // Variabel state untuk menyimpan daftar banner, status loading, dan pesan error
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fungsi untuk mengambil semua banner
   const fetchBanners = async () => {
     try {
       const response = await axios.get(
@@ -16,18 +19,20 @@ const useBanner = () => {
           },
         }
       );
-      setBanners(response.data.data);
+      setBanners(response.data.data); // Simpan banner yang diambil ke dalam state
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // Simpan pesan error ke dalam state
     } finally {
-      setLoading(false);
+      setLoading(false); // Set loading menjadi false setelah permintaan selesai
     }
   };
 
+  // Fungsi untuk membuat banner baru
   const createBanner = async (bannerData) => {
     try {
+      // Validasi field wajib
       if (!bannerData.name || !bannerData.imageUrl) {
-        throw new Error("Name and Image URL are required!");
+        throw new Error("Name dan Image URL wajib diisi!");
       }
 
       const response = await axios.post(
@@ -42,18 +47,20 @@ const useBanner = () => {
         }
       );
       if (response.status !== 200) throw new Error(response.data.message);
-      await fetchBanners();
+      await fetchBanners(); // Refresh daftar banner setelah pembuatan
       return { success: true };
     } catch (err) {
-      console.error("Error details:", err.response?.data, err.message);
+      console.error("Detail error:", err.response?.data, err.message); // Log detail error
       return { success: false, error: err.response?.data?.message || err.message };
     }
   };
 
+  // Fungsi untuk memperbarui banner yang ada berdasarkan ID
   const updateBanner = async (id, bannerData) => {
     try {
+      // Validasi field wajib
       if (!bannerData.name || !bannerData.imageUrl) {
-        throw new Error("Name and Image URL are required!");
+        throw new Error("Name dan Image URL wajib diisi!");
       }
 
       const response = await axios.post(
@@ -68,14 +75,15 @@ const useBanner = () => {
         }
       );
       if (response.status !== 200) throw new Error(response.data.message);
-      await fetchBanners();
+      await fetchBanners(); // Refresh daftar banner setelah pembaruan
       return { success: true };
     } catch (err) {
-      console.error("Error details:", err.response?.data, err.message);
+      console.error("Detail error:", err.response?.data, err.message); // Log detail error
       return { success: false, error: err.response?.data?.message || err.message };
     }
   };
 
+  // Fungsi untuk menghapus banner berdasarkan ID
   const deleteBanner = async (id) => {
     try {
       const response = await axios.delete(
@@ -88,18 +96,20 @@ const useBanner = () => {
         }
       );
       if (response.status !== 200) throw new Error(response.data.message);
-      await fetchBanners();
+      await fetchBanners(); // Refresh daftar banner setelah penghapusan
       return { success: true };
     } catch (err) {
-      console.error("Error details:", err.response?.data, err.message);
+      console.error("Detail error:", err.response?.data, err.message); // Log detail error
       return { success: false, error: err.response?.data?.message || err.message };
     }
   };
 
+  // Ambil semua banner saat komponen pertama kali dirender
   useEffect(() => {
     fetchBanners();
   }, []);
 
+  // Kembalikan variabel state dan fungsi untuk digunakan dalam komponen
   return {
     banners,
     loading,

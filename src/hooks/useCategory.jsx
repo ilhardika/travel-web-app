@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+// Hook kustom untuk mengelola kategori
 const useCategories = () => {
+  // Variabel state untuk menyimpan daftar kategori, status loading, dan pesan error
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fungsi untuk mengambil semua kategori
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
@@ -16,14 +19,15 @@ const useCategories = () => {
           },
         }
       );
-      setCategories(response.data.data);
+      setCategories(response.data.data); // Simpan kategori yang diambil ke dalam state
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // Simpan pesan error ke dalam state
     } finally {
-      setLoading(false);
+      setLoading(false); // Set loading menjadi false setelah permintaan selesai
     }
   };
 
+  // Fungsi untuk membuat kategori baru
   const createCategory = async (categoryData) => {
     try {
       const response = await axios.post(
@@ -41,13 +45,14 @@ const useCategories = () => {
         }
       );
       if (response.status !== 200) throw new Error(response.data.message);
-      await fetchCategories();
+      await fetchCategories(); // Refresh daftar kategori setelah pembuatan
       return true;
     } catch (err) {
       return false;
     }
   };
 
+  // Fungsi untuk memperbarui kategori yang ada berdasarkan ID
   const updateCategory = async (id, categoryData) => {
     try {
       const response = await axios.post(
@@ -62,13 +67,14 @@ const useCategories = () => {
         }
       );
       if (response.status !== 200) throw new Error(response.data.message);
-      await fetchCategories();
+      await fetchCategories(); // Refresh daftar kategori setelah pembaruan
       return { success: true };
     } catch (err) {
       return { success: false, error: err.message };
     }
   };
 
+  // Fungsi untuk menghapus kategori berdasarkan ID
   const deleteCategory = async (id) => {
     try {
       const response = await axios.delete(
@@ -81,17 +87,19 @@ const useCategories = () => {
         }
       );
       if (response.status !== 200) throw new Error(response.data.message);
-      await fetchCategories();
+      await fetchCategories(); // Refresh daftar kategori setelah penghapusan
       return { success: true };
     } catch (err) {
       return { success: false, error: err.message };
     }
   };
 
+  // Ambil semua kategori saat komponen pertama kali dirender
   useEffect(() => {
     fetchCategories();
   }, []);
 
+  // Kembalikan variabel state dan fungsi untuk digunakan dalam komponen
   return {
     categories,
     loading,

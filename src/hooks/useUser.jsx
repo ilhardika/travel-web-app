@@ -2,13 +2,16 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+// Hook kustom untuk mengelola profil pengguna
 const useUserProfile = () => {
+  // Variabel state untuk menyimpan data pengguna, daftar pengguna, status loading, dan pesan error
   const [userData, setUserData] = useState(null);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // Fungsi untuk mengambil profil pengguna
   useEffect(() => {
     const fetchUserProfile = async () => {
       const token = localStorage.getItem("token");
@@ -46,6 +49,7 @@ const useUserProfile = () => {
     fetchAllUsers();
   }, [navigate]);
 
+  // Fungsi untuk memperbarui profil pengguna
   const updateProfile = async (userData) => {
     setError("");
     setLoading(true);
@@ -72,6 +76,7 @@ const useUserProfile = () => {
     }
   };
 
+  // Fungsi untuk memperbarui peran pengguna
   const updateUserRole = async (userId, role) => {
     setError("");
     setLoading(true);
@@ -98,6 +103,7 @@ const useUserProfile = () => {
     }
   };
 
+  // Fungsi untuk mengambil semua pengguna
   const fetchAllUsers = async () => {
     setError("");
     setLoading(true);
@@ -122,6 +128,7 @@ const useUserProfile = () => {
     }
   };
 
+  // Kembalikan variabel state dan fungsi untuk digunakan dalam komponen
   return {
     userData,
     users,

@@ -2,12 +2,15 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 
+// Hook kustom untuk mengelola autentikasi
 const useAuth = () => {
+  // Variabel state untuk menyimpan pesan error dan status loading
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Fungsi untuk menangani permintaan autentikasi
   const handleAuthRequest = async (url, userData) => {
     try {
       const response = await axios.post(url, userData, {
@@ -35,6 +38,7 @@ const useAuth = () => {
     }
   };
 
+  // Fungsi untuk login
   const login = async (email, password) => {
     setError("");
     setLoading(true);
@@ -53,14 +57,16 @@ const useAuth = () => {
     return success;
   };
 
+  // Fungsi untuk registrasi
   const register = async (userData) => {
+    // Validasi field wajib
     if (
       !userData.name ||
       !userData.email ||
       !userData.password ||
       !userData.phoneNumber
     ) {
-      setError("All fields are required");
+      setError("Semua field wajib diisi");
       return false;
     }
 
@@ -78,6 +84,7 @@ const useAuth = () => {
     return success;
   };
 
+  // Fungsi untuk logout
   const logout = async () => {
     setLoading(true);
     try {
@@ -93,12 +100,13 @@ const useAuth = () => {
       navigate("/signin");
     } catch (error) {
       console.error("Logout error:", error);
-      setError("Failed to logout");
+      setError("Gagal logout");
     } finally {
       setLoading(false);
     }
   };
 
+  // Kembalikan fungsi login, register, logout, serta variabel error dan loading
   return { login, register, logout, error, loading };
 };
 

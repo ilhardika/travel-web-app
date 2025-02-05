@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+// Hook kustom untuk mengelola transaksi
 const useTransaction = () => {
+  // Variabel state untuk menyimpan status loading, pesan error, transaksi, metode pembayaran, dan daftar transaksi
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [transaction, setTransaction] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [transactions, setTransactions] = useState([]);
 
+  // Fungsi untuk membuat transaksi baru
   const createTransaction = async (cartIds, paymentMethodId) => {
     setLoading(true);
     try {
@@ -30,7 +33,7 @@ const useTransaction = () => {
       );
       console.log("Create transaction response data:", response.data);
 
-      // Fetch the latest transactions to get the transaction ID
+      // Ambil transaksi terbaru untuk mendapatkan ID transaksi
       const transactionsResponse = await axios.get(
         "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/my-transactions",
         {
@@ -41,7 +44,7 @@ const useTransaction = () => {
         }
       );
 
-      // Sort transactions by createdAt in descending order
+      // Urutkan transaksi berdasarkan createdAt secara menurun
       const sortedTransactions = transactionsResponse.data.data.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
@@ -50,10 +53,10 @@ const useTransaction = () => {
 
       setLoading(false);
       console.log("Transaction ID retrieved:", transactionId);
-      console.log("Full response data:", response.data); // Additional logging
+      console.log("Full response data:", response.data); // Log tambahan
       return {
         success: response.data.status === "OK",
-        transactionId, // Ensure transactionId is correctly retrieved
+        transactionId, // Pastikan transactionId diambil dengan benar
       };
     } catch (error) {
       console.error("Error creating transaction:", error);
@@ -65,6 +68,7 @@ const useTransaction = () => {
     }
   };
 
+  // Fungsi untuk mengunggah bukti pembayaran
   const uploadProofOfPayment = async (file) => {
     try {
       setLoading(true);
@@ -97,6 +101,7 @@ const useTransaction = () => {
     }
   };
 
+  // Fungsi untuk mengambil detail transaksi berdasarkan ID
   const fetchTransaction = async (transactionId) => {
     try {
       setLoading(true);
@@ -128,6 +133,7 @@ const useTransaction = () => {
     }
   };
 
+  // Fungsi untuk mengambil semua metode pembayaran
   const fetchPaymentMethods = async () => {
     try {
       setLoading(true);
@@ -149,6 +155,7 @@ const useTransaction = () => {
     }
   };
 
+  // Fungsi untuk mengambil semua transaksi pengguna
   const fetchMyTransactions = async () => {
     try {
       const response = await axios.get(
@@ -168,6 +175,7 @@ const useTransaction = () => {
     }
   };
 
+  // Fungsi untuk memperbarui bukti pembayaran transaksi
   const updateProofPayment = async (transactionId, proofPaymentUrl) => {
     try {
       setLoading(true);
@@ -194,6 +202,7 @@ const useTransaction = () => {
     }
   };
 
+  // Fungsi untuk mengambil semua transaksi
   const fetchAllTransactions = async () => {
     try {
       setLoading(true);
@@ -214,6 +223,7 @@ const useTransaction = () => {
     }
   };
 
+  // Fungsi untuk memperbarui status transaksi
   const updateTransactionStatus = async (transactionId, status) => {
     try {
       setLoading(true);
@@ -240,6 +250,7 @@ const useTransaction = () => {
     }
   };
 
+  // Fungsi untuk menghapus transaksi berdasarkan ID
   const deleteTransaction = async (transactionId) => {
     try {
       setLoading(true);
@@ -265,11 +276,13 @@ const useTransaction = () => {
     }
   };
 
+  // Ambil metode pembayaran dan semua transaksi saat komponen pertama kali dirender
   useEffect(() => {
     fetchPaymentMethods();
     fetchAllTransactions();
   }, []);
 
+  // Kembalikan variabel state dan fungsi untuk digunakan dalam komponen
   return {
     loading,
     error,

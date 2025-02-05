@@ -2,13 +2,16 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useCartContext } from "../context/CartContext";
 
+// Hook kustom untuk mengelola keranjang belanja
 const useCart = () => {
+  // Variabel state untuk menyimpan item keranjang, status loading, pesan error, dan item yang dipilih
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const { updateCartCount } = useCartContext();
 
+  // Fungsi untuk mengambil semua item keranjang
   const fetchCartItems = async () => {
     try {
       const response = await axios.get(
@@ -20,15 +23,16 @@ const useCart = () => {
           },
         }
       );
-      setCartItems(response.data.data);
-      updateCartCount();
+      setCartItems(response.data.data); // Simpan item keranjang yang diambil ke dalam state
+      updateCartCount(); // Perbarui jumlah item keranjang
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // Simpan pesan error ke dalam state
     } finally {
-      setLoading(false);
+      setLoading(false); // Set loading menjadi false setelah permintaan selesai
     }
   };
 
+  // Fungsi untuk menambahkan item ke keranjang
   const addToCart = async (activityId) => {
     try {
       const response = await axios.post(
@@ -43,14 +47,15 @@ const useCart = () => {
         }
       );
       if (response.status !== 200) throw new Error(response.data.message);
-      await fetchCartItems();
+      await fetchCartItems(); // Refresh daftar item keranjang setelah penambahan
       return true;
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // Simpan pesan error ke dalam state
       return false;
     }
   };
 
+  // Fungsi untuk memperbarui jumlah item di keranjang
   const updateQuantity = async (cartId, quantity) => {
     try {
       const response = await axios.post(
@@ -65,14 +70,15 @@ const useCart = () => {
         }
       );
       if (response.status !== 200) throw new Error(response.data.message);
-      await fetchCartItems();
+      await fetchCartItems(); // Refresh daftar item keranjang setelah pembaruan
       return true;
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // Simpan pesan error ke dalam state
       return false;
     }
   };
 
+  // Fungsi untuk menghapus item dari keranjang
   const deleteCartItem = async (cartId) => {
     try {
       const response = await axios.delete(
@@ -85,14 +91,15 @@ const useCart = () => {
         }
       );
       if (response.status !== 200) throw new Error(response.data.message);
-      await fetchCartItems();
+      await fetchCartItems(); // Refresh daftar item keranjang setelah penghapusan
       return true;
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // Simpan pesan error ke dalam state
       return false;
     }
   };
 
+  // Fungsi untuk menghitung total harga item yang dipilih
   const getSelectedItemsTotal = () => {
     return selectedItems.reduce((total, itemId) => {
       const item = cartItems.find((item) => item.id === itemId);
@@ -100,6 +107,7 @@ const useCart = () => {
     }, 0);
   };
 
+  // Fungsi untuk mengubah status pemilihan item
   const toggleItemSelection = (itemId) => {
     setSelectedItems((prevSelectedItems) =>
       prevSelectedItems.includes(itemId)
@@ -108,6 +116,7 @@ const useCart = () => {
     );
   };
 
+  // Fungsi untuk memilih atau membatalkan pemilihan semua item
   const toggleAllItems = (selectAll) => {
     if (selectAll) {
       setSelectedItems(cartItems.map((item) => item.id));
@@ -116,10 +125,12 @@ const useCart = () => {
     }
   };
 
+  // Ambil semua item keranjang saat komponen pertama kali dirender
   useEffect(() => {
     fetchCartItems();
   }, []);
 
+  // Kembalikan variabel state dan fungsi untuk digunakan dalam komponen
   return {
     cartItems,
     loading,

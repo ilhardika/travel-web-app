@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+// Hook kustom untuk mengelola aktivitas
 const useActivity = (activityId = null) => {
+  // Variabel state untuk menyimpan daftar aktivitas, satu aktivitas, status loading, dan pesan error
   const [activities, setActivities] = useState([]);
   const [activity, setActivity] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Fungsi untuk mengambil semua aktivitas
   const fetchActivities = async () => {
     try {
       const response = await axios.get(
@@ -17,14 +20,15 @@ const useActivity = (activityId = null) => {
           },
         }
       );
-      setActivities(response.data.data);
+      setActivities(response.data.data); // Simpan aktivitas yang diambil ke dalam state
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // Simpan pesan error ke dalam state
     } finally {
-      setLoading(false);
+      setLoading(false); // Set loading menjadi false setelah permintaan selesai
     }
   };
 
+  // Fungsi untuk mengambil detail satu aktivitas berdasarkan ID
   const fetchActivityDetail = async (id) => {
     try {
       const response = await axios.get(
@@ -38,19 +42,20 @@ const useActivity = (activityId = null) => {
       if (response.status !== 200) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      setActivity(response.data.data);
+      setActivity(response.data.data); // Simpan detail aktivitas yang diambil ke dalam state
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // Simpan pesan error ke dalam state
     } finally {
-      setLoading(false);
+      setLoading(false); // Set loading menjadi false setelah permintaan selesai
     }
   };
 
+  // Fungsi untuk membuat aktivitas baru
   const createActivity = async (activityData) => {
     try {
       // Validasi field wajib
       if (!activityData.categoryId || !activityData.title) {
-        throw new Error("Category and Title are required!");
+        throw new Error("Category dan Title wajib diisi!");
       }
 
       // Kirim request dengan field snake_case
@@ -81,10 +86,10 @@ const useActivity = (activityId = null) => {
       );
 
       if (response.status !== 200) throw new Error(response.data.message);
-      await fetchActivities();
+      await fetchActivities(); // Refresh daftar aktivitas setelah pembuatan
       return { success: true };
     } catch (err) {
-      console.error("Error details:", err.response?.data, err.message); // Log detail error
+      console.error("Detail error:", err.response?.data, err.message); // Log detail error
       return {
         success: false,
         error: err.response?.data?.message || err.message,
@@ -92,6 +97,7 @@ const useActivity = (activityId = null) => {
     }
   };
 
+  // Fungsi untuk memperbarui aktivitas yang ada berdasarkan ID
   const updateActivity = async (id, activityData) => {
     try {
       const response = await axios.post(
@@ -120,13 +126,14 @@ const useActivity = (activityId = null) => {
         }
       );
       if (response.status !== 200) throw new Error(response.data.message);
-      await fetchActivities();
+      await fetchActivities(); // Refresh daftar aktivitas setelah pembaruan
       return { success: true };
     } catch (err) {
       return { success: false, error: err.message };
     }
   };
 
+  // Fungsi untuk menghapus aktivitas berdasarkan ID
   const deleteActivity = async (id) => {
     try {
       const response = await axios.delete(
@@ -140,14 +147,15 @@ const useActivity = (activityId = null) => {
       );
 
       if (response.status !== 200) throw new Error(response.data.message);
-      await fetchActivities();
+      await fetchActivities(); // Refresh daftar aktivitas setelah penghapusan
       return { success: true };
     } catch (err) {
-      console.error("Error details:", err.response?.data);
+      console.error("Detail error:", err.response?.data);
       return { success: false, error: err.message };
     }
   };
 
+  // Ambil aktivitas atau detail aktivitas berdasarkan activityId
   useEffect(() => {
     if (activityId) {
       fetchActivityDetail(activityId);
@@ -156,6 +164,7 @@ const useActivity = (activityId = null) => {
     }
   }, [activityId]);
 
+  // Kembalikan variabel state dan fungsi untuk digunakan dalam komponen
   return {
     activities,
     activity,

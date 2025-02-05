@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 
+// Hook kustom untuk mengelola metode pembayaran
 const usePaymentMethods = () => {
+  // Variabel state untuk menyimpan daftar metode pembayaran, status loading, dan pesan error
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Fungsi untuk mengambil semua metode pembayaran
   useEffect(() => {
     const fetchPaymentMethods = async () => {
       try {
@@ -19,17 +22,18 @@ const usePaymentMethods = () => {
           }
         );
         const data = await response.json();
-        setPaymentMethods(data.data || []);
+        setPaymentMethods(data.data || []); // Simpan metode pembayaran yang diambil ke dalam state
       } catch (err) {
-        setError(err.message);
+        setError(err.message); // Simpan pesan error ke dalam state
       } finally {
-        setLoading(false);
+        setLoading(false); // Set loading menjadi false setelah permintaan selesai
       }
     };
 
     fetchPaymentMethods();
   }, []);
 
+  // Kembalikan variabel state untuk digunakan dalam komponen
   return { paymentMethods, loading, error };
 };
 
