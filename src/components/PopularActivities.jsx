@@ -7,6 +7,7 @@ const ActivityList = () => {
   const { activities, loading, error } = useActivity();
 
   if (loading) {
+    // Menampilkan pesan loading saat data sedang diambil
     return (
       <div className="flex justify-center items-center min-h-[500px]">
         <div className="animate-pulse text-xl text-gray-500">Loading...</div>
@@ -15,13 +16,14 @@ const ActivityList = () => {
   }
 
   if (error) {
+    // Menampilkan pesan error jika terjadi kesalahan saat mengambil data
     return <div className="text-center text-red-500">{error}</div>;
   }
 
   // Ambil 3 aktivitas teratas berdasarkan total_reviews
   const topActivities = activities
     .sort((a, b) => b.total_reviews - a.total_reviews)
-    .slice(4, 7);
+    .slice(0, 3);
 
   return (
     <section className="py-20 bg-white">

@@ -1,8 +1,9 @@
 import React from "react";
 import { useFeatures } from "../hooks/local/useFeatures";
 
+// Komponen fitur
 function Features() {
-  const { features } = useFeatures();
+  const { features } = useFeatures(); // Mengambil data fitur dari hook useFeatures
 
   return (
     <section className="py-20 bg-gray-50">

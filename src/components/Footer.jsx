@@ -9,8 +9,9 @@ import {
   Phone,
 } from "lucide-react";
 
+// Komponen footer
 function Footer() {
-  const currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear(); // Mendapatkan tahun saat ini
 
   const socialLinks = [
     { icon: Facebook, url: "#" },
@@ -31,7 +32,7 @@ function Footer() {
     <footer className="bg-gray-900 text-white py-16">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand Column */}
+          {/* Kolom Brand */}
           <div>
             <h3 className="text-2xl font-bold mb-4 text-blue-500">
               TravelBook
@@ -40,7 +41,7 @@ function Footer() {
               Discover the world, create memories that last a lifetime.
             </p>
 
-            {/* Social Links */}
+            {/* Tautan Sosial */}
             <div className="flex space-x-4">
               {socialLinks.map((social, index) => (
                 <a
@@ -54,7 +55,7 @@ function Footer() {
             </div>
           </div>
 
-          {/* Quick Links Column */}
+          {/* Kolom Tautan Cepat */}
           <div>
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
@@ -71,7 +72,7 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Contact Column */}
+          {/* Kolom Kontak */}
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact Us</h4>
             <div className="space-y-3">
@@ -90,7 +91,7 @@ function Footer() {
             </div>
           </div>
 
-          {/* Newsletter Column */}
+          {/* Kolom Newsletter */}
           <div>
             <h4 className="text-lg font-semibold mb-4">Newsletter</h4>
             <p className="text-gray-400 mb-4">
@@ -109,7 +110,7 @@ function Footer() {
           </div>
         </div>
 
-        {/* Copyright */}
+        {/* Hak Cipta */}
         <div className="mt-12 pt-8 border-t border-gray-800 text-center">
           <p className="text-gray-500">
             &copy; {currentYear} TravelBook. All rights reserved.

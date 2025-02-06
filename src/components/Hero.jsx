@@ -3,9 +3,11 @@ import { ArrowRight, Map, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import useBanners from "../hooks/useBanner";
 
+// Komponen untuk animasi angka
 const AnimatedNumber = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
 
+  // Effect untuk menganimasikan perhitungan angka
   useEffect(() => {
     let startTime;
     let animationFrame;
@@ -14,6 +16,7 @@ const AnimatedNumber = ({ end, duration = 2000 }) => {
       if (!startTime) startTime = timestamp;
       const progress = timestamp - startTime;
 
+      // Kalkulasi persentase progress dan easing
       const percentage = Math.min(progress / duration, 1);
       const easeOutQuad = 1 - Math.pow(1 - percentage, 3);
 
@@ -36,11 +39,14 @@ const AnimatedNumber = ({ end, duration = 2000 }) => {
   return <>{count.toLocaleString()}</>;
 };
 
+// Komponen Hero utama
 const Hero = () => {
+  // State untuk mengontrol visibilitas dan banner aktif
   const [isVisible, setIsVisible] = useState(false);
   const { banners, loading } = useBanners();
   const [currentBanner, setCurrentBanner] = useState(0);
 
+  // Effect untuk menampilkan konten setelah delay
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
@@ -49,6 +55,7 @@ const Hero = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Effect untuk mengatur rotasi banner otomatis
   useEffect(() => {
     if (banners.length > 0) {
       const interval = setInterval(() => {
@@ -60,7 +67,7 @@ const Hero = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Background Banner Slider */}
+      {/* Background Banner Slider dengan overlay gradient */}
       <div className="absolute inset-0 z-0">
         {loading || banners.length === 0 ? (
           <div className="absolute inset-0 bg-gradient-to-b from-blue-950 to-blue-900" />
@@ -82,17 +89,17 @@ const Hero = () => {
         )}
       </div>
 
-      {/* Content */}
+      {/* Konten Hero */}
       <div className="relative z-10 container mx-auto px-4 pt-32">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Small Highlight Text */}
+          {/* Highlight Text dengan animasi fade-in */}
           <div className="inline-block animate-fade-in">
             <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-sm font-medium mb-6">
               ✨ Temukan Petualangan Baru
             </span>
           </div>
 
-          {/* Main Heading */}
+          {/* Heading utama dengan animasi */}
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
             <span className="inline-block animate-fade-up-1">
               Jelajahi Keindahan
@@ -103,13 +110,13 @@ const Hero = () => {
             </span>
           </h1>
 
-          {/* Subheading */}
+          {/* Subheading dengan animasi */}
           <p className="text-xl text-white/80 mb-8 animate-fade-up-3">
             Dari gunung berapi yang megah hingga pantai yang mempesona, temukan
             destinasi impianmu bersama kami
           </p>
 
-          {/* CTA Buttons */}
+          {/* Tombol CTA dengan hover effect */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up-4">
             <Link
               to={"/destinations"}
@@ -127,7 +134,7 @@ const Hero = () => {
             </Link>
           </div>
 
-          {/* Stats */}
+          {/* Statistik dengan animasi angka */}
           <div className="grid grid-cols-2 md:grid-cols-2 gap-8 mt-20 text-white/90 animate-fade-up-5">
             <div className="p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 transition-all duration-300 hover:bg-white/10">
               <Map className="w-8 h-8 mx-auto mb-4 text-blue-400 stroke-2" />
@@ -147,7 +154,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Decorative Elements */}
+      {/* Gradient overlay di bagian bawah */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-blue-950 to-transparent" />
     </div>
   );

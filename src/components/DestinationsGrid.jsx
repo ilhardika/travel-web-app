@@ -1,6 +1,7 @@
 import React from "react";
 import DestinationCard from "./DestinationCard";
 
+// Komponen grid destinasi
 const DestinationsGrid = ({ destinations }) => {
   return (
     <div className="container mx-auto px-4">

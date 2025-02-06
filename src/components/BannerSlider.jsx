@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useBanners } from '../hooks/useBanners';
 
+// Komponen slider banner
 const BannerSlider = ({ title, description }) => {
   const { banners, loading } = useBanners();
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Mengatur interval untuk perpindahan slide otomatis
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % banners.length);
@@ -14,14 +16,17 @@ const BannerSlider = ({ title, description }) => {
     return () => clearInterval(timer);
   }, [banners.length]);
 
+  // Fungsi untuk slide berikutnya
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % banners.length);
   };
 
+  // Fungsi untuk slide sebelumnya
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length);
   };
 
+  // Menampilkan pesan loading jika banner belum dimuat
   if (loading || banners.length === 0) {
     return (
       <div className="h-[400px] bg-gray-200 animate-pulse flex items-center justify-center">
@@ -32,7 +37,7 @@ const BannerSlider = ({ title, description }) => {
 
   return (
     <div className="relative h-[400px] overflow-hidden group">
-      {/* Banner Images */}
+      {/* Gambar Banner */}
       <div className="absolute inset-0">
         {banners.map((banner, index) => (
           <div
@@ -50,7 +55,7 @@ const BannerSlider = ({ title, description }) => {
         ))}
       </div>
 
-      {/* Content */}
+      {/* Konten */}
       <div className="relative z-10 h-full flex items-center">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
@@ -64,7 +69,7 @@ const BannerSlider = ({ title, description }) => {
         </div>
       </div>
 
-      {/* Navigation Buttons */}
+      {/* Tombol Navigasi */}
       <button
         onClick={prevSlide}
         className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 rounded-full p-2 text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity"
@@ -78,7 +83,7 @@ const BannerSlider = ({ title, description }) => {
         <ChevronRight className="w-6 h-6" />
       </button>
 
-      {/* Indicators */}
+      {/* Indikator */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
         {banners.map((_, index) => (
           <button

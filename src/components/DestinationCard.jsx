@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Star, Calendar } from "lucide-react";
+import { MapPin, Star } from "lucide-react";
 
+// Komponen kartu destinasi
 const DestinationCard = ({ destination }) => {
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:scale-105">

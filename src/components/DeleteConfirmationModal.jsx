@@ -2,11 +2,14 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle } from 'lucide-react';
 
+// Komponen modal konfirmasi penghapusan
 const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, itemName }) => {
+  // Jika modal tidak terbuka, tidak menampilkan apapun
   if (!isOpen) return null;
 
   return (
     <AnimatePresence>
+      {/* Latar belakang gelap untuk modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -14,6 +17,7 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, itemName }) => {
           exit={{ opacity: 0, scale: 0.95 }}
           className="bg-white rounded-xl p-6 max-w-md w-full shadow-lg"
         >
+          {/* Ikon peringatan dan judul modal */}
           <div className="flex items-center gap-4 mb-4">
             <div className="p-3 bg-red-100 rounded-full">
               <AlertTriangle className="w-6 h-6 text-red-600" />
@@ -21,10 +25,12 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, itemName }) => {
             <h3 className="text-lg font-semibold text-gray-900">Remove Item</h3>
           </div>
           
+          {/* Pesan konfirmasi */}
           <p className="text-gray-600 mb-6">
             Are you sure you want to remove "{itemName}" from your cart?
           </p>
 
+          {/* Tombol aksi */}
           <div className="flex justify-end gap-3">
             <button
               onClick={onClose}
