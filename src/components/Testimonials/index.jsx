@@ -7,8 +7,10 @@ import CustomNextArrow from "../Arrows/CustomNextArrow";
 import TestimonialCard from "./TestimonialCard";
 
 function Testimonials() {
+  // Mengambil data testimonials dari hook useTestimonials
   const { testimonials } = useTestimonials();
 
+  // Pengaturan slider
   const settings = {
     dots: true,
     infinite: true,
@@ -40,6 +42,7 @@ function Testimonials() {
     <section className="py-20 bg-white relative">
       <div className="mx-20 px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
+          {/* Judul section */}
           <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
             Hear From Our <span className="text-blue-600">Travelers</span>
           </h2>
@@ -48,6 +51,7 @@ function Testimonials() {
           </p>
         </div>
         <div className="relative">
+          {/* Slider untuk menampilkan testimonial */}
           <Slider {...settings}>
             {testimonials.map((testimonial) => (
               <TestimonialCard key={testimonial.id} testimonial={testimonial} />

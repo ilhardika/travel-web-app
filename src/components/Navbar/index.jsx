@@ -4,7 +4,6 @@ import { ShoppingCart, X, ChevronDown, CircleUser } from "lucide-react";
 import { useCartContext } from "../../context/CartContext";
 import useCategories from "../../hooks/useCategory";
 import MobileNavigation from "./MobileNavigation";
-import DesktopNavigation from "./DesktopNavigation";
 import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
@@ -63,17 +62,111 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <DesktopNavigation
-            isLoggedIn={isLoggedIn}
-            isDropdownOpen={isDropdownOpen}
-            onDropdownToggle={toggleDropdown}
-            onLogout={handleLogout}
-            categories={categories}
-            categoriesLoading={categoriesLoading}
-            destinationsDropdownOpen={destinationsDropdownOpen}
-            setDestinationsDropdownOpen={setDestinationsDropdownOpen}
-            cartCount={cartCount}
-          />
+          <div className="hidden lg:flex items-center space-x-8">
+            <div className="flex space-x-8">
+              <Link
+                to="/promo"
+                className="flex items-center space-x-1 py-2 text-gray-600 hover:text-gray-900 transition-colors duration-300"
+              >
+                Promo
+              </Link>
+
+              {/* Destinations Dropdown */}
+              <div
+                className="relative"
+                onMouseEnter={() => setDestinationsDropdownOpen(true)}
+                onMouseLeave={() => setDestinationsDropdownOpen(false)}
+              >
+                <Link
+                  to="/activity"
+                  className="flex items-center space-x-1 py-2 text-gray-600 hover:text-gray-900 transition-colors duration-300"
+                >
+                  Destinations
+                  <ChevronDown className="w-4 h-4 ml-1" />
+                </Link>
+
+                {destinationsDropdownOpen && (
+                  <div className="absolute top-full left-0 w-64 bg-white shadow-lg rounded-lg border border-gray-100 z-50">
+                    <div className="py-2">
+                      {categoriesLoading ? (
+                        <div className="px-4 py-2 text-gray-500">
+                          Loading...
+                        </div>
+                      ) : (
+                        categories.map((category) => (
+                          <Link
+                            key={category.id}
+                            to={`/activity/${category.name.toLowerCase()}`}
+                            className="block px-4 py-2 hover:bg-gray-100 text-gray-700 hover:text-gray-900"
+                          >
+                            {category.name}
+                          </Link>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <Link
+                to="/cart"
+                className="p-2 rounded-full text-gray-600 hover:bg-gray-100 transition-colors duration-300 relative"
+              >
+                <ShoppingCart className="w-6 h-6" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+
+              {/* Auth Buttons */}
+              {isLoggedIn ? (
+                <div className="relative">
+                  <button
+                    onClick={toggleDropdown}
+                    className="p-2 rounded-full text-gray-600 hover:bg-gray-100"
+                  >
+                    <CircleUser className="w-6 h-6" />
+                  </button>
+
+                  {isDropdownOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg z-50">
+                      <Link
+                        to="/profile"
+                        className="block px-4 py-2 hover:bg-gray-100 rounded-t-xl"
+                      >
+                        Profile
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 hover:bg-gray-100 rounded-b-xl text-red-500"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <Link
+                    to="/signin"
+                    className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white rounded-xl hover:bg-gray-50"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
 
           {/* Mobile Navigation */}
           <MobileNavigation
@@ -83,8 +176,6 @@ const Navbar = () => {
             categoriesLoading={categoriesLoading}
             onMobileMenuToggle={toggleMobileMenu}
             onLogout={handleLogout}
-            destinationsDropdownOpen={destinationsDropdownOpen}
-            setDestinationsDropdownOpen={setDestinationsDropdownOpen}
           />
         </div>
       </div>
