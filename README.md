@@ -67,11 +67,8 @@ travel-web-app/
 ├── src/
 │   ├── components/     # Reusable UI components
 │   ├── pages/         # Page components
-│   ├── services/      # API services
+|   ├── hooks/         # Hooks components
 │   ├── context/       # React context
-│   ├── utils/         # Utility functions
-│   └── assets/        # Static assets
-├── public/            # Public assets
 └── ...configuration files
 ```
 
@@ -84,14 +81,6 @@ The application integrates with a RESTful API that provides:
 - Content management (Banners, Promos, Categories, Activities)
 - Transaction processing
 - Image upload capabilities
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 ## Contact
 
