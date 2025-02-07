@@ -9,18 +9,26 @@ import {
 import useUserProfile from "../../hooks/useUser";
 
 const UserManagement = () => {
+  /* ===== STATE MANAGEMENT ===== */
+  // State untuk pencarian pengguna
   const [searchTerm, setSearchTerm] = useState("");
-  const {
-    users: initialUsers,
-    updateUserRole,
-    loading,
-    error,
-  } = useUserProfile();
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(true);
 
+  // Mengambil data dan fungsi user dari custom hook
+  const {
+    users: initialUsers, // Data awal dari API
+    updateUserRole, // Fungsi untuk update role
+    loading, // Status loading
+    error, // Pesan error
+  } = useUserProfile();
+
+  // State untuk data pengguna
+  const [users, setUsers] = useState([]); // List pengguna aktif
+  const [selectedUser, setSelectedUser] = useState(null); // User yang dipilih
+  const [showEditModal, setShowEditModal] = useState(false); // Toggle modal edit
+  const [isExpanded, setIsExpanded] = useState(true); // Kontrol sidebar
+
+  /* ===== EFFECTS ===== */
+  // Effect untuk inisialisasi data pengguna
   useEffect(() => {
     setUsers(initialUsers);
   }, [initialUsers]);
@@ -48,6 +56,8 @@ const UserManagement = () => {
     }
   };
 
+  /* ===== EVENT HANDLERS ===== */
+  // Handler untuk update role pengguna
   const handleRoleUpdate = async () => {
     if (selectedUser) {
       console.log(
@@ -68,6 +78,8 @@ const UserManagement = () => {
     }
   };
 
+  /* ===== RENDER CONDITIONS ===== */
+  // Tampilkan loading spinner
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -76,6 +88,7 @@ const UserManagement = () => {
     );
   }
 
+  // Tampilkan pesan error
   if (error) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">
@@ -86,14 +99,15 @@ const UserManagement = () => {
     );
   }
 
+  /* ===== MAIN RENDER ===== */
   return (
     <div className="min-h-screen w-full bg-gray-900 flex">
+      {/* Sidebar */}
       <AdminSidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
-      <div
-        className={`w-full p-4 transition-all duration-300 ${
-          isExpanded ? "ml-64" : "pl-14"
-        }`}
-      >
+
+      {/* Konten Utama */}
+      <div className={`w-full p-4 ${isExpanded ? "ml-64" : "pl-14"}`}>
+        {/* Header dan Search */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Manajemen Pengguna</h1>
           <p className="text-gray-400">Kelola data pengguna aplikasi</p>
@@ -115,7 +129,7 @@ const UserManagement = () => {
           </div>
         </div>
 
-        {/* Users Table */}
+        {/* Tabel Pengguna */}
         <div className="bg-gray-800 rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full">
@@ -139,7 +153,9 @@ const UserManagement = () => {
                 {currentUsers?.map((user) => (
                   <tr key={user.id} className="text-gray-300">
                     <td className="px-6 py-4 whitespace-nowrap">{user.name}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {user.email}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
@@ -170,7 +186,7 @@ const UserManagement = () => {
           </div>
         </div>
 
-        {/* Pagination Controls */}
+        {/* Pagination */}
         <div className="flex justify-center gap-2 mt-4">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
@@ -216,7 +232,7 @@ const UserManagement = () => {
           </button>
         </div>
 
-        {/* Edit Modal */}
+        {/* Modal Edit Role */}
         {showEditModal && selectedUser && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div className="bg-gray-800 p-6 rounded-lg w-96">

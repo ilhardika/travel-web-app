@@ -1,3 +1,5 @@
+/* ===== IMPORT DEPENDENCIES ===== */
+// Import hooks dan komponen yang dibutuhkan
 import { useEffect, useState } from "react";
 import {
   PencilIcon,
@@ -13,32 +15,41 @@ import AdminSidebar from "../../components/AdminSidebar";
 import { useNavigate } from "react-router-dom";
 
 const PromoManagement = () => {
+  /* ===== STATE MANAGEMENT ===== */
+  // Mengambil data dan fungsi promo dari custom hook
   const {
-    promos,
-    loading: promosLoading,
-    createPromo,
-    updatePromo,
-    deletePromo,
-    refreshPromos,
+    promos, // Data promo dari API
+    loading: promosLoading, // Change this line to match the variable name used below
+    createPromo, // Fungsi untuk membuat promo baru
+    updatePromo, // Fungsi untuk update promo
+    deletePromo, // Fungsi untuk hapus promo
+    refreshPromos, // Fungsi untuk refresh data
   } = usePromos();
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredPromos, setFilteredPromos] = useState([]);
-  const [showForm, setShowForm] = useState(false);
+
+  // State untuk kontrol UI
+  const [isExpanded, setIsExpanded] = useState(true); // Kontrol sidebar
+  const [searchTerm, setSearchTerm] = useState(""); // Input pencarian
+  const [filteredPromos, setFilteredPromos] = useState([]); // Hasil filter
+  const [showForm, setShowForm] = useState(false); // Toggle form modal
+
+  // State untuk form dengan nilai default
   const [formData, setFormData] = useState({
-    id: "",
-    title: "",
-    description: "",
-    imageUrl: "",
-    terms_condition: "",
-    promo_code: "",
-    promo_discount_price: "",
-    minimum_claim_price: "",
+    id: "", // ID promo (kosong untuk promo baru)
+    title: "", // Judul promo
+    description: "", // Deskripsi promo
+    imageUrl: "", // URL gambar promo
+    terms_condition: "", // Syarat dan ketentuan
+    promo_code: "", // Kode promo
+    promo_discount_price: "", // Besaran diskon
+    minimum_claim_price: "", // Minimal pembelian
   });
+
+  /* ===== PAGINATION STATE ===== */
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const navigate = useNavigate();
 
+  /* ===== EFFECT HOOKS ===== */
+  // Effect untuk filter promo berdasarkan pencarian
   useEffect(() => {
     setFilteredPromos(
       promos.filter((promo) =>
@@ -47,11 +58,14 @@ const PromoManagement = () => {
     );
   }, [searchTerm, promos]);
 
+  /* ===== EVENT HANDLERS ===== */
+  // Handler untuk perubahan input form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Handler untuk submit form (create/update)
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title || !formData.promo_code) {
@@ -67,6 +81,7 @@ const PromoManagement = () => {
     }
   };
 
+  // Handler untuk edit promo
   const handleEdit = (promo) => {
     setFormData({
       id: promo.id,
@@ -114,14 +129,15 @@ const PromoManagement = () => {
     );
   }
 
+  /* ===== RENDER KOMPONEN ===== */
   return (
     <div className="min-h-screen w-full bg-gray-900 flex">
+      {/* Sidebar */}
       <AdminSidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
-      <div
-        className={`w-full p-4 transition-all duration-300 ${
-          isExpanded ? "ml-64" : "pl-14"
-        }`}
-      >
+
+      {/* Konten Utama */}
+      <div className={`w-full p-4 ${isExpanded ? "ml-64" : "pl-14"}`}>
+        {/* Header dan Search */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Manajemen Promo</h1>
           <p className="text-gray-400">Kelola semua promo di sini.</p>
@@ -147,6 +163,8 @@ const PromoManagement = () => {
             Tambah Promo
           </button>
         </div>
+
+        {/* Form Modal */}
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto">
             <div className="bg-gray-800 p-6 rounded-lg w-full max-w-lg max-h-[90%] overflow-y-auto">
@@ -250,6 +268,8 @@ const PromoManagement = () => {
             </div>
           </div>
         )}
+
+        {/* Tabel Promo */}
         <div className="bg-gray-800 rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full">
@@ -291,7 +311,9 @@ const PromoManagement = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap flex gap-4">
                       <button
-                        onClick={() => navigate(`/promo-management/${promo.id}`)}
+                        onClick={() =>
+                          navigate(`/promo-management/${promo.id}`)
+                        }
                         className="text-green-400 hover:text-green-300"
                       >
                         <EyeIcon className="h-5 w-5" />
@@ -315,6 +337,8 @@ const PromoManagement = () => {
             </table>
           </div>
         </div>
+
+        {/* Pagination */}
         <div className="flex justify-center gap-2 mt-4">
           <button
             onClick={() => handlePageChange(currentPage - 1)}

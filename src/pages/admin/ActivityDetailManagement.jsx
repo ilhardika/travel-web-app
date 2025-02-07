@@ -1,14 +1,23 @@
+/* ===== IMPORT DEPENDENCIES ===== */
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useActivity from "../../hooks/useActivity";
 import AdminSidebar from "../../components/AdminSidebar";
 
 const ActivityDetailManagement = () => {
+  /* ===== INISIALISASI DATA ===== */
+  // Mengambil ID aktivitas dari parameter URL
   const { activityId } = useParams();
-  const { activity, loading: activityLoading } = useActivity(activityId);
+
+  // Mengambil detail aktivitas dari API
+  const { activity, loading } = useActivity(activityId);
+
+  // State untuk mengatur lebar sidebar
   const [isExpanded, setIsExpanded] = useState(true);
 
-  if (activityLoading) {
+  /* ===== CONDITIONAL RENDERING ===== */
+  // Tampilkan loading spinner saat mengambil data
+  if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
@@ -16,21 +25,27 @@ const ActivityDetailManagement = () => {
     );
   }
 
+  /* ===== MAIN RENDER ===== */
   return (
     <div className="min-h-screen bg-gray-900 flex">
+      {/* Sidebar dengan kontrol lebar */}
       <AdminSidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
-      <div
-        className={`flex-1 p-8 transition-all duration-300 ${
-          isExpanded ? "ml-64" : "ml-20"
-        }`}
-      >
+
+      {/* Main content area */}
+      <div className={`flex-1 p-8 ${isExpanded ? "ml-64" : "ml-20"}`}>
+        {/* Header section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Detail Aktivitas</h1>
           <p className="text-gray-400">Informasi detail tentang aktivitas.</p>
         </div>
+
+        {/* Detail card */}
         <div className="bg-gray-800 rounded-xl shadow-lg p-6">
+          {/* Basic info */}
           <h2 className="text-2xl font-bold text-white">{activity.title}</h2>
           <p className="text-gray-400 mt-2">{activity.description}</p>
+
+          {/* Image gallery */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
             {activity.imageUrls.map((url, index) => (
               <img
@@ -41,6 +56,8 @@ const ActivityDetailManagement = () => {
               />
             ))}
           </div>
+
+          {/* Detailed information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
               <p className="text-gray-400 mt-2">
@@ -82,6 +99,8 @@ const ActivityDetailManagement = () => {
               />
             </div>
           </div>
+
+          {/* Back button */}
           <div className="mt-4">
             <button
               onClick={() => window.history.back()}

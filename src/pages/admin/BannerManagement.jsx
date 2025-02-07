@@ -1,3 +1,5 @@
+/* ===== IMPORT DAN DEPENDENCIES ===== */
+// Import komponen dan hooks yang dibutuhkan
 import { useEffect, useState } from "react";
 import {
   PencilIcon,
@@ -11,26 +13,36 @@ import useBanner from "../../hooks/useBanner";
 import AdminSidebar from "../../components/AdminSidebar";
 
 const BannerManagement = () => {
+  /* ===== PENGATURAN STATE DAN HOOKS ===== */
+  // Mengambil data dan fungsi banner dari custom hook
   const {
-    banners,
-    loading: bannersLoading,
-    createBanner,
-    updateBanner,
-    deleteBanner,
-    refreshBanners,
+    banners, // Data banner dari API
+    loading: bannersLoading, // Status loading data
+    createBanner, // Fungsi untuk membuat banner baru
+    updateBanner, // Fungsi untuk update banner
+    deleteBanner, // Fungsi untuk hapus banner
+    refreshBanners, // Fungsi untuk refresh data
   } = useBanner();
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredBanners, setFilteredBanners] = useState([]);
-  const [showForm, setShowForm] = useState(false);
+
+  // State untuk kontrol UI
+  const [isExpanded, setIsExpanded] = useState(true); // Kontrol lebar sidebar
+  const [searchTerm, setSearchTerm] = useState(""); // Input pencarian
+  const [filteredBanners, setFilteredBanners] = useState([]); // Hasil pencarian
+  const [showForm, setShowForm] = useState(false); // Toggle form modal
+
+  // State untuk form dengan nilai default
   const [formData, setFormData] = useState({
-    id: "",
-    name: "",
-    imageUrl: "",
+    id: "", // ID banner (kosong untuk banner baru)
+    name: "", // Nama banner
+    imageUrl: "", // URL gambar banner
   });
+
+  /* ===== PAGINATION STATE ===== */
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  /* ===== EFFECT HOOKS ===== */
+  // Effect untuk filter banner berdasarkan pencarian
   useEffect(() => {
     setFilteredBanners(
       banners.filter((banner) =>
@@ -39,11 +51,14 @@ const BannerManagement = () => {
     );
   }, [searchTerm, banners]);
 
+  /* ===== EVENT HANDLERS ===== */
+  // Handler untuk input form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Handler untuk submit form (create/update)
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.imageUrl) {
@@ -59,6 +74,7 @@ const BannerManagement = () => {
     }
   };
 
+  // Handler untuk edit banner
   const handleEdit = (banner) => {
     setFormData({
       id: banner.id,
@@ -68,6 +84,7 @@ const BannerManagement = () => {
     setShowForm(true);
   };
 
+  // Handler untuk navigasi halaman
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
@@ -96,18 +113,22 @@ const BannerManagement = () => {
     );
   }
 
+  /* ===== RENDER KOMPONEN ===== */
+  // Layout utama dengan sidebar dan konten
   return (
     <div className="min-h-screen w-full bg-gray-900 flex">
+      {/* Sidebar dengan toggle ekspansi */}
       <AdminSidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
-      <div
-        className={`w-full p-4 transition-all duration-300 ${
-          isExpanded ? "ml-64" : "pl-14"
-        }`}
-      >
+
+      {/* Area konten utama */}
+      <div className={`w-full p-4 ${isExpanded ? "ml-64" : "pl-14"}`}>
+        {/* Header halaman */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Manajemen Banner</h1>
           <p className="text-gray-400">Kelola semua banner di sini.</p>
         </div>
+
+        {/* Search dan tombol tambah */}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-6 mr-12 lg:mr-0">
           <div className="flex gap-4">
             <div className="relative">
@@ -129,6 +150,8 @@ const BannerManagement = () => {
             Tambah Banner
           </button>
         </div>
+
+        {/* Form modal untuk tambah/edit */}
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto">
             <div className="bg-gray-800 p-6 rounded-lg w-full max-w-lg max-h-[90%] overflow-y-auto">
@@ -179,6 +202,8 @@ const BannerManagement = () => {
             </div>
           </div>
         )}
+
+        {/* Tabel daftar banner */}
         <div className="bg-gray-800 rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full">
@@ -228,6 +253,8 @@ const BannerManagement = () => {
             </table>
           </div>
         </div>
+
+        {/* Kontrol pagination */}
         <div className="flex justify-center gap-2 mt-4">
           <button
             onClick={() => handlePageChange(currentPage - 1)}

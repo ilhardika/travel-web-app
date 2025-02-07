@@ -1,3 +1,5 @@
+/* ===== IMPORT DEPENDENCIES ===== */
+// Import hooks dan komponen yang dibutuhkan
 import { useState } from "react";
 import {
   PencilIcon,
@@ -12,21 +14,28 @@ import useAuth from "../../hooks/useAuth";
 import AdminSidebar from "../../components/AdminSidebar";
 
 const CategoryManagement = () => {
+  /* ===== STATE MANAGEMENT ===== */
+  // State untuk pencarian kategori
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Mengambil data dan fungsi kategori dari custom hook
   const {
-    categories,
-    loading,
-    error,
-    createCategory,
-    updateCategory,
-    deleteCategory,
+    categories, // Data kategori dari API
+    loading, // Status loading
+    error, // Pesan error jika ada
+    createCategory, // Fungsi untuk membuat kategori baru
+    updateCategory, // Fungsi untuk update kategori
+    deleteCategory, // Fungsi untuk hapus kategori
   } = useCategories();
   const { token } = useAuth();
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(true);
 
+  // State untuk UI
+  const [selectedCategory, setSelectedCategory] = useState(null); // Kategori yang dipilih untuk edit
+  const [showEditModal, setShowEditModal] = useState(false); // Toggle modal edit
+  const [showCreateModal, setShowCreateModal] = useState(false); // Toggle modal tambah
+  const [isExpanded, setIsExpanded] = useState(true); // Kontrol sidebar
+
+  /* ===== PAGINATION STATE ===== */
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -47,21 +56,24 @@ const CategoryManagement = () => {
     }
   };
 
+  /* ===== EVENT HANDLERS ===== */
+  // Handler untuk membuat kategori baru
   const handleCreateCategory = async (categoryData) => {
     const success = await createCategory({
       name: categoryData.name,
-      imageUrl: categoryData.imageUrl, 
+      imageUrl: categoryData.imageUrl,
     });
     if (success) {
       setShowCreateModal(false);
     }
   };
 
+  // Handler untuk update kategori
   const handleUpdateCategory = async () => {
     if (selectedCategory) {
       const success = await updateCategory(selectedCategory.id, {
         name: selectedCategory.name,
-        imageUrl: selectedCategory.imageUrl, 
+        imageUrl: selectedCategory.imageUrl,
       });
       if (success) {
         setShowEditModal(false);
@@ -70,6 +82,7 @@ const CategoryManagement = () => {
     }
   };
 
+  // Handler untuk menghapus kategori
   const handleDeleteCategory = async (id) => {
     const success = await deleteCategory(id);
     if (success) {
@@ -77,6 +90,8 @@ const CategoryManagement = () => {
     }
   };
 
+  /* ===== RENDER CONDITIONS ===== */
+  // Tampilkan loading spinner
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -85,6 +100,7 @@ const CategoryManagement = () => {
     );
   }
 
+  // Tampilkan pesan error
   if (error) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">
@@ -95,14 +111,18 @@ const CategoryManagement = () => {
     );
   }
 
+  /* ===== MAIN RENDER ===== */
   return (
     <div className="min-h-screen w-full bg-gray-900 flex">
+      {/* Sidebar */}
       <AdminSidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
+      {/* Konten Utama */}
       <div
         className={`w-full p-4 transition-all duration-300 ${
           isExpanded ? "ml-64" : "pl-14"
         }`}
       >
+        {/* Header dan Search */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Manajemen Kategori</h1>
           <p className="text-gray-400">Kelola data kategori aplikasi</p>
@@ -128,6 +148,7 @@ const CategoryManagement = () => {
             Tambah Kategori
           </button>
         </div>
+        {/* Tabel Kategori */}
         <div className="bg-gray-800 rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full">
@@ -180,6 +201,7 @@ const CategoryManagement = () => {
             </table>
           </div>
         </div>
+        {/* Pagination */}
         <div className="flex justify-center gap-2 mt-4">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
@@ -222,6 +244,7 @@ const CategoryManagement = () => {
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
+        {/* Modal Form Tambah */}
         {showCreateModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div className="bg-gray-800 p-6 rounded-lg w-96">
@@ -271,6 +294,7 @@ const CategoryManagement = () => {
             </div>
           </div>
         )}
+        {/* Modal Form Edit */}
         {showEditModal && selectedCategory && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div className="bg-gray-800 p-6 rounded-lg w-96">

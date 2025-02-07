@@ -1,4 +1,7 @@
+/* ===== IMPORT DEPENDENCIES ===== */
+// Import hooks React yang diperlukan
 import { useEffect, useState } from "react";
+// Import komponen dan fungsi lainnya
 import { useNavigate } from "react-router-dom";
 import {
   PencilIcon,
@@ -14,19 +17,28 @@ import useCategories from "../../hooks/useCategory";
 import AdminSidebar from "../../components/AdminSidebar";
 
 const ActivityManagement = () => {
+  /* ===== INISIALISASI HOOKS DAN STATE ===== */
+  // Mengambil data dan fungsi dari custom hook aktivitas
   const {
-    activities,
-    loading: activitiesLoading,
-    createActivity,
-    updateActivity,
-    deleteActivity,
-    refreshActivities,
+    activities, // Data aktivitas dari API
+    loading, // Status loading saat fetch data
+    createActivity, // Fungsi untuk membuat aktivitas baru
+    updateActivity, // Fungsi untuk memperbarui aktivitas
+    deleteActivity, // Fungsi untuk menghapus aktivitas
+    refreshActivities, // Fungsi untuk memuat ulang data
   } = useActivities();
+
+  // Mengambil data kategori untuk dropdown pilihan
   const { categories } = useCategories();
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredActivities, setFilteredActivities] = useState([]);
-  const [showForm, setShowForm] = useState(false);
+
+  /* ===== STATE MANAGEMENT ===== */
+  // State untuk kontrol UI
+  const [isExpanded, setIsExpanded] = useState(true); // Mengatur lebar sidebar
+  const [searchTerm, setSearchTerm] = useState(""); // Input pencarian
+  const [filteredActivities, setFilteredActivities] = useState([]); // Hasil filter
+  const [showForm, setShowForm] = useState(false); // Tampilkan/sembunyikan form
+
+  // State untuk form input dengan nilai default kosong
   const [formData, setFormData] = useState({
     id: "",
     title: "",
@@ -43,10 +55,14 @@ const ActivityManagement = () => {
     imageUrls: [],
     locationMaps: "",
   });
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  const navigate = useNavigate();
 
+  /* ===== PAGINATION STATE ===== */
+  const [currentPage, setCurrentPage] = useState(1); // Halaman saat ini
+  const itemsPerPage = 10; // Jumlah item per halaman
+  const navigate = useNavigate(); // Fungsi untuk navigasi
+
+  /* ===== EFFECTS & FILTERS ===== */
+  // Effect untuk memfilter aktivitas berdasarkan kata kunci pencarian
   useEffect(() => {
     setFilteredActivities(
       activities.filter((activity) =>
@@ -55,11 +71,14 @@ const ActivityManagement = () => {
     );
   }, [searchTerm, activities]);
 
+  /* ===== EVENT HANDLERS ===== */
+  // Menangani perubahan input form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Menangani submit form (tambah/edit)
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!formData.categoryId || !formData.title) {
@@ -75,6 +94,7 @@ const ActivityManagement = () => {
     }
   };
 
+  // Mengisi form untuk edit aktivitas
   const handleEdit = (activity) => {
     setFormData({
       id: activity.id,
@@ -95,12 +115,14 @@ const ActivityManagement = () => {
     setShowForm(true);
   };
 
+  // Menangani perubahan halaman pagination
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
     }
   };
 
+  // Membuka form untuk tambah aktivitas baru
   const handleAddActivity = () => {
     setFormData({
       id: "",
@@ -121,12 +143,16 @@ const ActivityManagement = () => {
     setShowForm(true);
   };
 
+  /* ===== PAGINATION CALCULATIONS ===== */
+  // Menghitung total halaman dan data yang ditampilkan
   const totalPages = Math.ceil(filteredActivities.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentActivities = filteredActivities.slice(startIndex, endIndex);
 
-  if (activitiesLoading) {
+  /* ===== RENDER CONDITIONS ===== */
+  // Tampilan loading saat mengambil data
+  if (loading) {
     return (
       <div className="min-h-full bg-gray-900 flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
@@ -134,18 +160,21 @@ const ActivityManagement = () => {
     );
   }
 
+  /* ===== MAIN RENDER ===== */
   return (
     <div className="min-h-screen w-full bg-gray-900 flex">
+      {/* Sidebar dengan toggle ekspansi */}
       <AdminSidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
-      <div
-        className={`w-full p-4 transition-all duration-300 ${
-          isExpanded ? "ml-64" : "pl-14"
-        }`}
-      >
+
+      {/* Main content area */}
+      <div className={`w-full p-4 ${isExpanded ? "ml-64" : "pl-14"}`}>
+        {/* Header section */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">Manajemen Aktivitas</h1>
           <p className="text-gray-400">Kelola semua aktivitas di sini.</p>
         </div>
+
+        {/* Search and Add button section */}
         <div className="mb-6 flex flex-wrap items-center justify-between gap-6 mr-12 lg:mr-0">
           <div className="flex gap-4">
             <div className="relative">
@@ -167,6 +196,8 @@ const ActivityManagement = () => {
             Tambah Aktivitas
           </button>
         </div>
+
+        {/* Modal form untuk tambah/edit */}
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-y-auto">
             <div className="bg-gray-800 p-6 rounded-lg w-full max-w-lg max-h-[90%] overflow-y-auto">
@@ -349,6 +380,8 @@ const ActivityManagement = () => {
             </div>
           </div>
         )}
+
+        {/* Table section */}
         <div className="bg-gray-800 rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full">
@@ -416,6 +449,8 @@ const ActivityManagement = () => {
             </table>
           </div>
         </div>
+
+        {/* Pagination controls */}
         <div className="flex justify-center gap-2 mt-4">
           <button
             onClick={() => handlePageChange(currentPage - 1)}

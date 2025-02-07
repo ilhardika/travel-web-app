@@ -1,3 +1,5 @@
+/* ===== IMPORT DAN DEPENDENCIES ===== */
+// Import komponen dan hooks yang dibutuhkan
 import { useEffect, useState } from "react";
 import {
   PencilIcon,
@@ -13,32 +15,43 @@ import { useNavigate } from "react-router-dom";
 import Toast from "../../components/Toast";
 
 const TransactionManagement = () => {
+  /* ===== STATE MANAGEMENT ===== */
+  // Mengambil data dan fungsi transaksi dari custom hook
   const {
-    transactions,
-    loading: transactionsLoading,
-    updateTransactionStatus,
-    deleteTransaction,
-    refreshTransactions,
+    transactions, // Data transaksi dari API
+    loading: transactionsLoading, // Transaksi loading status
+    updateTransactionStatus, // Fungsi untuk update status
+    deleteTransaction, // Fungsi untuk hapus transaksi
+    refreshTransactions, // Fungsi untuk refresh data
   } = useTransaction();
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredTransactions, setFilteredTransactions] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
-    id: "",
-    status: "",
-  });
-  const [currentPage, setCurrentPage] = useState(1);
-  const [toastMessage, setToastMessage] = useState("");
-  const [showToast, setShowToast] = useState(false);
-  const itemsPerPage = 10;
-  const navigate = useNavigate();
 
+  // State untuk UI
+  const [isExpanded, setIsExpanded] = useState(true); // Kontrol sidebar
+  const [searchTerm, setSearchTerm] = useState(""); // Input pencarian
+  const [filteredTransactions, setFilteredTransactions] = useState([]); // Hasil filter
+  const [showForm, setShowForm] = useState(false); // Toggle form modal
+  const [toastMessage, setToastMessage] = useState(""); // Pesan notifikasi
+  const [showToast, setShowToast] = useState(false); // Toggle notifikasi
+
+  // State untuk form edit status
+  const [formData, setFormData] = useState({
+    id: "", // ID transaksi
+    status: "", // Status baru
+  });
+
+  /* ===== PAGINATION SETUP ===== */
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Add this line to define itemsPerPage constant
+
+  /* ===== EFFECTS & FILTERS ===== */
+  // Effect untuk filter transaksi berdasarkan pencarian
   useEffect(() => {
     setFilteredTransactions(
       transactions.filter(
         (transaction) =>
-          transaction.invoiceId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          transaction.invoiceId
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
           transaction.totalAmount.toString().includes(searchTerm) ||
           transaction.payment_method?.name
             .toLowerCase()
@@ -48,11 +61,8 @@ const TransactionManagement = () => {
     );
   }, [searchTerm, transactions]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
+  /* ===== EVENT HANDLERS ===== */
+  // Handler untuk update status transaksi
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!formData.status) {
@@ -60,7 +70,10 @@ const TransactionManagement = () => {
       setShowToast(true);
       return;
     }
-    const { success, error } = await updateTransactionStatus(formData.id, formData.status);
+    const { success, error } = await updateTransactionStatus(
+      formData.id,
+      formData.status
+    );
     if (success) {
       setShowForm(false);
       await refreshTransactions();
@@ -71,9 +84,12 @@ const TransactionManagement = () => {
     setShowToast(true);
   };
 
+  // Handler untuk edit status
   const handleEdit = (transaction) => {
     if (transaction.status !== "pending") {
-      setToastMessage("Failed to update status, only 'pending' status are allowed");
+      setToastMessage(
+        "Failed to update status, only 'pending' status are allowed"
+      );
       setShowToast(true);
       return;
     }
@@ -103,6 +119,7 @@ const TransactionManagement = () => {
     );
   }
 
+  /* ===== RENDER KOMPONEN ===== */
   return (
     <div className="min-h-screen w-full bg-gray-900 flex">
       <AdminSidebar isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
@@ -288,7 +305,13 @@ const TransactionManagement = () => {
           </button>
         </div>
       </div>
-      {showToast && <Toast message={toastMessage} onClose={() => setShowToast(false)} show={showToast} />}
+      {showToast && (
+        <Toast
+          message={toastMessage}
+          onClose={() => setShowToast(false)}
+          show={showToast}
+        />
+      )}
     </div>
   );
 };
