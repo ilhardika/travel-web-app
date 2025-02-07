@@ -6,22 +6,26 @@ import Navbar from "../../components/Navbar/index.jsx";
 import Toast from "../../components/Toast.jsx";
 
 const PaymentsPage = () => {
+  // Inisialisasi state dan hooks untuk manajemen pembayaran
   const { transactionId } = useParams();
   const navigate = useNavigate();
   const {
-    uploadProofOfPayment,
-    updateProofPayment,
-    fetchTransaction,
+    uploadProofOfPayment,    // Fungsi untuk upload bukti pembayaran
+    updateProofPayment,      // Fungsi untuk update data pembayaran
+    fetchTransaction,        // Fungsi untuk mengambil data transaksi
     loading,
     error,
   } = useTransaction();
+  
+  // State untuk manajemen UI dan data
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
-  const [proofImage, setProofImage] = useState(null);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const [proofImage, setProofImage] = useState(null);           // File gambar yang dipilih
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(""); // URL gambar yang sudah diupload
+  const [previewUrl, setPreviewUrl] = useState(null);          // URL preview gambar
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [transaction, setTransaction] = useState(null);
 
+  // Effect untuk mengambil data transaksi saat komponen dimount
   useEffect(() => {
     console.log("Transaction ID from URL:", transactionId);
     console.log("Current URL:", window.location.href);
@@ -40,10 +44,12 @@ const PaymentsPage = () => {
     }
   }, [transactionId]);
 
+  // Handler untuk perubahan file
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setProofImage(file);
+      // Membuat preview URL untuk gambar yang dipilih
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewUrl(reader.result);
@@ -52,13 +58,16 @@ const PaymentsPage = () => {
     }
   };
 
+  // Handler untuk menghapus gambar yang dipilih
   const handleRemoveImage = () => {
     setProofImage(null);
     setPreviewUrl(null);
   };
 
+  // Handler untuk mengupload bukti pembayaran
   const handleUploadProof = async () => {
     if (proofImage) {
+      // Proses upload dan update bukti pembayaran
       const uploadResult = await uploadProofOfPayment(proofImage);
       if (uploadResult.success) {
         const updateResult = await updateProofPayment(
@@ -84,6 +93,7 @@ const PaymentsPage = () => {
     }
   };
 
+  // Tampilan loading
   if (loading) {
     return (
       <div className="min-h-screen">
@@ -98,6 +108,7 @@ const PaymentsPage = () => {
     );
   }
 
+  // Tampilan error
   if (error) {
     return (
       <div className="min-h-screen">
@@ -123,7 +134,7 @@ const PaymentsPage = () => {
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-3xl mx-auto flex flex-col gap-8">
-          {/* Items Summary */}
+          {/* Ringkasan Aktivitas */}
           <div className="bg-white rounded-2xl shadow-lg p-8 mt-8 transition-all hover:shadow-xl">
             <h2 className="text-xl font-bold mb-6 text-gray-900">
               Activity Summary
@@ -154,6 +165,8 @@ const PaymentsPage = () => {
               </h3>
             </div>
           </div>
+
+          {/* Form Upload Bukti Pembayaran */}
           <div className="bg-white rounded-2xl shadow-lg p-8 transition-all hover:shadow-xl">
             <h2 className="text-xl font-bold mb-6 text-gray-900">
               Upload Proof of Payment
@@ -213,6 +226,7 @@ const PaymentsPage = () => {
         </div>
       </div>
 
+      {/* Modal Sukses Upload - Fixed closing tags */}
       {showSuccessModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white rounded-2xl shadow-lg p-8 transition-all hover:shadow-xl w-full max-w-md text-center">

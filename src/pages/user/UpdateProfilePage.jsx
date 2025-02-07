@@ -5,49 +5,49 @@ import useForm from "../../hooks/local/useForm";
 import useAuth from "../../hooks/useAuth";
 
 const UpdateProfilePage = () => {
+  // Inisialisasi hooks dan state untuk manajemen profil
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
 
+  // Inisialisasi form dengan custom hook useForm
   const { values, handleChange, setValues } = useForm({
-    name: "",
-    email: "",
-    phoneNumber: "",
+    name: "",         // Nama lengkap pengguna
+    email: "",        // Email pengguna
+    phoneNumber: "",  // Nomor telepon pengguna
   });
 
+  // Mengambil fungsi dan state dari hook autentikasi
   const { updateProfile, error, loading } = useAuth();
 
-  // Ambil data user dari localStorage saat komponen dimuat
+  // Effect untuk mengambil data user dari localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setUserData(parsedUser);
-      // Set initial form values
+      // Mengisi form dengan data user yang ada
       setValues({
         name: parsedUser.name || "",
         email: parsedUser.email || "",
         phoneNumber: parsedUser.phoneNumber || "",
       });
     } else {
-      // Redirect ke halaman login jika tidak ada data user
+      // Redirect ke login jika tidak ada data
       navigate("/signin");
     }
   }, [navigate, setValues]);
 
-  // Handler submit form
+  // Handler untuk submit form update profil
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validasi input
     if (!values.name || !values.email || !values.phoneNumber) {
       alert("Semua field harus diisi");
       return;
     }
-
     await updateProfile(values);
   };
 
-  // Render loading
+  // Tampilan loading saat mengambil data
   if (!userData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -59,19 +59,22 @@ const UpdateProfilePage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-100 to-blue-300 py-12 px-4 flex items-center justify-center">
       <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
+        {/* Header Form */}
         <div className="bg-blue-600 p-6 text-center">
           <h1 className="text-2xl font-bold text-white">Perbarui Profil</h1>
         </div>
 
+        {/* Form Update Profil */}
         <form onSubmit={handleSubmit} className="p-8 space-y-6">
-          {/* Pesan Error */}
+          {/* Pesan Error jika ada */}
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-center">
               {error}
             </div>
           )}
 
-          {/* Input Nama */}
+          {/* Input Fields dengan Icons */}
+          {/* Field Nama */}
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <User className="h-5 w-5 text-gray-400" />
@@ -87,7 +90,7 @@ const UpdateProfilePage = () => {
             />
           </div>
 
-          {/* Input Email */}
+          {/* Field Email */}
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Mail className="h-5 w-5 text-gray-400" />
@@ -103,7 +106,7 @@ const UpdateProfilePage = () => {
             />
           </div>
 
-          {/* Input Nomor Telepon */}
+          {/* Field Nomor Telepon */}
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Phone className="h-5 w-5 text-gray-400" />
@@ -119,7 +122,7 @@ const UpdateProfilePage = () => {
             />
           </div>
 
-          {/* Tombol Submit */}
+          {/* Tombol Submit dengan Loading State */}
           <button
             type="submit"
             disabled={loading}
@@ -141,7 +144,7 @@ const UpdateProfilePage = () => {
               </>
             )}
           </button>
-          {/* Tombol Kembali */}
+          {/* Tombol Kembali ke Profil */}
           <div className="mt-4 text-center">
             <button
               type="button"

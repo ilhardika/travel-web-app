@@ -6,10 +6,13 @@ import Navbar from "../../components/Navbar/index.jsx";
 import Toast from "../../components/Toast.jsx";
 
 const TransactionDetailPage = () => {
+  // Inisialisasi state dan hooks untuk manajemen transaksi
   const { transactionId } = useParams();
   const navigate = useNavigate();
   const { uploadProofOfPayment, updateProofPayment, fetchTransaction } =
     useTransaction();
+  
+  // State untuk manajemen UI dan data
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
   const [transaction, setTransaction] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,6 +21,7 @@ const TransactionDetailPage = () => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [previewUrl, setPreviewUrl] = useState(null);
 
+  // Effect untuk mengambil detail transaksi saat komponen dimount
   useEffect(() => {
     const getTransaction = async () => {
       setLoading(true);
@@ -34,11 +38,12 @@ const TransactionDetailPage = () => {
     getTransaction();
   }, [transactionId]);
 
+  // Handler untuk perubahan file bukti pembayaran
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setProofImage(file);
-      // Create preview URL
+      // Membuat preview URL untuk gambar
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewUrl(reader.result);
@@ -47,11 +52,13 @@ const TransactionDetailPage = () => {
     }
   };
 
+  // Handler untuk menghapus gambar yang dipilih
   const handleRemoveImage = () => {
     setProofImage(null);
     setPreviewUrl(null);
   };
 
+  // Handler untuk mengupload bukti pembayaran
   const handleUploadProof = async () => {
     if (proofImage) {
       const uploadResult = await uploadProofOfPayment(proofImage);
@@ -80,6 +87,7 @@ const TransactionDetailPage = () => {
     }
   };
 
+  // Tampilan loading
   if (loading) {
     return (
       <div className="min-h-screen">
@@ -94,6 +102,7 @@ const TransactionDetailPage = () => {
     );
   }
 
+  // Tampilan error
   if (error) {
     return (
       <div className="min-h-screen">
@@ -119,6 +128,7 @@ const TransactionDetailPage = () => {
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-3xl mx-auto">
+          {/* Tombol Kembali */}
           <button
             onClick={() => navigate(-1)}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
@@ -131,8 +141,9 @@ const TransactionDetailPage = () => {
             Transaction Detail
           </h1>
 
-          {/* Transaction Info Card */}
+          {/* Informasi Transaksi */}
           <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 transition-all hover:shadow-xl">
+            {/* Detail Invoice dan Status */}
             <div className="flex justify-between items-start mb-8">
               <div>
                 <p className="text-sm text-gray-500 mb-1">Invoice ID</p>
@@ -160,7 +171,7 @@ const TransactionDetailPage = () => {
               </div>
             </div>
 
-            {/* Payment Method */}
+            {/* Metode Pembayaran */}
             <div className="mb-8 p-6 bg-gray-50 rounded-xl">
               <p className="text-sm text-gray-500 mb-4">Payment Method</p>
               <div className="flex items-center gap-6">
@@ -185,7 +196,7 @@ const TransactionDetailPage = () => {
               </div>
             </div>
 
-            {/* Proof of Payment */}
+            {/* Bukti Pembayaran yang Sudah Ada */}
             {uploadedImageUrl && (
               <div className="mb-8">
                 <p className="text-sm text-gray-500 mb-4">Proof of Payment</p>
@@ -199,7 +210,7 @@ const TransactionDetailPage = () => {
               </div>
             )}
 
-            {/* Dates */}
+            {/* Informasi Tanggal */}
             <div className="grid grid-cols-2 gap-8 mb-8 p-6 bg-gray-50 rounded-xl">
               <div>
                 <p className="text-sm text-gray-500 mb-2">Order Date</p>
@@ -222,7 +233,7 @@ const TransactionDetailPage = () => {
               </div>
             </div>
 
-            {/* Items */}
+            {/* Daftar Item */}
             <div className="space-y-6">
               <p className="text-sm text-gray-500 mb-4">Items</p>
               {transaction?.transaction_items?.map((item) => (
@@ -248,7 +259,7 @@ const TransactionDetailPage = () => {
             </div>
           </div>
 
-          {/* Upload Proof of Payment */}
+          {/* Form Upload Bukti Pembayaran */}
           <div className="bg-white rounded-2xl shadow-lg p-8 transition-all hover:shadow-xl">
             <h2 className="text-xl font-bold mb-6 text-gray-900">
               Update Proof of Payment

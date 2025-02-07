@@ -5,21 +5,25 @@ import useTransactions from "../../hooks/useTransaction";
 import Navbar from "../../components/Navbar";
 
 const TransactionsPage = () => {
+  // Inisialisasi hooks dan state untuk manajemen transaksi
   const navigate = useNavigate();
   const {
-    transactions = [],
-    loading,
-    error,
-    fetchMyTransactions,
+    transactions = [],    // Data transaksi dari API
+    loading,             // Status loading
+    error,              // Pesan error jika ada
+    fetchMyTransactions, // Fungsi untuk mengambil data transaksi
   } = useTransactions();
 
+  // State untuk paginasi
   const [currentPage, setCurrentPage] = useState(1);
-  const transactionsPerPage = 5;
+  const transactionsPerPage = 5; // Jumlah transaksi per halaman
 
+  // Mengambil data transaksi saat komponen dimount
   useEffect(() => {
     fetchMyTransactions();
   }, []);
 
+  // Tampilan loading state
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -37,6 +41,7 @@ const TransactionsPage = () => {
     );
   }
 
+  // Tampilan error state
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -56,21 +61,21 @@ const TransactionsPage = () => {
     );
   }
 
-  // Sort transactions by latest created
+  // Mengurutkan transaksi berdasarkan tanggal terbaru
   const sortedTransactions = transactions.sort(
     (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
   );
 
-  // Pagination logic
+  // Logika paginasi
   const indexOfLastTransaction = currentPage * transactionsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
   const currentTransactions = sortedTransactions.slice(
     indexOfFirstTransaction,
     indexOfLastTransaction
   );
-
   const totalPages = Math.ceil(sortedTransactions.length / transactionsPerPage);
 
+  // Handler untuk navigasi halaman
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -88,8 +93,11 @@ const TransactionsPage = () => {
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-3xl font-bold mb-8">My Transactions</h1>
+
+        {/* Daftar Transaksi */}
         <div className="space-y-4">
           {currentTransactions.map((transaction) => (
+            // Item transaksi dengan detail lengkap
             <div
               key={transaction.id}
               onClick={() => navigate(`/transactions/${transaction.id}`)}
@@ -148,6 +156,8 @@ const TransactionsPage = () => {
             </div>
           ))}
         </div>
+
+        {/* Kontrol Paginasi */}
         <div className="flex justify-center gap-6 items-center mt-8">
           <button
             onClick={handlePreviousPage}

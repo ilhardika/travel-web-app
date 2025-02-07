@@ -3,15 +3,19 @@ import { ArrowRight, Map, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import useBanners from "../hooks/useBanner";
 
-// Komponen untuk animasi angka
+// Komponen untuk menampilkan angka dengan animasi
+// Props:
+// - end: nilai akhir yang dituju
+// - duration: durasi animasi dalam milidetik
 const AnimatedNumber = ({ end, duration = 2000 }) => {
   const [count, setCount] = useState(0);
 
-  // Effect untuk menganimasikan perhitungan angka
+  // Menggunakan requestAnimationFrame untuk animasi yang smooth
   useEffect(() => {
     let startTime;
     let animationFrame;
 
+    // Fungsi animasi yang akan dipanggil setiap frame
     const animate = (timestamp) => {
       if (!startTime) startTime = timestamp;
       const progress = timestamp - startTime;
@@ -27,8 +31,10 @@ const AnimatedNumber = ({ end, duration = 2000 }) => {
       }
     };
 
+    // Memulai animasi
     animationFrame = requestAnimationFrame(animate);
 
+    // Membersihkan animasi saat komponen unmount
     return () => {
       if (animationFrame) {
         cancelAnimationFrame(animationFrame);
@@ -39,14 +45,15 @@ const AnimatedNumber = ({ end, duration = 2000 }) => {
   return <>{count.toLocaleString()}</>;
 };
 
-// Komponen Hero utama
+// Komponen utama Hero
+// Menampilkan banner slider dan konten utama landing page
 const Hero = () => {
-  // State untuk mengontrol visibilitas dan banner aktif
+  // State untuk mengontrol animasi dan tampilan
   const [isVisible, setIsVisible] = useState(false);
-  const { banners, loading } = useBanners();
+  const { banners, loading } = useBanners();  // Hook untuk mengambil data banner
   const [currentBanner, setCurrentBanner] = useState(0);
 
-  // Effect untuk menampilkan konten setelah delay
+  // Efek untuk menampilkan konten dengan delay
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
@@ -55,7 +62,7 @@ const Hero = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Effect untuk mengatur rotasi banner otomatis
+  // Efek untuk rotasi banner otomatis setiap 5 detik
   useEffect(() => {
     if (banners.length > 0) {
       const interval = setInterval(() => {
@@ -67,8 +74,9 @@ const Hero = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Background Banner Slider dengan overlay gradient */}
+      {/* Bagian Banner Slider */}
       <div className="absolute inset-0 z-0">
+        {/* Menampilkan loading state atau daftar banner */}
         {loading || banners.length === 0 ? (
           <div className="absolute inset-0 bg-gradient-to-b from-blue-950 to-blue-900" />
         ) : (
@@ -89,17 +97,17 @@ const Hero = () => {
         )}
       </div>
 
-      {/* Konten Hero */}
+      {/* Konten Utama */}
       <div className="relative z-10 container mx-auto px-4 pt-32">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Highlight Text dengan animasi fade-in */}
+          {/* Teks highlight dengan efek fade in */}
           <div className="inline-block animate-fade-in">
             <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-sm font-medium mb-6">
               ✨ Temukan Petualangan Baru
             </span>
           </div>
 
-          {/* Heading utama dengan animasi */}
+          {/* Judul Utama dengan animasi fade up */}
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
             <span className="inline-block animate-fade-up-1">
               Jelajahi Keindahan
@@ -110,13 +118,13 @@ const Hero = () => {
             </span>
           </h1>
 
-          {/* Subheading dengan animasi */}
+          {/* Deskripsi dengan animasi */}
           <p className="text-xl text-white/80 mb-8 animate-fade-up-3">
             Dari gunung berapi yang megah hingga pantai yang mempesona, temukan
             destinasi impianmu bersama kami
           </p>
 
-          {/* Tombol CTA dengan hover effect */}
+          {/* Tombol CTA dengan efek hover */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up-4">
             <Link
               to={"/destinations"}
@@ -154,7 +162,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Gradient overlay di bagian bawah */}
+      {/* Gradient overlay untuk efek visual */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-blue-950 to-transparent" />
     </div>
   );

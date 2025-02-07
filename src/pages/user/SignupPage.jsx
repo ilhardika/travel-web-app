@@ -6,30 +6,35 @@ import useForm from "../../hooks/local/useForm";
 import useBanner from "../../hooks/useBanner";
 
 const SignUpPage = () => {
+  // Inisialisasi form dengan nilai awal menggunakan custom hook
   const { values, handleChange } = useForm({
-    name: "",
-    email: "",
-    password: "",
-    phoneNumber: "",
+    name: "",         // Nama lengkap user
+    email: "",        // Alamat email user
+    password: "",     // Password user
+    phoneNumber: "",  // Nomor telepon user
   });
 
-  const { register, error, loading } = useAuth();
-  const { banners } = useBanner();
-  const [successMessage, setSuccessMessage] = useState("");
+  // Mengambil fungsi dan state yang diperlukan dari hooks
+  const { register, error, loading } = useAuth();         // Hook autentikasi
+  const { banners } = useBanner();                        // Hook untuk banner
+  const [successMessage, setSuccessMessage] = useState(""); // State pesan sukses
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Mengambil gambar background dari data banner
   const bgImage = banners[8]?.imageUrl;
   console.log(bgImage);
 
+  // Handler untuk menangani proses pendaftaran
   const handleSignUp = async (e) => {
     e.preventDefault();
     const success = await register(values);
     if (success) {
-      setSuccessMessage("Registration successful! Redirecting...");
+      setSuccessMessage("Pendaftaran berhasil! Mengalihkan...");
     }
   };
 
+  // Effect untuk redirect setelah pendaftaran berhasil
   useEffect(() => {
     if (successMessage) {
       const timer = setTimeout(() => {
@@ -44,6 +49,7 @@ const SignUpPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 relative">
+      {/* Background Image dengan overlay */}
       {banners.length > 0 && (
         <img
           src={bgImage}
@@ -52,7 +58,10 @@ const SignUpPage = () => {
         />
       )}
       <div className="absolute inset-0 bg-black opacity-60"></div>
+      
+      {/* Form Container */}
       <div className="relative w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
+        {/* Header Form */}
         <div className="bg-gradient-to-r from-blue-500 to-sky-400 p-6 text-center">
           <div className="flex justify-center items-center mb-4">
             <h1 className="text-3xl font-bold text-white">TravApp</h1>
@@ -61,6 +70,7 @@ const SignUpPage = () => {
         </div>
 
         <div className="p-8">
+          {/* Pesan Error dan Sukses */}
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-center">
               {error}
@@ -72,7 +82,9 @@ const SignUpPage = () => {
             </div>
           )}
 
+          {/* Form Pendaftaran */}
           <form onSubmit={handleSignUp} className="space-y-6">
+            {/* Input Nama dengan Icon */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <User className="h-5 w-5 text-gray-400" />
@@ -88,6 +100,7 @@ const SignUpPage = () => {
               />
             </div>
 
+            {/* Input Email dengan Icon */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Mail className="h-5 w-5 text-gray-400" />
@@ -103,6 +116,7 @@ const SignUpPage = () => {
               />
             </div>
 
+            {/* Input Nomor Telepon dengan Icon */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Phone className="h-5 w-5 text-gray-400" />
@@ -118,6 +132,7 @@ const SignUpPage = () => {
               />
             </div>
 
+            {/* Input Password dengan Icon */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Lock className="h-5 w-5 text-gray-400" />
@@ -134,6 +149,7 @@ const SignUpPage = () => {
               />
             </div>
 
+            {/* Tombol Submit dengan Loading State */}
             <button
               type="submit"
               disabled={loading}
@@ -147,6 +163,7 @@ const SignUpPage = () => {
             </button>
           </form>
 
+          {/* Link ke Halaman Login */}
           <div className="mt-6 text-center">
             <p className="text-gray-600">
               Sudah punya akun?{" "}

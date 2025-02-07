@@ -10,27 +10,29 @@ import DeleteConfirmationModal from "../../components/DeleteConfirmationModal";
 import Navbar from "../../components/Navbar";
 
 const CartPage = () => {
+  // Inisialisasi hooks dan state
   const navigate = useNavigate();
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
+  
+  // Mengambil fungsi dan state dari custom hooks
   const {
-    cartItems,
-    loading,
-    updateQuantity,
-    deleteCartItem,
-    selectedItems,
-    toggleItemSelection,
-    toggleAllItems,
-    getSelectedItemsTotal,
+    cartItems,            // Data item dalam keranjang
+    loading,             // Status loading
+    updateQuantity,      // Fungsi update jumlah item
+    deleteCartItem,      // Fungsi hapus item
+    selectedItems,       // Item yang dipilih
+    toggleItemSelection, // Toggle pilihan item
+    toggleAllItems,      // Toggle semua item
+    getSelectedItemsTotal, // Hitung total harga
   } = useCart();
-  const {
-    paymentMethods,
-    createTransaction,
-    loading: creatingTransaction,
-  } = useTransaction();
+
+  // State untuk manajemen pembayaran dan hapus item
+  const { paymentMethods, createTransaction, loading: creatingTransaction } = useTransaction();
   const [deleteItem, setDeleteItem] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const { updateCartCount } = useCartContext();
 
+  // Tampilan loading
   if (loading) {
     return (
       <div className="min-h-screen">
@@ -45,6 +47,7 @@ const CartPage = () => {
     );
   }
 
+  // Handler untuk mengubah jumlah item
   const handleQuantityChange = async (cartId, currentQuantity, change) => {
     const newQuantity = currentQuantity + change;
     if (newQuantity > 0) {
@@ -60,10 +63,12 @@ const CartPage = () => {
     }
   };
 
+  // Handler untuk menghapus item
   const handleDelete = async (cartId, itemName) => {
     setDeleteItem({ id: cartId, name: itemName });
   };
 
+  // Konfirmasi penghapusan item
   const confirmDelete = async () => {
     if (!deleteItem) return;
 
@@ -81,7 +86,9 @@ const CartPage = () => {
     setDeleteItem(null);
   };
 
+  // Handler untuk membuat transaksi
   const handleCreateTransaction = async () => {
+    // Validasi item yang dipilih
     if (!selectedItems || !selectedItems.length) {
       setToast({
         show: true,
@@ -91,6 +98,7 @@ const CartPage = () => {
       return;
     }
 
+    // Validasi metode pembayaran
     if (!selectedPayment) {
       setToast({
         show: true,
@@ -100,6 +108,7 @@ const CartPage = () => {
       return;
     }
 
+    // Proses pembuatan transaksi
     try {
       console.log("Selected items:", selectedItems);
       const selectedItemIds = selectedItems.map((item) => item);
@@ -131,6 +140,7 @@ const CartPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Komponen Toast untuk notifikasi */}
       <Toast
         show={toast.show}
         message={toast.message}
@@ -139,6 +149,7 @@ const CartPage = () => {
       />
       <Navbar />
       <div className="container mx-auto px-4 py-8">
+        {/* Header dengan pilihan Select All */}
         <div className="flex flex-col justify-between items-star gap-4 mb-4">
           <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 lg:mb-0">
             Activity Cart
@@ -158,7 +169,9 @@ const CartPage = () => {
           )}
         </div>
 
+        {/* Tampilan keranjang kosong atau daftar item */}
         {cartItems && cartItems.length === 0 ? (
+          // Tampilan keranjang kosong
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -175,7 +188,9 @@ const CartPage = () => {
             </div>
           </motion.div>
         ) : (
+          // Tampilan daftar item dan ringkasan
           <div className="flex flex-col lg:flex-row gap-8">
+            {/* Daftar item dalam keranjang */}
             <div className="flex-1 space-y-4">
               <AnimatePresence>
                 {cartItems &&
@@ -284,7 +299,9 @@ const CartPage = () => {
               </AnimatePresence>
             </div>
 
+            {/* Panel ringkasan dan pembayaran */}
             <div className="w-full lg:w-1/3 space-y-4">
+              {/* Ringkasan harga */}
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <h2 className="text-lg font-semibold mb-4">Summary</h2>
                 <div className="space-y-2">
@@ -301,6 +318,7 @@ const CartPage = () => {
                 </div>
               </div>
 
+              {/* Pilihan metode pembayaran */}
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <h2 className="text-lg font-semibold mb-4">Payment Method</h2>
                 <div className="space-y-4">
@@ -334,6 +352,7 @@ const CartPage = () => {
                 </div>
               </div>
 
+              {/* Tombol checkout */}
               <button
                 onClick={handleCreateTransaction}
                 className="w-full px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold"
@@ -345,6 +364,7 @@ const CartPage = () => {
           </div>
         )}
       </div>
+      {/* Modal konfirmasi hapus item */}
       <DeleteConfirmationModal
         isOpen={!!deleteItem}
         onClose={() => setDeleteItem(null)}

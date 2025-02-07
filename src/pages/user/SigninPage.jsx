@@ -6,20 +6,24 @@ import useForm from "../../hooks/local/useForm";
 import useBanner from "../../hooks/useBanner";
 
 const SigninPage = () => {
+  // Inisialisasi form dengan custom hook useForm
   const { values, handleChange } = useForm({
     email: "",
     password: "",
   });
 
+  // Mengambil fungsi dan state yang diperlukan dari hooks
   const { login, error, loading } = useAuth();
   const { banners } = useBanner();
   const [successMessage, setSuccessMessage] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Mengambil gambar latar dari data banner
   const bgImage = banners[8]?.imageUrl;
   console.log(bgImage);
 
+  // Handler untuk submit form login
   const handleSubmit = async (e) => {
     e.preventDefault();
     const success = await login(values.email, values.password);
@@ -28,6 +32,7 @@ const SigninPage = () => {
     }
   };
 
+  // Effect untuk menangani redirect setelah login berhasil
   useEffect(() => {
     if (successMessage) {
       const timer = setTimeout(() => {
@@ -42,6 +47,7 @@ const SigninPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 relative">
+      {/* Background Image dengan overlay */}
       {banners.length > 0 && (
         <img
           src={bgImage}
@@ -51,7 +57,7 @@ const SigninPage = () => {
       )}
       <div className="absolute inset-0 bg-black opacity-60"></div>
       <div className="relative w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
-        {/* Header */}
+        {/* Header Section */}
         <div className="bg-gradient-to-r from-blue-500 to-sky-400 p-6 text-center">
           <div className="flex justify-center items-center mb-4">
             <h1 className="text-3xl font-bold text-white">TravelApp</h1>
@@ -60,7 +66,7 @@ const SigninPage = () => {
         </div>
 
         <div className="p-8">
-          {/* Error Display */}
+          {/* Error dan Success Messages */}
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-4 text-center">
               {error}
@@ -71,8 +77,9 @@ const SigninPage = () => {
               {successMessage}
             </div>
           )}
-          {/* Form */}
+          {/* Form Login */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Input Email */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Mail className="h-5 w-5 text-gray-400" />
@@ -88,6 +95,7 @@ const SigninPage = () => {
               />
             </div>
 
+            {/* Input Password */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Lock className="h-5 w-5 text-gray-400" />
@@ -103,6 +111,7 @@ const SigninPage = () => {
               />
             </div>
 
+            {/* Tombol Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -116,7 +125,7 @@ const SigninPage = () => {
             </button>
           </form>
 
-          {/* Sign Up Link */}
+          {/* Link ke Halaman Sign Up */}
           <div className="mt-6 text-center">
             <p className="text-gray-600">
               Don't have an account?{" "}

@@ -17,6 +17,7 @@ import useUserProfile from "../../hooks/useUser";
 import Navbar from "../../components/Navbar";
 
 const ProfilePage = () => {
+  // Inisialisasi hooks dan state untuk profil pengguna
   const navigate = useNavigate();
   const { userData, loading, error } = useUserProfile();
   const {
@@ -25,15 +26,18 @@ const ProfilePage = () => {
     fetchMyTransactions,
   } = useTransactions();
 
+  // Mengambil data transaksi saat komponen dimount
   useEffect(() => {
     fetchMyTransactions();
   }, []);
 
+  // Handler untuk proses logout
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/signin");
   };
 
+  // Tampilan loading state
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -51,6 +55,7 @@ const ProfilePage = () => {
     );
   }
 
+  // Tampilan error state
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -70,7 +75,7 @@ const ProfilePage = () => {
     );
   }
 
-  // Sort transactions by latest created
+  // Mengurutkan transaksi berdasarkan tanggal terbaru
   const sortedTransactions = transactions.sort(
     (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
   );
@@ -79,7 +84,7 @@ const ProfilePage = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Profile Header */}
+        {/* Header Profil - Menampilkan info utama pengguna */}
         <div className="bg-blue-600  rounded-2xl p-8 mb-8">
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="w-32 h-32 rounded-full border-4 border-white/30 overflow-hidden">
@@ -117,9 +122,9 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Main Content */}
+        {/* Konten Utama */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - User Info */}
+          {/* Kolom Kiri - Informasi Personal */}
           <div className="bg-white rounded-2xl p-6 shadow-sm h-fit">
             <h2 className="text-xl font-semibold mb-6">Personal Information</h2>
             <div className="space-y-6">
@@ -164,9 +169,10 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          {/* Right Column - Transactions */}
+          {/* Kolom Kanan - Riwayat Transaksi */}
           <div className="lg:col-span-2 space-y-8">
             <div className="bg-white rounded-2xl p-6 shadow-sm">
+              {/* Header Transaksi */}
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-semibold">Recent Transactions</h2>
                 <button
@@ -177,7 +183,9 @@ const ProfilePage = () => {
                 </button>
               </div>
 
+              {/* Daftar Transaksi */}
               {transactionsLoading ? (
+                // Loading skeleton untuk transaksi
                 <div className="space-y-4">
                   {[1, 2, 3].map((i) => (
                     <div key={i} className="animate-pulse">
@@ -186,6 +194,7 @@ const ProfilePage = () => {
                   ))}
                 </div>
               ) : sortedTransactions.length === 0 ? (
+                // Tampilan saat tidak ada transaksi
                 <div className="text-center py-8">
                   <p className="text-gray-500">No transactions yet</p>
                   <button
@@ -196,8 +205,10 @@ const ProfilePage = () => {
                   </button>
                 </div>
               ) : (
+                // Daftar transaksi terakhir (maksimal 3)
                 <div className="space-y-4">
                   {sortedTransactions.slice(0, 3).map((transaction) => (
+                    // Item transaksi dengan detail lengkap
                     <div
                       key={transaction.id}
                       onClick={() =>
