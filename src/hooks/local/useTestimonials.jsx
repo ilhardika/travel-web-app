@@ -8,7 +8,9 @@ import {
   Globe,
 } from "lucide-react";
 
+// Hook untuk menyediakan data testimoni pengguna
 export const useTestimonials = () => {
+  // State berisi array testimoni dengan data statis
   const [testimonials] = useState([
     {
       id: 1,

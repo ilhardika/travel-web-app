@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Globe, Compass, Headphones, Paperclip } from "lucide-react";
 
+// Hook untuk menyediakan data fitur-fitur aplikasi
 export const useFeatures = () => {
+  // State berisi array fitur dengan data statis
   const [features] = useState([
     {
       icon: Globe,
