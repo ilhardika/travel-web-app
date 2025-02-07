@@ -1,43 +1,53 @@
-Project Estimated Timeline (4 Weeks)
+Estimasi Timeline Proyek (4 Minggu)  
 
-Week 1: Planning and Preparation
-- Day 1-2: 
-  - Determine Key Features: Create a list of features you want to include in the application, such as:
-    - Landing Page
-    - Activity Detail Page
-    - Cart Page
-    - Payment Page
-    - Transaction History Page
-- Day 3-5: 
-  - Create Simple Wireframes: Draw basic wireframes for the landing page and other main pages. You can use paper or simple design tools.
-  - Set Up Development Environment: Install all necessary tools, such as Node.js, React, and other development tools.
+ Minggu 1: Perencanaan dan Persiapan  
+📌 Hari 1-2  
+- Tentukan fitur utama yang akan ada di aplikasi, seperti:  
+  - Halaman Utama (Landing Page)  
+  - Halaman Detail Aktivitas  
+  - Halaman Keranjang  
+  - Halaman Pembayaran  
+  - Halaman Riwayat Transaksi  
 
-Week 2: Landing Page Development
-- Day 6-7: 
-  - Develop Landing Page: Start developing the landing page using React. Focus on the HTML structure and CSS.
-  - Implement UI Elements: Add elements such as header, hero section, promo banner, activity categories, and popular activities.
-- Day 8-10: 
-  - Add Interactivity: Implement buttons and hover effects to enhance user experience.
-  - Test Responsiveness: Ensure the landing page is responsive across various screen sizes (desktop and mobile).
+📌 Hari 3-5  
+- Buat Wireframe Sederhana: Gambar sketsa tampilan halaman utama dan halaman penting lainnya (bisa di kertas atau pakai tools desain).  
+- Siapkan Lingkungan Pengembangan: Install semua alat yang diperlukan, seperti Node.js, React, dan library yang dibutuhkan.  
 
-Week 3: Main Page Development
-- Day 11-13: 
-  - Develop Activity Detail Page: Create a page that displays activity details, including images, descriptions, prices, and an "Add to Cart" button.
-- Day 14-16: 
-  - Develop Cart Page: Create a page that displays a list of activities added to the cart, with options to edit or remove items.
-- Day 17: 
-  - Develop Payment Page: Create a page for selecting payment methods and uploading payment proof.
+---  
+ Minggu 2: Pengembangan Halaman Utama  
+📌 Hari 6-7  
+- Bangun Halaman Utama: Mulai koding halaman utama menggunakan React. Fokus pada struktur HTML dan styling dengan CSS.  
+- Tambahkan Elemen UI: Buat bagian seperti header, hero section, banner promo, kategori aktivitas, dan aktivitas populer.  
 
-Week 4: Testing and Finalization
-- Day 18-20: 
-  - Develop Transaction History Page: Create a page that displays a list and details of user transactions, as well as a button to cancel orders.
-- Day 21-22: 
-  - Application Testing: Conduct testing to ensure all pages and features function correctly. Fix any bugs found.
-- Day 23-25: 
-  - Finalization and Launch Preparation: Complete all final details, such as styling and documentation. Prepare the application for launch.
+📌 Hari 8-10  
+- Tambahkan Interaksi: Implementasikan tombol dan efek hover agar lebih menarik.  
+- Uji Responsivitas: Pastikan tampilan halaman utama tetap bagus di berbagai ukuran layar (desktop & mobile).  
 
-Summary
--Week 1: Planning and Preparation
--Week 2: Landing Page Development
--Week 3: Main Page Development
--Week 4: Testing and Finalization
+---  
+ Minggu 3: Pengembangan Halaman Utama Lainnya  
+📌 Hari 11-13  
+- Buat Halaman Detail Aktivitas: Menampilkan informasi detail aktivitas, termasuk gambar, deskripsi, harga, dan tombol "Tambah ke Keranjang".  
+
+📌 Hari 14-16  
+- Buat Halaman Keranjang: Menampilkan daftar aktivitas yang ditambahkan ke keranjang dengan opsi edit/hapus.  
+
+📌 Hari 17  
+- Buat Halaman Pembayaran: Menyediakan pilihan metode pembayaran dan fitur unggah bukti pembayaran.  
+
+---  
+ Minggu 4: Pengujian dan Penyelesaian  
+📌 Hari 18-20  
+- Buat Halaman Riwayat Transaksi: Menampilkan daftar transaksi pengguna dan tombol untuk membatalkan pesanan.  
+
+📌 Hari 21-22  
+- Pengujian Aplikasi: Cek semua halaman dan fitur apakah berfungsi dengan baik. Perbaiki bug yang ditemukan.  
+
+📌 Hari 23-25  
+- Finalisasi & Persiapan Peluncuran: Selesaikan detail terakhir, termasuk styling dan dokumentasi. Aplikasi siap diluncurkan!  
+
+
+ Ringkasan  
+✅ Minggu 1: Perencanaan dan Persiapan  
+✅ Minggu 2: Pengembangan Halaman Utama  
+✅ Minggu 3: Pengembangan Halaman Utama Lainnya  
+✅ Minggu 4: Pengujian dan Penyelesaian

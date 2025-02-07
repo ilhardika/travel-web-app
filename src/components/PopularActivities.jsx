@@ -20,10 +20,16 @@ const ActivityList = () => {
     return <div className="text-center text-red-500">{error}</div>;
   }
 
-  // Ambil 3 aktivitas teratas berdasarkan total_reviews
-  const topActivities = activities
-    .sort((a, b) => b.total_reviews - a.total_reviews)
-    .slice(0, 3);
+  // Filter activities dari ID yang spesifik
+  const specificIds = [
+    "6f6a450d-c417-4417-9243-c5c81964cd5b",
+    "b3cd3802-3ecc-4bf8-b67f-daba55b86ec4",
+    "1490d07e-b12a-40ab-a732-716597a3d331",
+  ];
+
+  const selectedActivities = activities.filter((activity) =>
+    specificIds.includes(activity.id)
+  );
 
   return (
     <section className="py-20 bg-white">
@@ -38,7 +44,7 @@ const ActivityList = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {topActivities.map((activity) => (
+          {selectedActivities.map((activity) => (
             <div
               key={activity.id}
               className="group relative bg-white rounded-lg shadow-md overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-lg border border-gray-200"

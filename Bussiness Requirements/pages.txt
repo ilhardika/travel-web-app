@@ -12,31 +12,22 @@ Form password
 Form konfirmasi password
 Tombol register
 
-3. Validasi input
-Lupa Password
-Form input email
-Tombol kirim link reset
-Notifikasi pengiriman
-
 
 🏠 Halaman Umum:
 1. Landing Page
-Banner promosi
-Kategori aktivitas
-Promo terbaru
+Navbar
+Banner Hero
+Feature
 Aktivitas rekomendasi
-Search/filter
+Testimony
+Footer
 
-2. Kategori
+2. Promo
 Grid/list kategori
-Thumbnail kategori
-Jumlah aktivitas per kategori
 
-3. Aktivitas per Kategori
+3. Aktivitas
 List aktivitas
-Filter harga
-Filter rating
-Sorting
+Filter kategori
 
 4. Detail Aktivitas
 Galeri foto
@@ -49,26 +40,18 @@ Peta lokasi
 
 
 🛒 Halaman Transaksi:
-
 1. Keranjang
 List aktivitas
-Jumlah tiket
-Total harga
+Fitur + - jumlah dan hapus
+Total Harga
+Metode Pembayaran
 Tombol checkout
-
-2. Metode Pembayaran
-Pilih metode
-Detail pembayaran
-Ringkasan pesanan
 
 3. Konfirmasi Pembayaran
 Upload bukti transfer
 Konfirmasi detail
-Status transaksi
-
 
 👤 Halaman Pengguna:
-
 1. Profil Pengguna
 Foto profil
 Data personal
@@ -81,61 +64,51 @@ Simpan perubahan
 
 3. Riwayat Transaksi
 List transaksi
-Status transaksi
 Detail transaksi
-Unduh invoice
+Ubah bukti pembayaran
 
 🔧 Halaman Admin:
+1. Dashboard Admin
+Ringkasan data Promo, User, Activity & Transaksi
 
-1. Login Admin
-Form khusus admin
-Validasi role
-
-2. Dashboard Admin
-Statistik transaksi
-Grafik penjualan
-Aktivitas terbaru
-Ringkasan data
-
-3. Manajemen Pengguna
-Tabel pengguna
-Filter
-Tambah/edit/hapus
+2. Manajemen Pengguna
+Tabel data
+Search
 Ubah role
+Pagination
 
-4. Manajemen Kategori
-Tambah kategori
-Edit kategori
-Hapus kategori
-Thumbnail
+3. Manajemen Kategori
+Tabel data
+Search
+Tambah/edit/hapus
+Pagination
 
-5. Manajemen Aktivitas
-Tambah aktivitas
-Edit aktivitas
-Hapus aktivitas
-Upload foto
+4. Manajemen Aktivitas
+Tabel data
+Search
+Tambah/edit/hapus
+Detail Aktivitas
+Pagination
 
 5. Manajemen Promo
-Buat promo baru
-Edit promo
-Hapus promo
-Aktif/nonaktif promo
+Tabel data
+Search
+Tambah/edit/hapus
+Detail Promo
+Pagination	
 
-6. Manajemen Transaksi
-List transaksi
-Filter status
-Konfirmasi pembayaran
-Detail transaksi
+6. Manajemen Banner
+Tabel data
+Search
+Tambah/edit/hapus
+Pagination
 
-7. Manajemen Banner
-Tambah banner
-Edit banner
-Hapus banner
-Atur urutan
+7. Manajemen Transaksi
+Tabel data
+Search
+edit/hapus
+Detail Transaksi
+Ubah status transaksi
+Pagination
 
-Tambahan Pertimbangan:
-Responsive design
-Validasi disetiap form
-Error handling
-Loading state
-Pesan konfirmasi
+Logout
