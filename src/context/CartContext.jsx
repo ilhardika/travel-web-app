@@ -1,13 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-// Membuat context untuk manajemen keranjang belanja
+// Context untuk manajemen state keranjang belanja
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  // State untuk menyimpan jumlah item di keranjang
   const [cartCount, setCartCount] = useState(0);
 
-  // Fungsi untuk mengupdate jumlah item keranjang dari API
+  // Fungsi update jumlah item keranjang
   const updateCartCount = async () => {
     try {
       const response = await fetch(
@@ -26,7 +25,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Effect untuk mengambil data keranjang saat pertama kali mounted
+  // Initial fetch
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -36,7 +35,6 @@ export const CartProvider = ({ children }) => {
     }
   }, [localStorage.getItem("token")]);
 
-  // Menyediakan context value untuk komponen child
   return (
     <CartContext.Provider value={{ cartCount, setCartCount, updateCartCount }}>
       {children}
@@ -44,5 +42,4 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-// Custom hook untuk menggunakan CartContext
 export const useCartContext = () => useContext(CartContext);

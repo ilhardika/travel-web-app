@@ -9,13 +9,10 @@ import Navbar from "../../components/Navbar";
 import Toast from "../../components/Toast";
 
 const ActivityDetailPage = () => {
+  // State dan hooks initialization
   const { activityId } = useParams();
   const navigate = useNavigate();
-  const {
-    activity,
-    loading: activityLoading,
-    error: activityError,
-  } = useActivityDetails(activityId);
+  const { activity, loading: activityLoading, error: activityError } = useActivityDetails(activityId);
   const [selectedImage, setSelectedImage] = useState(0);
   const { addToCart, loading: isBooking } = useCart();
   const { isAuthenticated } = useAuth();
@@ -26,6 +23,7 @@ const ActivityDetailPage = () => {
   });
   const { updateCartCount } = useCartContext();
 
+  // Loading state handler
   if (activityLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -34,26 +32,18 @@ const ActivityDetailPage = () => {
     );
   }
 
-  if (activityError) {
+  // Error state handler
+  if (activityError || !activity) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="text-red-500 text-xl mb-4">{activityError}</div>
+          <div className="text-red-500 text-xl mb-4">{activityError || "Activity not found"}</div>
         </div>
       </div>
     );
   }
 
-  if (!activity) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-500 text-xl mb-4">Activity not found</div>
-        </div>
-      </div>
-    );
-  }
-
+  // Booking handler
   const handleBooking = async () => {
     if (!isAuthenticated) {
       navigate(`/signin?prev=${location.pathname}${location.search}`);
@@ -81,18 +71,20 @@ const ActivityDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 relative">
-      {" "}
-      {/* Added relative */}
+      {/* Notification Toast */}
       <Toast
         show={toast.show}
         message={toast.message || "An error occurred"}
         type={toast.type}
         onClose={() => setToast((prev) => ({ ...prev, show: false }))}
       />
+      
+      {/* Main Content */}
       <Navbar />
+      
       <div className="container mx-auto px-4 py-8">
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-          {/* Image Gallery Section */}
+          {/* Galeri Gambar */}
           <div className="relative">
             <div className="aspect-[21/9] w-full overflow-hidden">
               <img
@@ -124,7 +116,7 @@ const ActivityDetailPage = () => {
           </div>
 
           <div className="p-6 lg:p-8">
-            {/* Title and Location */}
+            {/* Judul dan Lokasi */}
             <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
               <div className="flex-1">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -148,7 +140,7 @@ const ActivityDetailPage = () => {
               </div>
             </div>
 
-            {/* Price Card */}
+            {/* Kartu Harga */}
             <div className="bg-gray-50 rounded-xl p-6 mb-8">
               <div className="flex items-center justify-between mb-4">
                 <div>
@@ -178,7 +170,7 @@ const ActivityDetailPage = () => {
               </div>
             </div>
 
-            {/* Description */}
+            {/* Deskripsi */}
             <div className="prose prose-lg max-w-none mb-8">
               <h3 className="text-xl font-semibold mb-4">
                 About This Activity
@@ -186,7 +178,7 @@ const ActivityDetailPage = () => {
               <p className="text-gray-600">{activity.description}</p>
             </div>
 
-            {/* Facilities */}
+            {/* Fasilitas */}
             <div className="mb-8">
               <h3 className="text-xl font-semibold mb-4">Facilities</h3>
               <div
@@ -195,7 +187,7 @@ const ActivityDetailPage = () => {
               />
             </div>
 
-            {/* Location */}
+            {/* Lokasi dan Peta */}
             <div className="bg-white">
               <h3 className="text-xl font-semibold mb-6 flex items-center">
                 <MapPin className="w-6 h-6 text-blue-600 mr-2" />
@@ -203,7 +195,7 @@ const ActivityDetailPage = () => {
               </h3>
 
               <div className="grid lg:grid-cols-2 gap-8">
-                {/* Location Details */}
+                {/* Detail Lokasi */}
                 <div className="space-y-6">
                   <div className="bg-gray-50 rounded-xl p-6">
                     <h4 className="font-semibold text-gray-900 mb-4">
@@ -247,7 +239,7 @@ const ActivityDetailPage = () => {
                   </div>
                 </div>
 
-                {/* Map */}
+                {/* Peta */}
                 <div className="h-full min-h-[400px]">
                   <div className="bg-gray-50 rounded-xl overflow-hidden h-full">
                     <div

@@ -1,16 +1,8 @@
 import { useState } from "react";
-import {
-  UserCircle2,
-  Plane,
-  MapPin,
-  UserCheck,
-  Compass,
-  Globe,
-} from "lucide-react";
+import { UserCircle2, Plane, MapPin, UserCheck, Compass, Globe } from "lucide-react";
 
-// Hook untuk menyediakan data testimoni pengguna
+// Custom hook untuk menyediakan data testimonial statis
 export const useTestimonials = () => {
-  // State berisi array testimoni dengan data statis
   const [testimonials] = useState([
     {
       id: 1,
