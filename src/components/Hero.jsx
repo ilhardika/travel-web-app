@@ -50,7 +50,7 @@ const AnimatedNumber = ({ end, duration = 2000 }) => {
 const Hero = () => {
   // State untuk mengontrol animasi dan tampilan
   const [isVisible, setIsVisible] = useState(false);
-  const { banners, loading } = useBanners();  // Hook untuk mengambil data banner
+  const { banners, loading } = useBanners(); // Hook untuk mengambil data banner
   const [currentBanner, setCurrentBanner] = useState(0);
 
   // Efek untuk menampilkan konten dengan delay
@@ -127,7 +127,7 @@ const Hero = () => {
           {/* Tombol CTA dengan efek hover */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up-4">
             <Link
-              to={"/destinations"}
+              to={"/activity"}
               className="group px-8 py-4 bg-white rounded-xl text-blue-950 font-semibold hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
             >
               Mulai Petualangan
@@ -135,7 +135,7 @@ const Hero = () => {
             </Link>
 
             <Link
-              to={"/destinations"}
+              to={"/activity"}
               className="px-8 py-4 bg-white/10 backdrop-blur-sm rounded-xl text-white border border-white/20 hover:bg-white/20 transition-all duration-300"
             >
               Pelajari Lebih Lanjut
