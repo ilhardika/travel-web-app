@@ -8,21 +8,21 @@ import useBanner from "../../hooks/useBanner";
 const SignUpPage = () => {
   // Inisialisasi form dengan nilai awal menggunakan custom hook
   const { values, handleChange } = useForm({
-    name: "",         // Nama lengkap user
-    email: "",        // Alamat email user
-    password: "",     // Password user
-    phoneNumber: "",  // Nomor telepon user
+    name: "", // Nama lengkap user
+    email: "", // Alamat email user
+    password: "", // Password user
+    phoneNumber: "", // Nomor telepon user
   });
 
   // Mengambil fungsi dan state yang diperlukan dari hooks
-  const { register, error, loading } = useAuth();         // Hook autentikasi
-  const { banners } = useBanner();                        // Hook untuk banner
+  const { register, error, loading } = useAuth(); // Hook autentikasi
+  const { banners } = useBanner(); // Hook untuk banner
   const [successMessage, setSuccessMessage] = useState(""); // State pesan sukses
   const location = useLocation();
   const navigate = useNavigate();
 
   // Mengambil gambar background dari data banner
-  const bgImage = banners[8]?.imageUrl;
+  const bgImage = banners[1]?.imageUrl;
   console.log(bgImage);
 
   // Handler untuk menangani proses pendaftaran
@@ -58,7 +58,7 @@ const SignUpPage = () => {
         />
       )}
       <div className="absolute inset-0 bg-black opacity-60"></div>
-      
+
       {/* Form Container */}
       <div className="relative w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden">
         {/* Header Form */}

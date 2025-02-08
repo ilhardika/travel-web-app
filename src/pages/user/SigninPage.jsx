@@ -20,7 +20,7 @@ const SigninPage = () => {
   const navigate = useNavigate();
 
   // Mengambil gambar latar dari data banner
-  const bgImage = banners[8]?.imageUrl;
+  const bgImage = banners[1]?.imageUrl;
   console.log(bgImage);
 
   // Handler untuk submit form login
