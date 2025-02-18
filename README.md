@@ -22,6 +22,15 @@ A modern travel booking platform built with React and Vite, designed to provide 
 - Transaction management
 - Payment method configuration
 
+### Login Credentials
+
+For testing purposes, you can use the following credentials:
+
+- **User**: `har@user.com`
+- **Admin**: `har@admin.com`
+- **Password**: `123456`
+
+
 ## Tech Stack
 
 - React 18
