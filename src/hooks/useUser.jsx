@@ -39,6 +39,11 @@ const useUserProfile = () => {
 
         setUserData(response.data.data);
         setLoading(false);
+
+        // Fetch all users if the logged-in user is an admin
+        if (response.data.data.role === "admin") {
+          fetchAllUsers();
+        }
       } catch (err) {
         setError(err.message);
         setLoading(false);
@@ -46,7 +51,6 @@ const useUserProfile = () => {
     };
 
     fetchUserProfile();
-    fetchAllUsers();
   }, [navigate]);
 
   // Fungsi untuk memperbarui profil pengguna

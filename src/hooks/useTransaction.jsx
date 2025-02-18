@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // Hook kustom untuk mengelola transaksi
 const useTransaction = () => {
@@ -9,6 +10,7 @@ const useTransaction = () => {
   const [transaction, setTransaction] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const navigate = useNavigate();
 
   // Fungsi untuk membuat transaksi baru
   const createTransaction = async (cartIds, paymentMethodId) => {
@@ -206,18 +208,28 @@ const useTransaction = () => {
   const fetchAllTransactions = async () => {
     try {
       setLoading(true);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Token not found");
+      }
       const response = await axios.get(
         "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/all-transactions",
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
             apiKey: "24405e01-fbc1-45a5-9f5a-be13afcd757c",
           },
         }
       );
       setTransactions(response.data.data);
     } catch (err) {
-      setError(err.message);
+      console.error("Error fetching all transactions:", err);
+      if (err.response && err.response.status === 401) {
+        localStorage.removeItem("token");
+        navigate("/signin");
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -279,7 +291,7 @@ const useTransaction = () => {
   // Ambil metode pembayaran dan semua transaksi saat komponen pertama kali dirender
   useEffect(() => {
     fetchPaymentMethods();
-    fetchAllTransactions();
+    fetchMyTransactions();
   }, []);
 
   // Kembalikan variabel state dan fungsi untuk digunakan dalam komponen
