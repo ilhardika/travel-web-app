@@ -1,0 +1,44 @@
+travel-app/
+│
+├── src/
+│   ├── components/
+│   │   │
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   └── Footer.jsx
+│   │   │
+│   │
+│   ├── pages/
+│   │   ├── auth/
+│   │   │   ├── Login.jsx
+│   │   │   ├── Register.jsx
+│   │   │   └── ForgotPassword.jsx
+│   │   │
+│   │   ├── public/
+│   │   │   ├── LandingPage.jsx
+│   │   │   ├── CategoryPage.jsx
+│   │   │   ├── ActivityListPage.jsx
+│   │   │   └── ActivityDetailPage.jsx
+│   │   │
+│   │   ├── user/
+│   │   │   ├── ProfilePage.jsx
+│   │   │   ├── EditProfilePage.jsx
+│   │   │   ├── CartPage.jsx
+│   │   │   ├── PaymentMethodPage.jsx
+│   │   │   └── TransactionHistoryPage.jsx
+│   │   │
+│   │   └── admin/
+│   │       ├── AdminDashboard.jsx
+│   │       ├── UserManagement.jsx
+│   │       ├── CategoryManagement.jsx
+│   │       ├── ActivityManagement.jsx
+│   │       ├── PromoManagement.jsx
+│   │       ├── TransactionManagement.jsx
+│   │       └── BannerManagement.jsx
+│   │
+│   │
+│   ├── App.jsx
+│   └── main.jsx
+│
+├── package.json
+└── README.md

@@ -6,8 +6,7 @@ Akses & Fitur:
 - Lihat & Cari Aktivitas: Menjelajahi aktivitas wisata berdasarkan kategori.  
 - Tambah ke Keranjang: Menambahkan aktivitas ke keranjang.  
 - Checkout & Pembayaran: Memilih metode pembayaran dan upload bukti pembayaran.  
-- Lihat Riwayat Transaksi: Melihat status pemesanan dan detail transaksi.  
-- Batalkan Pesanan: Membatalkan transaksi yang belum diproses.
+- Lihat Riwayat Transaksi: Melihat status pemesanan dan detail transaksi.
 
 2. Admin
 Role ini untuk mengelola konten dan transaksi dalam web app.

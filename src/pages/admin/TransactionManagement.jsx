@@ -15,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 import Toast from "../../components/Toast";
 
 const TransactionManagement = () => {
+  const navigate = useNavigate();
+
   /* ===== STATE MANAGEMENT ===== */
   // Mengambil data dan fungsi transaksi dari custom hook
   const {
