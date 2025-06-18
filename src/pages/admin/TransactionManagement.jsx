@@ -48,8 +48,12 @@ const TransactionManagement = () => {
   /* ===== EFFECTS & FILTERS ===== */
   // Effect untuk filter transaksi berdasarkan pencarian
   useEffect(() => {
+    // Urutkan transaksi dari terbaru ke terlama
+    const sorted = [...transactions].sort(
+      (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
+    );
     setFilteredTransactions(
-      transactions.filter(
+      sorted.filter(
         (transaction) =>
           transaction.invoiceId
             .toLowerCase()
