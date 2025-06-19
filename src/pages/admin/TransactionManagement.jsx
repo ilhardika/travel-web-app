@@ -1,6 +1,6 @@
 /* ===== IMPORT DAN DEPENDENCIES ===== */
 // Import komponen dan hooks yang dibutuhkan
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import {
   PencilIcon,
   TrashIcon,
@@ -17,6 +17,7 @@ import Toast from "../../components/Toast";
 
 const TransactionManagement = () => {
   const navigate = useNavigate();
+  const lastRefreshTime = useRef(new Date());
 
   /* ===== STATE MANAGEMENT ===== */
   // Mengambil data dan fungsi transaksi dari custom hook
@@ -44,35 +45,59 @@ const TransactionManagement = () => {
     status: "",
   });
 
-  // Create a memoized refresh function that shows loading state
+  // Create an optimized refresh function with debouncing
   const handleManualRefresh = useCallback(async () => {
+    // Prevent rapid repeated refreshes (debounce)
+    const now = new Date();
+    if (now - lastRefreshTime.current < 3000) {
+      // 3 seconds cooldown
+      setToastMessage("Please wait a moment before refreshing again");
+      setShowToast(true);
+      return;
+    }
+
     setRefreshing(true);
-    await refreshTransactions();
-    setRefreshing(false);
-    setToastMessage("Transactions refreshed successfully");
+    lastRefreshTime.current = now;
+
+    // Optimistic UI update first
+    setToastMessage("Refreshing transactions...");
     setShowToast(true);
+
+    try {
+      await refreshTransactions();
+      setToastMessage("Transactions refreshed successfully");
+    } catch (error) {
+      console.error("Refresh error:", error);
+      setToastMessage("Error refreshing transactions");
+    } finally {
+      setRefreshing(false);
+      setShowToast(true);
+    }
   }, [refreshTransactions]);
 
   // Fetch all transactions when component mounts
   useEffect(() => {
+    console.log("Initial transaction fetch");
     refreshTransactions();
-
-    // No polling - causes too many rerenders and performance issues
-    // Instead rely on manual refresh
   }, []);
 
   // Update filteredTransactions when transactions or searchTerm changes
   useEffect(() => {
-    // Normalize the search term - trim whitespace and convert to lowercase
     const normalizedSearchTerm = searchTerm.toLowerCase().trim();
 
-    // Urutkan transaksi dari terbaru ke terlama
-    const sorted = [...transactions].sort(
-      (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
-    );
+    // Run this operation outside the main thread for better performance
+    // This helps prevent UI blocking during filtering
+    const timeoutId = setTimeout(() => {
+      console.log(
+        `Filtering ${transactions.length} transactions with search: "${normalizedSearchTerm}"`
+      );
 
-    setFilteredTransactions(
-      sorted.filter(
+      // Only sort once for better performance
+      const sorted = [...transactions].sort(
+        (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
+      );
+
+      const filtered = sorted.filter(
         (transaction) =>
           (transaction.invoiceId?.toLowerCase() || "").includes(
             normalizedSearchTerm
@@ -86,8 +111,12 @@ const TransactionManagement = () => {
           (transaction.status?.toLowerCase() || "").includes(
             normalizedSearchTerm
           )
-      )
-    );
+      );
+
+      setFilteredTransactions(filtered);
+    }, 100); // Small delay to batch operations
+
+    return () => clearTimeout(timeoutId);
   }, [searchTerm, transactions]);
 
   /* ===== EVENT HANDLERS ===== */
@@ -212,17 +241,21 @@ const TransactionManagement = () => {
               />
               <SearchIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
             </div>
-            {/* Add refresh button */}
+            {/* Improved refresh button with disabled state */}
             <button
               onClick={handleManualRefresh}
               disabled={refreshing}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-colors"
+              className={`px-4 py-2 rounded-lg flex items-center gap-2 transition-colors ${
+                refreshing
+                  ? "bg-blue-500 text-white cursor-not-allowed"
+                  : "bg-blue-600 text-white hover:bg-blue-700"
+              }`}
               title="Refresh transactions"
             >
               <RefreshCw
                 className={`h-5 w-5 ${refreshing ? "animate-spin" : ""}`}
               />
-              Refresh
+              {refreshing ? "Refreshing..." : "Refresh"}
             </button>
           </div>
         </div>
@@ -400,9 +433,9 @@ const TransactionManagement = () => {
       )}
       {/* Add refreshing indicator */}
       {refreshing && (
-        <div className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg z-50 flex items-center gap-2">
+        <div className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg z-50 flex items-center gap-2 shadow-lg">
           <RefreshCw className="h-4 w-4 animate-spin" />
-          Refreshing...
+          Refreshing transactions...
         </div>
       )}
     </div>
