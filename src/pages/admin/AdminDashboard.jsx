@@ -12,7 +12,11 @@ const AdminDashboard = () => {
   // Mengambil data dari berbagai custom hooks
   const { promos, loading: promosLoading } = usePromos(); // Data promo
   const { userData, users, loading: usersLoading } = useUserProfile(); // Data user
-  const { transactions, loading: transactionsLoading } = useTransactions(); // Data transaksi
+  const {
+    transactions,
+    loading: transactionsLoading,
+    refreshTransactions, // Add this to get the fetchAllTransactions function
+  } = useTransactions(); // Data transaksi
   const { activities, loading: activitiesLoading } = useActivities(); // Data aktivitas
 
   // State untuk statistik dashboard
@@ -25,8 +29,17 @@ const AdminDashboard = () => {
 
   // State untuk kontrol sidebar
   const [isExpanded, setIsExpanded] = useState(true);
+  const [didInitialFetch, setDidInitialFetch] = useState(false);
 
-  /* ===== EFFECT HOOKS ===== */
+  // IMPORTANT: Only fetch transactions once when component mounts
+  useEffect(() => {
+    if (!didInitialFetch && refreshTransactions) {
+      console.log("Fetching all transactions for admin dashboard");
+      refreshTransactions();
+      setDidInitialFetch(true);
+    }
+  }, [refreshTransactions, didInitialFetch]);
+
   // Effect untuk menghitung statistik ketika data tersedia
   useEffect(() => {
     // Update statistik hanya jika semua data sudah dimuat

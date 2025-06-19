@@ -1,6 +1,6 @@
 /* ===== IMPORT DAN DEPENDENCIES ===== */
 // Import komponen dan hooks yang dibutuhkan
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   PencilIcon,
   TrashIcon,
@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
   EyeIcon,
+  RefreshCw,
 } from "lucide-react";
 import useTransaction from "../../hooks/useTransaction";
 import AdminSidebar from "../../components/AdminSidebar";
@@ -27,48 +28,76 @@ const TransactionManagement = () => {
     refreshTransactions, // Fungsi untuk refresh data
   } = useTransaction();
 
-  // State untuk UI
-  const [isExpanded, setIsExpanded] = useState(true); // Kontrol sidebar
-  const [searchTerm, setSearchTerm] = useState(""); // Input pencarian
-  const [filteredTransactions, setFilteredTransactions] = useState([]); // Hasil filter
-  const [showForm, setShowForm] = useState(false); // Toggle form modal
-  const [toastMessage, setToastMessage] = useState(""); // Pesan notifikasi
-  const [showToast, setShowToast] = useState(false); // Toggle notifikasi
-
-  // State untuk form edit status
+  // State untuk tampilan dan pengelolaan transaksi
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [formData, setFormData] = useState({
-    id: "", // ID transaksi
-    status: "", // Status baru
+    id: "",
+    status: "",
   });
 
-  /* ===== PAGINATION SETUP ===== */
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Add this line to define itemsPerPage constant
+  // Create a memoized refresh function that shows loading state
+  const handleManualRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await refreshTransactions();
+    setRefreshing(false);
+    setToastMessage("Transactions refreshed successfully");
+    setShowToast(true);
+  }, [refreshTransactions]);
 
-  /* ===== EFFECTS & FILTERS ===== */
-  // Effect untuk filter transaksi berdasarkan pencarian
+  // Fetch all transactions when component mounts
   useEffect(() => {
+    refreshTransactions();
+
+    // No polling - causes too many rerenders and performance issues
+    // Instead rely on manual refresh
+  }, []);
+
+  // Update filteredTransactions when transactions or searchTerm changes
+  useEffect(() => {
+    // Normalize the search term - trim whitespace and convert to lowercase
+    const normalizedSearchTerm = searchTerm.toLowerCase().trim();
+
     // Urutkan transaksi dari terbaru ke terlama
     const sorted = [...transactions].sort(
       (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
     );
+
     setFilteredTransactions(
       sorted.filter(
         (transaction) =>
-          transaction.invoiceId
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          transaction.totalAmount.toString().includes(searchTerm) ||
-          transaction.payment_method?.name
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          transaction.status.toLowerCase().includes(searchTerm.toLowerCase())
+          (transaction.invoiceId?.toLowerCase() || "").includes(
+            normalizedSearchTerm
+          ) ||
+          (transaction.totalAmount?.toString() || "").includes(
+            normalizedSearchTerm
+          ) ||
+          (transaction.payment_method?.name?.toLowerCase() || "").includes(
+            normalizedSearchTerm
+          ) ||
+          (transaction.status?.toLowerCase() || "").includes(
+            normalizedSearchTerm
+          )
       )
     );
   }, [searchTerm, transactions]);
 
   /* ===== EVENT HANDLERS ===== */
-  // Handler untuk update status transaksi
+  // Handler untuk input form
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  // Handler untuk submit form update status
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (!formData.status) {
@@ -76,17 +105,44 @@ const TransactionManagement = () => {
       setShowToast(true);
       return;
     }
+
+    setUpdatingStatus(true); // Start loading indicator
+
     const { success, error } = await updateTransactionStatus(
       formData.id,
       formData.status
     );
+
     if (success) {
       setShowForm(false);
+      // Update immediately in the UI for better responsiveness
+      const updatedTransactions = transactions.map((t) =>
+        t.id === formData.id ? { ...t, status: formData.status } : t
+      );
+      setFilteredTransactions(
+        updatedTransactions.filter(
+          (transaction) =>
+            (transaction.invoiceId?.toLowerCase() || "").includes(
+              searchTerm.toLowerCase().trim()
+            ) ||
+            (transaction.totalAmount?.toString() || "").includes(searchTerm) ||
+            (transaction.payment_method?.name?.toLowerCase() || "").includes(
+              searchTerm.toLowerCase().trim()
+            ) ||
+            (transaction.status?.toLowerCase() || "").includes(
+              searchTerm.toLowerCase().trim()
+            )
+        )
+      );
+
+      // Then refresh from server without causing a full reload
       await refreshTransactions();
       setToastMessage("Status updated successfully");
     } else {
       setToastMessage(error || "Failed to update status");
     }
+
+    setUpdatingStatus(false); // End loading indicator
     setShowToast(true);
   };
 
@@ -147,9 +203,27 @@ const TransactionManagement = () => {
                 className="bg-gray-800 text-white px-4 py-2 pl-10 rounded-lg"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                onPaste={(e) => {
+                  // Handle paste events properly
+                  e.preventDefault();
+                  const pastedText = e.clipboardData.getData("text");
+                  setSearchTerm(pastedText);
+                }}
               />
               <SearchIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
             </div>
+            {/* Add refresh button */}
+            <button
+              onClick={handleManualRefresh}
+              disabled={refreshing}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-colors"
+              title="Refresh transactions"
+            >
+              <RefreshCw
+                className={`h-5 w-5 ${refreshing ? "animate-spin" : ""}`}
+              />
+              Refresh
+            </button>
           </div>
         </div>
         {showForm && (
@@ -317,6 +391,19 @@ const TransactionManagement = () => {
           onClose={() => setShowToast(false)}
           show={showToast}
         />
+      )}
+      {/* Add overlay loading indicator when updating status */}
+      {updatingStatus && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      )}
+      {/* Add refreshing indicator */}
+      {refreshing && (
+        <div className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg z-50 flex items-center gap-2">
+          <RefreshCw className="h-4 w-4 animate-spin" />
+          Refreshing...
+        </div>
       )}
     </div>
   );

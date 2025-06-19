@@ -212,6 +212,8 @@ const useTransaction = () => {
       if (!token) {
         throw new Error("Token not found");
       }
+
+      console.log("Fetching all transactions...");
       const response = await axios.get(
         "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1/all-transactions",
         {
@@ -221,7 +223,10 @@ const useTransaction = () => {
           },
         }
       );
+
+      console.log("All transactions fetched:", response.data.data.length);
       setTransactions(response.data.data);
+      return response.data.data;
     } catch (err) {
       console.error("Error fetching all transactions:", err);
       if (err.response && err.response.status === 401) {
@@ -230,6 +235,7 @@ const useTransaction = () => {
       } else {
         setError(err.message);
       }
+      return [];
     } finally {
       setLoading(false);
     }
@@ -249,7 +255,14 @@ const useTransaction = () => {
           },
         }
       );
+
       if (response.data.status === "OK") {
+        // Update local state immediately for better UX
+        setTransactions((prev) =>
+          prev.map((t) => (t.id === transactionId ? { ...t, status } : t))
+        );
+
+        // Then refresh from server
         await fetchAllTransactions();
         return { success: true };
       }
